@@ -1,6 +1,6 @@
-# PBS Projects — Website
+# PBS Projects Website
 
-Business website for PBS Projects (Pindoni Investment) — glass & aluminum
+Business website for PBS Projects (Pindoni Investment) glass & aluminum
 specialists based in Harare, Zimbabwe.
 
 ## Stack
