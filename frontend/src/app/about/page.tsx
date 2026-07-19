@@ -1,3 +1,9 @@
 export default function AboutPage() {
-  return <main>{/* About Us content */}</main>;
+  return (
+    <main>
+      {/* Business story */}
+      {/* <AboutFounder /> */}
+      {/* <LocationMap /> */}
+    </main>
+  );
 }

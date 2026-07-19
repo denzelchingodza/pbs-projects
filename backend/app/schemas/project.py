@@ -7,6 +7,7 @@ class ProjectOut(BaseModel):
     category: str
     image_url: str
     before_image_url: str | None = None
+    is_featured: bool = False
 
     class Config:
         from_attributes = True

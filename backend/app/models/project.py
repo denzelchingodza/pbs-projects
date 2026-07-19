@@ -1,5 +1,5 @@
 """Gallery items — completed jobs, categorized by product type, managed by the admin."""
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean
 from app.database import Base
 
 
@@ -10,3 +10,4 @@ class Project(Base):
     category = Column(String, index=True)  # windows, doors, shopfronts, ceilings, cabinets
     image_url = Column(String, nullable=False)
     before_image_url = Column(String, nullable=True)  # for before/after slider
+    is_featured = Column(Boolean, default=False)  # shows on homepage highlights
