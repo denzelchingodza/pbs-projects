@@ -1,0 +1,12 @@
+from pydantic import BaseModel
+
+
+class ProjectOut(BaseModel):
+    id: int
+    title: str
+    category: str
+    image_url: str
+    before_image_url: str | None = None
+
+    class Config:
+        from_attributes = True
