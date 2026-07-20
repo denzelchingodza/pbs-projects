@@ -6,6 +6,7 @@ class ProjectOut(BaseModel):
     title: str
     category: str
     image_url: str
+    media_type: str = "image"  # "image" or "video"
     before_image_url: str | None = None
     is_featured: bool = False
 
