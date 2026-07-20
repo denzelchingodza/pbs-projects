@@ -76,11 +76,28 @@ export default function AdminGalleryPage() {
                   <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
                     {photos.map((p) => (
                       <div key={p.id} className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={p.image_url} alt={p.title} className="w-full aspect-[4/3] object-cover" />
+                        {p.media_type === "video" ? (
+                          <video
+                            src={p.image_url}
+                            controls
+                            playsInline
+                            preload="metadata"
+                            className="w-full aspect-[4/3] object-cover bg-neutral-900"
+                          />
+                        ) : (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={p.image_url} alt={p.title} className="w-full aspect-[4/3] object-cover" />
+                        )}
                         <div className="p-4">
                           <div className="flex items-start justify-between gap-2">
-                            <div className="text-sm font-semibold text-dark">{p.title}</div>
+                            <div className="text-sm font-semibold text-dark">
+                              {p.title}
+                              {p.media_type === "video" && (
+                                <span className="ml-2 text-[10px] font-semibold uppercase tracking-widest text-neutral-400">
+                                  Video
+                                </span>
+                              )}
+                            </div>
                             {p.is_featured && (
                               <span className="text-[10px] font-semibold uppercase tracking-widest text-orange bg-orange/10 rounded-full px-2 py-1 shrink-0">
                                 Featured

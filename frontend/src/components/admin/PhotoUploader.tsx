@@ -2,15 +2,17 @@
 
 /**
  * Upload form for POST /api/admin/gallery (multipart: title, category,
- * is_featured, file). Fields are ordered as a real decision flow: pick the
- * category first (that's what determines where the photo shows up on the
- * site), then title, then the file itself, then the optional homepage
- * feature toggle, so filling this in top to bottom matches the order the
- * decisions actually need to be made in.
+ * is_featured, file). Accepts both photos and short videos, the backend
+ * (app/services/image_service.py) tells them apart by file extension and
+ * treats them very differently: photos get auto-resized, videos are stored
+ * exactly as uploaded (no compression, see that file's docstring for why).
+ * That asymmetry is exactly why this form is upfront about size limits and
+ * accepted formats before the admin picks a file, not after a failed upload.
  */
 import { useState } from "react";
 import { uploadGalleryPhoto } from "@/lib/adminApi";
 import { GALLERY_CATEGORIES } from "@/lib/categories";
+import { IMAGE_ACCEPT, MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, VIDEO_ACCEPT, validateMediaFile } from "@/lib/media";
 
 export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }) {
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
@@ -23,10 +25,18 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
 
     const form = e.currentTarget;
     const data = new FormData(form);
+    const file = data.get("file") as File;
 
-    if (!(data.get("file") as File)?.size) {
+    if (!file?.size) {
       setStatus("error");
-      setErrorMsg("Please choose a photo to upload.");
+      setErrorMsg("Please choose a photo or video to upload.");
+      return;
+    }
+
+    const validationError = validateMediaFile(file);
+    if (validationError) {
+      setStatus("error");
+      setErrorMsg(validationError);
       return;
     }
 
@@ -44,14 +54,25 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
   return (
     <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
       <div className="bg-neutral-50 border-b border-neutral-200 px-6 py-4">
-        <p className="text-sm font-semibold text-dark">Add a photo</p>
-        <p className="text-xs text-neutral-500 mt-1 leading-relaxed">
+        <p className="text-sm font-semibold text-dark">Add a photo or video</p>
+        <p className="text-xs text-neutral-500 mt-1.5 leading-relaxed">
           Category decides which section it lands in below and which filter shows
           it on the public portfolio page. Photos are automatically resized for
-          phones after upload, so any reasonably sized photo works. Turning on
-          &ldquo;Feature this&rdquo; also shows it in the Our Work section on the
-          homepage.
+          phones after upload, so any reasonably sized photo works.
         </p>
+        <div className="mt-3 flex flex-col gap-1 text-xs text-neutral-600">
+          <p>
+            <span className="font-semibold text-dark">Photos:</span> JPG, PNG, or WEBP,
+            up to {MAX_IMAGE_BYTES / 1024 / 1024}MB.
+          </p>
+          <p>
+            <span className="font-semibold text-dark">Videos:</span> MP4, MOV, or WEBM,
+            up to {MAX_VIDEO_BYTES / 1024 / 1024}MB. Videos are stored as uploaded, not
+            compressed, so keep clips short and export at a reasonable resolution
+            before uploading, a phone video straight off a recent iPhone can easily
+            be several hundred MB.
+          </p>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
@@ -71,7 +92,7 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">2. Photo title</label>
+          <label className="block text-sm font-medium mb-1">2. Title</label>
           <input
             name="title"
             required
@@ -81,11 +102,11 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">3. Photo file</label>
+          <label className="block text-sm font-medium mb-1">3. Photo or video file</label>
           <input
             type="file"
             name="file"
-            accept="image/*"
+            accept={`${IMAGE_ACCEPT},${VIDEO_ACCEPT}`}
             required
             className="w-full text-sm file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:bg-neutral-100 file:text-sm file:font-medium hover:file:bg-neutral-200"
           />
@@ -103,7 +124,7 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
           disabled={status === "submitting"}
           className="bg-orange text-white font-semibold py-3 rounded-md hover:brightness-95 transition disabled:opacity-60"
         >
-          {status === "submitting" ? "Uploading..." : "Upload Photo"}
+          {status === "submitting" ? "Uploading..." : "Upload"}
         </button>
       </form>
     </div>
