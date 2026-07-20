@@ -578,3 +578,81 @@ of being an unlabeled row of photos.
 compiled, linted, type-checked, and statically generated all 13 routes
 with zero errors (same Google Fonts sandbox workaround as Stages 9 and 10,
 confirmed unrelated to this code).
+
+---
+
+## Stage 12: Real video uploads, a better gallery, and a redesigned WhatsApp button
+
+**Context:** the ask was to handle the admin wanting to post "large things
+and maybe videos," with clear guidelines and caution about what's
+accepted, plus a genuinely better-feeling gallery and a neater WhatsApp
+button. Asked directly whether video should mean (a) images only with
+clear guidance, (b) a pasted video link instead of a real upload, or (c)
+real video file upload. The answer was real upload, so this stage adds
+actual video support end to end, not just a "coming soon" note.
+
+**Database:** `projects.media_type` (new column, migration
+`aed0cb5089bc`, backfilled `'image'` for every existing row on upgrade).
+`image_url` now holds the uploaded file's URL regardless of type,
+`media_type` says whether to render it as a photo or a video, this keeps
+every existing photo-only piece of code working unchanged.
+
+**Backend (`image_service.py`, `routers/admin.py`):** photos keep the
+existing resize-and-thumbnail treatment. Videos are stored exactly as
+uploaded, no compression or transcoding, doing that properly needs
+ffmpeg and a background job queue (a video finishes processing well
+after the HTTP request that uploaded it returns), which is a real project
+of its own and out of scope here. What's real instead: separate size caps
+(8MB photos, 50MB video) enforced server-side regardless of what the
+browser already checked, a specific error message naming the exact limit
+and exact accepted formats, and `detect_media_type()` telling files apart
+by extension so the upload endpoint can branch correctly.
+
+**Verified against a real running instance, not assumed:** installed
+dependencies, ran the new migration, started the actual FastAPI server,
+and with real `curl` requests: uploaded a real photo (came back resized,
+`media_type: "image"`), uploaded a real video file (came back stored
+as-is, `media_type: "video"`), sent a fake 51MB video and got back
+exactly `"Video too large (max 50MB)."`, sent a `.pdf` and got back the
+full list of accepted photo and video formats, confirmed the public
+`/api/gallery/` list correctly returns both items, then deleted the video
+and confirmed only its one file disappeared from disk, the photo and its
+thumbnail were untouched.
+
+**Admin upload form (`PhotoUploader.tsx`, new `lib/media.ts`):** accepts
+both photos and videos now, with the exact size limits and formats
+written out above the form before a file is even picked, plus a specific
+caution that videos aren't compressed, so a raw phone recording could
+easily be several hundred MB and should be trimmed/re-exported first.
+`lib/media.ts` mirrors the backend's limits so a bad file is rejected
+instantly in the browser with a specific message, the backend re-checks
+everything independently regardless, this is just faster feedback.
+
+**Gallery, made better, not just functional:**
+- `GalleryGrid.tsx`: video thumbnails now show a play-icon badge (so a
+  visitor knows it's a video before clicking) and every thumbnail gets a
+  dark gradient title scrim on hover instead of a plain white pill.
+- `Lightbox.tsx`: added previous/next navigation, on-screen arrow buttons
+  and keyboard arrow keys, plus a position counter ("3 / 8"), and now
+  actually plays video with controls instead of only ever rendering an
+  `<img>`.
+- `GalleryExplorer.tsx`: builds one flat, ordered list so next/prev
+  behaves correctly whichever view is active, "All" (grouped by
+  category) or a single category filter.
+- `gallery/page.tsx`: added a closing "Get a Quote" banner (the same
+  pattern the Products page already used) so browsing the portfolio ends
+  with a clear next step, plus a one-line note when any video exists.
+- Admin gallery cards and the homepage's Featured Work teaser both
+  render real `<video>` playback for video items instead of a broken
+  image tag.
+
+**WhatsApp button:** replaced the generic speech-bubble emoji with the
+real WhatsApp glyph as inline SVG (crisp, exactly on-brand green, not
+dependent on the visitor's device having that emoji), added a soft
+pulsing ring so it reads as a live action rather than a static icon, and
+a "Chat with us" label that fades in on hover on desktop.
+
+**Frontend verified for real:** `tsc --noEmit`, zero errors. Full
+production `next build`, compiled, linted, type-checked, and statically
+generated all 13 routes with zero errors (same Google Fonts sandbox
+workaround as every stage since 9, confirmed unrelated to this code).

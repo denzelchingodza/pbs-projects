@@ -1,5 +1,22 @@
-/** Presentational grid — click a photo to open it in the Lightbox (handled by the parent). */
+/**
+ * Presentational grid, click a photo or video to open it in the Lightbox
+ * (handled by the parent). Videos render as a muted preview with a play
+ * icon overlay so a visitor knows it's a video before clicking, rather
+ * than a static frame that looks identical to a photo.
+ */
 import type { Project } from "@/types";
+
+function PlayBadge() {
+  return (
+    <span className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <span className="w-11 h-11 rounded-full bg-black/55 flex items-center justify-center">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+          <path d="M4 2.5v11l10-5.5-10-5.5z" />
+        </svg>
+      </span>
+    </span>
+  );
+}
 
 export default function GalleryGrid({
   projects,
@@ -23,16 +40,27 @@ export default function GalleryGrid({
         <button
           key={p.id}
           onClick={() => onOpen(p)}
-          className="relative rounded-lg overflow-hidden aspect-[4/3] group"
+          className="relative rounded-lg overflow-hidden aspect-[4/3] group bg-neutral-900"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={p.image_url}
-            alt={p.title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          />
-          <span className="absolute bottom-2 left-2 bg-white/90 text-dark text-xs font-semibold px-3 py-1 rounded-full">
-            {p.title}
+          {p.media_type === "video" ? (
+            <video
+              src={p.image_url}
+              muted
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={p.image_url}
+              alt={p.title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          )}
+          {p.media_type === "video" && <PlayBadge />}
+          <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent pt-8 pb-2 px-3">
+            <span className="text-white text-xs font-semibold">{p.title}</span>
           </span>
         </button>
       ))}

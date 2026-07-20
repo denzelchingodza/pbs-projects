@@ -32,13 +32,25 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
         ) : (
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
             {projects.slice(0, 6).map((p) => (
-              <div key={p.id} className="relative rounded-xl overflow-hidden border border-neutral-200">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={p.image_url}
-                  alt={p.title}
-                  className="aspect-[4/3] object-cover w-full"
-                />
+              <div key={p.id} className="relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900">
+                {p.media_type === "video" ? (
+                  <video
+                    src={p.image_url}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    className="aspect-[4/3] object-cover w-full"
+                  />
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={p.image_url}
+                    alt={p.title}
+                    className="aspect-[4/3] object-cover w-full"
+                  />
+                )}
                 <span className="absolute top-3 left-3 bg-white/90 text-dark text-xs font-semibold px-3 py-1 rounded-full">
                   {categoryLabel(p.category)}
                 </span>

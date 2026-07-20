@@ -6,11 +6,14 @@ export interface Product {
   thumbnail_url?: string;
 }
 
+export type MediaType = "image" | "video";
+
 export interface Project {
   id: number;
   title: string;
   category: string;
   image_url: string;
+  media_type: MediaType;
   before_image_url?: string;
   is_featured?: boolean;
 }
