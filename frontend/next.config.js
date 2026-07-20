@@ -9,6 +9,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "upload.wikimedia.org" }, // placeholder hero photo only — remove once real photos are in
     ],
   },
 };

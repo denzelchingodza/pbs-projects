@@ -1,0 +1,8 @@
+# Only needed once you switch DATABASE_URL from SQLite to Postgres (production).
+# Not required for local development — see requirements.txt.
+#
+# Using psycopg (v3) instead of psycopg2-binary: it ships prebuilt wheels for
+# a much wider range of Python versions/platforms, so it won't hit the
+# "pg_config not found, building from source" error psycopg2-binary can hit
+# on newer Python versions. Install with: pip install -r requirements-postgres.txt
+psycopg[binary]==3.2.3

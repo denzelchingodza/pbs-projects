@@ -15,7 +15,7 @@ from app.services.image_service import save_upload, delete_upload
 
 router = APIRouter()
 
-VALID_CATEGORIES = {"windows", "doors", "shopfronts", "ceilings", "cabinets"}
+VALID_CATEGORIES = {"windows", "doors", "showercubicles", "shopfronts", "ceilings", "cabinets"}
 
 
 # ---------- Quote pipeline ----------

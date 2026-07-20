@@ -3,6 +3,7 @@ node_modules/
 .next/
 out/
 frontend/.env.local
+frontend/tsconfig.tsbuildinfo
 
 # Python / FastAPI
 __pycache__/
