@@ -11,7 +11,17 @@ from app.models.quote import QuoteRequest
 from app.models.project import Project
 from app.schemas.quote import QuoteOut, QuoteStatusUpdate
 from app.schemas.project import ProjectOut
-from app.services.image_service import save_upload, delete_upload
+from app.services.image_service import (
+    IMAGE_EXTS,
+    VIDEO_EXTS,
+    MAX_IMAGE_BYTES,
+    MAX_VIDEO_BYTES,
+    UnsupportedFileError,
+    detect_media_type,
+    save_image_upload,
+    save_video_upload,
+    delete_upload,
+)
 
 router = APIRouter()
 
@@ -46,7 +56,7 @@ def update_quote_status(
 # ---------- Gallery management ----------
 
 @router.post("/gallery", response_model=ProjectOut)
-async def upload_gallery_photo(
+async def upload_gallery_media(
     title: str = Form(...),
     category: str = Form(...),
     is_featured: bool = Form(False),
@@ -57,19 +67,36 @@ async def upload_gallery_photo(
     if category not in VALID_CATEGORIES:
         raise HTTPException(status_code=400, detail=f"category must be one of {sorted(VALID_CATEGORIES)}")
 
+    media_type = detect_media_type(file.filename or "")
+    if media_type is None:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Unsupported file type. Photos: "
+                f"{', '.join(sorted(IMAGE_EXTS))}. Videos: {', '.join(sorted(VIDEO_EXTS))}."
+            ),
+        )
+
     contents = await file.read()
-    if len(contents) > 8 * 1024 * 1024:  # 8MB cap — keep uploads reasonable
-        raise HTTPException(status_code=400, detail="Image too large (max 8MB)")
+    max_bytes = MAX_IMAGE_BYTES if media_type == "image" else MAX_VIDEO_BYTES
+    if len(contents) > max_bytes:
+        raise HTTPException(
+            status_code=400,
+            detail=f"{media_type.capitalize()} too large (max {max_bytes // (1024 * 1024)}MB).",
+        )
 
     try:
-        urls = save_upload(contents, file.filename)
-    except ValueError as e:
+        urls = save_image_upload(contents, file.filename) if media_type == "image" else save_video_upload(
+            contents, file.filename
+        )
+    except UnsupportedFileError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
     project = Project(
         title=title,
         category=category,
         image_url=urls["image_url"],
+        media_type=media_type,
         is_featured=is_featured,
     )
     db.add(project)
@@ -87,7 +114,7 @@ def delete_gallery_photo(
     project = db.query(Project).filter(Project.id == project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
-    delete_upload(project.image_url)
+    delete_upload(project.image_url, project.media_type)
     db.delete(project)
     db.commit()
     return {"deleted": True}
