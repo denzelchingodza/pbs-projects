@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Nav links use in-page anchors like /#quote — this makes those jumps land
+   smoothly instead of snapping instantly. */
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: #e8622d;
+  color: #ffffff;
+}
