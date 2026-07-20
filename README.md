@@ -22,8 +22,12 @@ python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 alembic upgrade head
+python seed.py
 uvicorn app.main:app --reload
 ```
+
+Only run `pip install -r requirements-postgres.txt` too if you're switching
+`DATABASE_URL` to Postgres for production — it's not needed for local dev.
 
 ### Frontend
 ```
