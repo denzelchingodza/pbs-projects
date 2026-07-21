@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.database import Base
 from app.config import settings
-from app.models import user, product, project, quote, testimonial, settings as settings_model  # noqa: F401
+from app.models import user, product, project, project_media, quote, testimonial, settings as settings_model  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.database_url)

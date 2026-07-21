@@ -720,3 +720,118 @@ every uploaded file on disk is a valid, correctly sized JPEG, and
 `/api/gallery/?category=windows` (and the unfiltered list) come back in
 ascending id order, meaning the site clustering holds. `tsc --noEmit` on
 the changed frontend file came back clean.
+
+---
+
+## Stage 14: Fixing photos that would not actually display
+
+**The bug:** every photo the API returns comes back as a path like
+`/static/uploads/x.jpg`, which is only ever correct relative to the
+backend's own address. Every `<img>` and `<video>` tag was using that
+path directly as its `src`, which meant the browser looked for the photo
+on whatever address the frontend itself was running on instead, found
+nothing, and showed a broken image everywhere a real photo should have
+been. This had likely been broken since photo uploads were first added,
+it just had not been caught yet because verification up to this point
+had been through the API directly (`curl`, database checks), not by
+actually looking at a rendered page in a browser.
+
+**The fix:** added `mediaUrl()` in `lib/media.ts`, which resolves a
+relative photo or video path against the backend's actual address
+(derived from `NEXT_PUBLIC_API_URL`), and used it everywhere a photo or
+video is rendered: the gallery grid, the lightbox, the homepage teaser,
+the admin gallery panel, and the before and after slider. Confirmed the
+resolution logic directly (feeding it real paths and checking the output
+address), plus `tsc --noEmit` and a full production build.
+
+---
+
+## Stage 15: Projects with multiple photos, and real customer testimonials
+
+**Context:** two real problems raised at once. First, the gallery was
+still treating every uploaded photo as its own separate project, so one
+real job photographed 3 times showed up as 3 unrelated pieces of work
+instead of 1. Second, the public portfolio page showed every single photo
+in an endless scroll rather than a curated set of jobs with a way to see
+everything for one job on demand. Third, there was no real way for an
+actual customer to leave a testimonial, the ones on the homepage were all
+seeded starter content.
+
+**Database restructure (`models/project.py`, new `models/project_media.py`,
+migration `b7f3d2a19c40`):** a `Project` is now the job itself (title,
+category, featured flag, an optional before photo, created date). The
+actual photos and videos moved into a new `ProjectMedia` table, one row
+per photo, each pointing back at its project. A job with 1 photo has 1
+project and 1 media row, a job with 4 photos has 1 project and 4 media
+rows. The migration also regrouped the real 88 photos already in the
+database: using the same by eye site groupings from Stage 13 (same
+brick, same roof, same background), it merged photos that are actually
+the same job into one project each, cutting 88 single photo "projects"
+down to 66 real ones, 18 of which now correctly show 2 to 4 photos of
+the same job. Nothing was deleted or re-uploaded, the migration moved
+existing rows into the new shape and verified counts before and after
+matched exactly.
+
+**Testimonial moderation (`models/testimonial.py`, same migration):**
+added a `status` column, `pending` or `approved`. The 3 existing seeded
+testimonials were backfilled to `approved` so they kept showing, new
+submissions default to `pending` and stay off the public site until the
+admin reviews them.
+
+**Backend endpoints (`routers/gallery.py`, `routers/admin.py`,
+`routers/testimonials.py`):** the public gallery read now returns
+projects with their full photo list embedded, not a flat list of
+photos. New admin routes: start a project with its first photo, add
+another photo or video to an existing project, edit a project's title,
+category, or featured flag, remove one photo (the project itself gets
+cleaned up too if that was its only photo), and delete a whole project
+outright (removing every file on disk that belonged to it, not just the
+database rows). Testimonials got a public submit endpoint (same honeypot
+spam guard as the quote form) and admin endpoints to list, approve, and
+delete them.
+
+**Public gallery redesign (`GalleryGrid.tsx`, `Lightbox.tsx`,
+`GalleryExplorer.tsx`, `FeaturedWork.tsx`):** the grid now shows one card
+per project (its cover photo, a "+N more" badge if it has extra photos),
+not one card per photo, so browsing the portfolio is no longer an endless
+scroll of near duplicate shots. Clicking a card opens every photo for
+that job in the lightbox, with previous/next browsing scoped to just
+that project, this is the "view all the pictures individually" behavior.
+The homepage teaser uses the same cover-plus-badge treatment.
+
+**Admin gallery rebuild (`ProjectCard.tsx`, `AddPhotoButton.tsx`,
+`PhotoUploader.tsx`, `admin/gallery/page.tsx`):** each project is a card
+showing every one of its photos as a small thumbnail (removable
+individually on hover), a dedicated tile to add more photos to that same
+job, and an inline edit mode for title, category, and the featured flag,
+no separate page needed. The existing upload form now clearly starts a
+new project rather than always creating a new gallery entry, its copy
+says plainly to use a project's own "Add photo" tile instead if more
+photos of an existing job come in.
+
+**Public testimonial form (`app/testimonial/page.tsx`,
+`TestimonialForm.tsx`) and admin moderation
+(`app/admin/testimonials/page.tsx`, `TestimonialModerationList.tsx`):** a
+real customer can now submit their name, role, a star rating, and their
+experience, it lands as pending and a plain confirmation message says so.
+The homepage testimonials section always renders now (an honest empty
+state instead of disappearing entirely) with a permanent "Share Your
+Experience" link, also added to the footer. The admin panel gets a new
+Testimonials screen, pending ones listed first, approve or delete each
+one, plus dashboard counters for gallery projects and testimonials
+awaiting review.
+
+**Verified for real, not assumed:** ran the actual migration against the
+real database and confirmed before and after counts matched the plan
+exactly (88 photos regrouped into 66 projects, 18 of them multi photo,
+3 testimonials backfilled to approved). Then, against an isolated copy of
+the real (already migrated) database, ran the real backend and exercised
+every new endpoint end to end: created a project, added a second photo to
+it, edited its title and featured flag, deleted one photo (project stayed
+with 1 remaining), deleted its last photo (project was removed
+automatically), deleted a whole project outright, confirmed a bad category
+gets rejected, submitted a testimonial (came back pending), confirmed it
+does not appear on the public testimonials list until approved, approved
+it, confirmed it then does appear, and confirmed the honeypot field
+silently rejects a bot-style submission. `tsc --noEmit` came back clean
+and a full production build generated all 15 routes with zero errors.
