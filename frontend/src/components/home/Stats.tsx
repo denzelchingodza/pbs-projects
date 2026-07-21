@@ -1,31 +1,23 @@
 /**
- * Deliberately shows only numbers we can actually back up:
- * - "Years in business" is computed from settings.founded_year (real).
- * - "Projects completed" is the real count from /api/gallery — this will
- *   honestly read 0 until the admin uploads real project photos. That's
- *   correct behavior, not a bug: we don't fabricate a fake number here.
- * No "provinces served" stat, since that's not something we actually track —
- * it's mentioned as a plain sentence elsewhere instead of a fake counter.
- *
- * Redesign notes: replaced the dark boxed-card pair with a plain light strip
- * with vertical dividers — reads as a calm confirmation of scale rather than
- * a second, competing "hero" section right under the real hero.
+ * Only real, honest stats. No project count here on purpose: a raw number
+ * either reads as impressive when it's high or thin when it's low, and it's
+ * exactly the kind of thing that goes stale the moment new work isn't
+ * uploaded, the actual portfolio (Our Work, below) is what proves the work,
+ * not a counter next to it. What's left is stable, always-true information:
+ * how long the business has been running, what it actually builds, and
+ * where.
  */
 import type { SiteSettings } from "@/types";
 
-export default function Stats({
-  settings,
-  projectCount,
-}: {
-  settings: SiteSettings;
-  projectCount: number;
-}) {
+export default function Stats({ settings }: { settings: SiteSettings }) {
   const years = settings.founded_year ? new Date().getFullYear() - settings.founded_year : null;
+  const addressParts = settings.address.split(",");
+  const city = addressParts[addressParts.length - 1]?.trim() || "Harare";
 
   const items = [
     { value: years !== null ? `${years}+` : "New", label: "Years in Business" },
-    { value: `${projectCount}`, label: "Projects Completed" },
     { value: "6", label: "Product Categories" },
+    { value: city, label: "Based, Serving All Zimbabwe" },
   ];
 
   return (

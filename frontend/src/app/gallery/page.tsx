@@ -10,18 +10,18 @@ export default async function GalleryPage() {
   const projects: Project[] = await getProjects();
   const beforeAfterExample = projects.find((p) => p.before_image_url && p.media[0]);
   const hasVideo = projects.some((p) => p.media.some((m) => m.media_type === "video"));
+  const photoCount = projects.reduce((total, p) => total + p.media.length, 0);
 
   return (
     <main>
       <div className="px-6 md:px-8 py-16">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <SectionHeading
             eyebrow="Portfolio"
-            title="Our Work"
+            title="The Full Gallery"
             intro={
-              hasVideo
-                ? "Browse recent installations by category. Anything with a play icon is a short video walkthrough."
-                : "Browse recent installations by category."
+              `Every photo we have from ${photoCount} completed installations, filter by category, tap any photo to view it full size, or start the slideshow.` +
+              (hasVideo ? " Anything with a play icon is a short video walkthrough." : "")
             }
           />
 

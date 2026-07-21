@@ -1,81 +1,53 @@
 "use client";
 
 /**
- * Owns the interactive state for the gallery page: which category filter is
- * active, and which project (if any) is open in the lightbox, and at which
- * photo within it. FilterBar/GalleryGrid/Lightbox are all "dumb" components
- * that just receive props, keeping the state in one place here avoids prop
- * drilling or needing a state management library for something this small.
+ * The full "see everything" gallery browser: every photo and video across
+ * every project, flattened out of the projects list (a project with 3
+ * photos contributes 3 tiles here, not 1), filterable by category, laid
+ * out as a dense iPhone Photos style grid. Clicking any tile opens it in
+ * the Lightbox with previous/next across the current filter and an
+ * optional slideshow.
  *
- * Arrangement: picking "All" shows projects grouped into a section per
- * category (skipping any category with zero projects, so the public page
- * never shows an empty placeholder section, that's the admin view's job),
- * instead of one long mixed grid. Picking a specific category filter
- * switches to a single flat grid of just that category. Each card is one
- * project (its cover photo), not one photo, opening a card shows every
- * photo/video that project actually has.
+ * Projects still matter, just not here: the homepage teaser (FeaturedWork)
+ * and the admin panel (ProjectCard) both work at the project level, one
+ * cover photo per job. This page is the one place meant for scrolling
+ * through literally all of them.
  */
 import { useMemo, useState } from "react";
 import FilterBar from "./FilterBar";
 import GalleryGrid from "./GalleryGrid";
 import Lightbox from "./Lightbox";
-import { GALLERY_CATEGORIES, categoryLabel } from "@/lib/categories";
+import type { PhotoItem } from "./types";
 import type { Project } from "@/types";
 
 export default function GalleryExplorer({ projects }: { projects: Project[] }) {
   const [activeFilter, setActiveFilter] = useState("all");
-  const [openProject, setOpenProject] = useState<Project | null>(null);
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const filtered = useMemo(
-    () => (activeFilter === "all" ? [] : projects.filter((p) => p.category === activeFilter)),
-    [projects, activeFilter]
-  );
-
-  const groups = useMemo(
+  const allItems = useMemo<PhotoItem[]>(
     () =>
-      GALLERY_CATEGORIES.map((cat) => ({
-        ...cat,
-        photos: projects.filter((p) => p.category === cat.value),
-      })).filter((group) => group.photos.length > 0),
+      projects.flatMap((p) =>
+        p.media.map((m) => ({
+          key: `${p.id}-${m.id}`,
+          image_url: m.image_url,
+          media_type: m.media_type,
+          title: p.title,
+          category: p.category,
+        }))
+      ),
     [projects]
   );
 
-  function openAtStart(project: Project) {
-    setOpenProject(project);
-    setOpenIndex(0);
-  }
+  const items = useMemo(
+    () => (activeFilter === "all" ? allItems : allItems.filter((i) => i.category === activeFilter)),
+    [allItems, activeFilter]
+  );
 
   return (
     <>
       <FilterBar active={activeFilter} onSelect={setActiveFilter} />
-
-      {activeFilter === "all" ? (
-        projects.length === 0 ? (
-          <GalleryGrid projects={[]} onOpen={openAtStart} />
-        ) : (
-          <div className="flex flex-col gap-14">
-            {groups.map((group) => (
-              <div key={group.value}>
-                <h3 className="text-lg font-bold text-dark tracking-tight mb-5">
-                  {categoryLabel(group.value)}
-                </h3>
-                <GalleryGrid projects={group.photos} onOpen={openAtStart} />
-              </div>
-            ))}
-          </div>
-        )
-      ) : (
-        <GalleryGrid projects={filtered} onOpen={openAtStart} />
-      )}
-
-      <Lightbox
-        title={openProject?.title ?? ""}
-        media={openProject?.media ?? []}
-        index={openProject ? openIndex : null}
-        onClose={() => setOpenProject(null)}
-        onNavigate={setOpenIndex}
-      />
+      <GalleryGrid items={items} onOpen={setOpenIndex} />
+      <Lightbox items={items} index={openIndex} onClose={() => setOpenIndex(null)} onNavigate={setOpenIndex} />
     </>
   );
 }

@@ -23,7 +23,7 @@ export default async function HomePage() {
   return (
     <main>
       <Hero />
-      <Stats settings={settings} projectCount={projects.length} />
+      <Stats settings={settings} />
       <ProductsOverview products={products} />
       <FeaturedWork projects={projects} />
       <Testimonials testimonials={testimonials} />

@@ -835,3 +835,76 @@ does not appear on the public testimonials list until approved, approved
 it, confirmed it then does appear, and confirmed the honeypot field
 silently rejects a bot-style submission. `tsc --noEmit` came back clean
 and a full production build generated all 15 routes with zero errors.
+
+---
+
+## Stage 16: A real Our Work section, a real gallery page, an orange header
+
+**Context:** four separate notes after actually seeing the site with real
+photos in it. The homepage stats strip showed a raw project count, which
+reads as thin (or fake looking) rather than useful. The homepage's Our
+Work section and the gallery page were both doing the same "project card"
+job, when what was actually wanted was a strong curated showcase on the
+homepage and a real "see everything" browsing page on its own. The
+header was still plain white. The Products page was still using
+generic, could be any company copy instead of describing what PBS
+actually builds.
+
+**Stats (`Stats.tsx`):** dropped the project count entirely, a raw number
+next to the actual portfolio doesn't add anything the photos don't
+already prove, and it is exactly the kind of stat that goes stale the
+moment new work sits unphotographed for a while. Replaced it with the
+business's own city (read from its address) as a third, non-numeric
+stat, so the strip still holds three balanced items instead of feeling
+like something was removed and not replaced.
+
+**Homepage Our Work (`FeaturedWork.tsx`):** rebuilt as a bento layout, one
+large lead project plus four smaller ones, each captioned with its own
+title and a short, category specific line about what that kind of work
+actually involves, pulled from the featured projects the admin picks
+(narrowed to 5 well spread ones: two window jobs, two door jobs, one
+shower cubicle, instead of an arbitrary six). Ends with a clear "View
+Full Gallery" button, this section is now a highlight reel, not a
+grid of thumbnails.
+
+**The full gallery page, rebuilt as flat browsing
+(`GalleryExplorer.tsx`, `GalleryGrid.tsx`, `Lightbox.tsx`, new
+`gallery/types.ts`):** this page now flattens every project's photos and
+videos into one list (a project with 3 photos contributes 3 tiles, not
+1), shown as a dense, tightly packed grid closer to a phone's Photos
+app than a set of cards, filterable by the same 6 categories. Clicking
+any tile opens the Lightbox scoped to the current filter, with previous
+and next across every photo in it, not just the one project it came
+from, this is the actual "scroll through all of them" experience. Added
+a Slideshow button that auto advances every few seconds until paused,
+and reworked the image sizing to use explicit viewport units with
+`object-contain` instead of relying on a parent's percentage height,
+which is what let some photos render cropped or cut off before, the
+whole photo is now always visible, shrunk to fit, never cropped. The
+project card view (one cover photo, a "+N more" badge) still exists,
+that's what the homepage teaser and the admin panel use, just not this
+page anymore.
+
+**Header (`Navbar.tsx`, `Logo.tsx`):** the navbar background is now the
+brand orange instead of plain white. `Logo.tsx` got a third rendering
+mode, `onOrange`, white "PBS" and roof icon, dark navy "Projects", since
+the existing orange accented logo would have simply vanished against an
+orange background, this way it still reads as a clean two tone mark.
+The "Get a Quote" button stays dark so it still reads as a button
+against the new orange field, its hover state changed from "brighter
+orange" (which would have blended into the bar itself) to a plain
+darker shade.
+
+**Products page copy (`seed.py`, and the existing rows in the real
+database updated directly since seeding only inserts, it does not
+update):** replaced the six generic one line descriptions with ones
+grounded in what is actually in the 88 real job photos, awning and
+casement windows fitted into brick or plastered walls, sliding patio
+and security screen doors, frameless shower cubicles sealed to the tile,
+and so on for shop fronts, ceilings, and cabinets.
+
+**Verified:** `tsc --noEmit` came back clean and a full production build
+generated all 13 frontend routes with zero errors. The Products and
+Stats changes were confirmed directly against the real database (the
+6 product descriptions updated, and the stats section no longer
+depends on `projects.length` at all).

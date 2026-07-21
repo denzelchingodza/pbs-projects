@@ -15,6 +15,13 @@
  * reads as a deliberate surface, and it carries three real colors instead
  * of one (white text, orange for the primary action, WhatsApp's own green
  * for the chat link), each meaning something rather than decoration.
+ *
+ * Header redesign notes: the bar itself is now the brand orange instead of
+ * plain white, so the very first thing on every page is unmistakably PBS's
+ * own color rather than a neutral shell. The logo switches to its
+ * `onOrange` treatment (see ui/Logo.tsx) so "Projects" and the roof icon
+ * stay readable instead of orange disappearing into orange, and the primary
+ * button stays dark so it still reads as a button against the orange field.
  */
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -49,27 +56,27 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
   const waDigits = settings.whatsapp_number.replace(/[^\d]/g, "");
 
   return (
-    <header className="sticky top-0 z-50 bg-white">
+    <header className="sticky top-0 z-50 bg-orange">
       {/* Thin top strip — contact info, hidden on mobile to save space */}
-      <div className="hidden md:flex items-center justify-end gap-6 px-8 py-2 text-xs text-neutral-500 border-b border-neutral-100">
-        <a href={`mailto:${settings.email}`} className="hover:text-orange transition-colors">
+      <div className="hidden md:flex items-center justify-end gap-6 px-8 py-2 text-xs text-white/80 border-b border-white/15">
+        <a href={`mailto:${settings.email}`} className="hover:text-white transition-colors">
           {settings.email}
         </a>
         <a
           href={`tel:${settings.phone_primary.replace(/\s/g, "")}`}
-          className="hover:text-orange transition-colors font-medium"
+          className="hover:text-white transition-colors font-medium"
         >
           {settings.phone_primary}
         </a>
       </div>
 
       <div
-        className={`flex items-center justify-between px-6 md:px-8 py-4 transition-shadow border-b border-neutral-100 ${
-          scrolled ? "shadow-sm" : ""
+        className={`flex items-center justify-between px-6 md:px-8 py-4 transition-shadow ${
+          scrolled ? "shadow-md" : ""
         }`}
       >
         <Link href="/">
-          <Logo />
+          <Logo onOrange />
         </Link>
 
         <nav className="hidden md:flex items-center gap-9">
@@ -77,21 +84,21 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-neutral-600 hover:text-dark transition-colors"
+              className="text-sm font-medium text-white/90 hover:text-white transition-colors"
             >
               {link.label}
             </Link>
           ))}
           <Link
             href="/#quote"
-            className="bg-dark text-white text-sm font-semibold px-5 py-2.5 rounded-md hover:bg-orange transition-colors"
+            className="bg-dark text-white text-sm font-semibold px-5 py-2.5 rounded-md hover:bg-black transition-colors"
           >
             Get a Quote
           </Link>
         </nav>
 
         <button
-          className="md:hidden text-2xl text-dark"
+          className="md:hidden text-2xl text-white"
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
         >

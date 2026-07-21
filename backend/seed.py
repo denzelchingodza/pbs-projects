@@ -12,12 +12,23 @@ from app.models.testimonial import Testimonial
 from app.core.security import hash_password
 
 PRODUCTS = [
-    ("Windows", "windows", "Aluminum-framed windows, built to size for homes and shops."),
-    ("Doors", "doors", "Sliding, hinged, and shop-entry aluminum doors."),
-    ("Shower Cubicles", "shower-cubicles", "Frameless and framed shower cubicle installations."),
-    ("Shop Fronts", "shop-fronts", "Full storefront glazing and aluminum framing."),
-    ("Suspended Ceilings", "suspended-ceilings", "Commercial and residential ceiling fit-outs."),
-    ("Cabinets", "cabinets", "Custom aluminum and glass cabinetry."),
+    ("Windows", "windows",
+     "Aluminum awning and casement windows, built to size and fitted into brick or "
+     "plastered walls, from a single opening to a full wall of glass."),
+    ("Doors", "doors",
+     "Sliding patio doors, security screen doors, and hinged entrances in aluminum, "
+     "built for daily use and finished to match the rest of the home or shop."),
+    ("Shower Cubicles", "shower-cubicles",
+     "Frameless sliding glass shower cubicles, sealed clean to the tile, no leaks, no rust."),
+    ("Shop Fronts", "shop-fronts",
+     "Full storefront glazing and aluminum framing, built to secure a shop overnight "
+     "and welcome customers by day."),
+    ("Suspended Ceilings", "suspended-ceilings",
+     "Aluminum grid suspended ceilings for homes, shops, and offices, a clean finish "
+     "with easy access above it for wiring and maintenance."),
+    ("Cabinets", "cabinets",
+     "Custom aluminum framed glass cabinets and display units, built to size for "
+     "kitchens, shops, and display spaces."),
 ]
 
 TESTIMONIALS = [
