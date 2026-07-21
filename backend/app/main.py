@@ -15,6 +15,10 @@ app = FastAPI(title="PBS Projects API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],  # Next.js dev server
+    # Also allow the dev server when it's opened from another device on the
+    # same network (phone testing), e.g. http://192.168.1.23:3000. Matches
+    # the common private IP ranges only, never applies outside local dev.
+    allow_origin_regex=r"http://(192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}):3000",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

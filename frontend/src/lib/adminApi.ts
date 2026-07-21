@@ -3,11 +3,18 @@
  * every request here needs an `Authorization: Bearer <token>` header and
  * runs from the browser (Client Components), unlike the public site's
  * server-side fetches in lib/api.ts.
+ *
+ * Same auto-detect as lib/api.ts: NEXT_PUBLIC_API_URL wins if set, otherwise
+ * the API host follows whatever host the admin panel itself was opened from.
  */
 import { clearToken, getToken, setToken } from "./auth";
 import type { AdminQuote, AdminUser, Project, QuoteStatus, Testimonial } from "@/types";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined"
+    ? `http://${window.location.hostname}:8000/api`
+    : "http://localhost:8000/api");
 
 /**
  * Attaches the stored token to every request, and if the backend ever comes

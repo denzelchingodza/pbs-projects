@@ -1272,3 +1272,49 @@ needing regex escaping.
 typing these directly, once supplied they get added to `lib/i18n.ts`
 and show up everywhere that key is already wired in, no other code
 changes needed.
+
+## Stage 24: Phone and LAN access for local development
+
+Denzel asked how to run the site locally and actually see it on his own
+phone, not just his computer, so this stage makes the local dev setup
+work from any device on the same WiFi network, with no manual IP typing
+into config files.
+
+**Backend (`backend/app/main.py`):** the CORS rule used to allow only
+`http://localhost:3000`, which blocks a phone opening the frontend at
+the Mac's network address (e.g. `http://192.168.1.23:3000`). Added an
+`allow_origin_regex` matching the standard private network ranges
+(`192.168.x.x`, `10.x.x.x`, `172.16.x.x` through `172.31.x.x`) on port
+3000, so any device on the same home or office network is allowed in,
+without hardcoding one specific address that would go stale the next
+time the router hands out a different IP.
+
+**Frontend (`lib/api.ts`, `lib/adminApi.ts`):** the API base URL used
+to be hardcoded to `http://localhost:8000/api` whenever the
+`NEXT_PUBLIC_API_URL` environment variable wasn't set. That works fine
+on the computer itself, but a phone has no `localhost:8000`, that
+address only means the phone. Changed both files so that, in the
+browser, the API address automatically follows whatever host the page
+was actually opened from, using `window.location.hostname`. Open the
+site from the Mac at `localhost:3000` and it still talks to
+`localhost:8000`. Open it from a phone at `192.168.1.23:3000` and it
+automatically talks to `192.168.1.23:8000`, no `.env.local` file to
+create or edit. Server side rendering (which always runs on the Mac
+itself) keeps the plain `localhost` fallback, which is correct there.
+
+**Frontend (`package.json`):** added a `dev:lan` script
+(`next dev -H 0.0.0.0`) as an explicit, reliable way to start the
+frontend listening on every network interface, alongside the existing
+`dev` script which is left unchanged.
+
+**How to view the site on a phone:** start the backend with
+`uvicorn app.main:app --reload --host 0.0.0.0` and the frontend with
+`npm run dev:lan`, find the Mac's own network address (System Settings,
+Wi-Fi, Details, or `ipconfig getifaddr en0` in Terminal), then on the
+phone, connected to the same WiFi, open a browser to
+`http://<that address>:3000`.
+
+**Verified for real, not assumed:** `tsc --noEmit` came back clean and
+a full production build generated all 16 frontend routes with zero
+errors. Confirmed by inspecting `git status` that only the four
+intended files changed.
