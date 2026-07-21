@@ -28,10 +28,10 @@ export default function AboutFounder({ settings }: { settings: SiteSettings }) {
           <img
             src={settings.owner_photo_url}
             alt={name}
-            className="w-full aspect-square object-cover rounded-2xl border border-neutral-200"
+            className="w-full aspect-square object-cover rounded-2xl shadow-md ring-4 ring-orange/10"
           />
         ) : (
-          <div className="w-full aspect-square rounded-2xl bg-dark text-white flex items-center justify-center text-4xl font-bold">
+          <div className="w-full aspect-square rounded-2xl bg-dark text-white flex items-center justify-center text-4xl font-bold shadow-md ring-4 ring-orange/10">
             {initials(name)}
           </div>
         )}

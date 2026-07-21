@@ -30,9 +30,10 @@ export default function AdminGalleryPage() {
       <h1 className="text-2xl font-bold text-dark mb-1">Gallery</h1>
       <p className="text-neutral-500 text-sm mb-8">
         Projects are grouped by category below, so you can see at a glance which
-        product lines still need real photos. A project can have more than one
-        photo, add extras with the &quot;Add photo&quot; tile right on its card
-        instead of creating a new project for the same job.
+        product lines still need real photos. Each card shows its cover photo
+        first, tap &quot;Manage Photos&quot; on a card to see every photo in that
+        project, remove one, or add another, a project can have more than one
+        photo without creating a new one for the same job.
       </p>
 
       <div className="mb-10">

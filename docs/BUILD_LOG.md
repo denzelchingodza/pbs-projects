@@ -1047,3 +1047,64 @@ through the button and the link hover state instead of the whole bar.
 
 **Verified:** `tsc --noEmit` came back clean and a full production build
 generated all 13 frontend routes with zero errors.
+
+---
+
+## Stage 20: A real gallery layout, a fuller About page, a calmer admin gallery
+
+**Context:** three separate notes after living with the site for a while.
+The full gallery page still felt like a raw camera roll rather than an
+actual gallery. The About page had nowhere near enough on it besides the
+founder and the map, though the map itself was called out as already
+looking great and was left completely untouched. The admin gallery page
+felt messy, every project card showed every one of its photos at once,
+which got overwhelming fast with dozens of real projects on the page
+together.
+
+**Public gallery, now organized into real sections
+(`GalleryExplorer.tsx`, `GalleryGrid.tsx`):** picking "All" now groups
+every photo into one labeled section per category (Windows, Doors,
+Shower Cubicles, and so on), each with its own heading and count, in a
+fixed order, instead of whatever order the photos happened to land in
+the database. Picking one category filter still shows just that
+category's photos, no heading needed since the filter chip already says
+what you are looking at. Tiles are bigger now too (2 to 4 per row
+depending on screen size, instead of up to 6 tightly packed squares),
+each rounded, with its project's title fading in on hover, this reads as
+a real curated gallery rather than a phone's photo roll. The Lightbox's
+previous and next still work correctly across the grouped order, this
+was checked directly against the real data shape (88 photos across
+windows, doors, and shower cubicles) with a small script simulating the
+exact grouping logic used in the component, confirming every photo lands
+in exactly one section and the running index never skips or repeats.
+
+**About page, genuinely fuller now (`about/page.tsx`, new
+`WhyChooseUs.tsx`):** added a three reason "why choose us" section
+between the intro and the founder bio, real trade experience, everything
+measured and built to fit its own opening, and being local and based in
+Harare, each with a small icon. Added a "Real Work" strip of up to 4
+actual finished job photos (whichever the admin has featured) linking
+into the full gallery, so the About page is not just text and a founder
+photo, it also shows real finished work before ending at the map. The
+founder photo got a soft shadow and a subtle orange ring around it for a
+bit more polish. The map section itself was left completely alone.
+
+**Admin gallery, calmer by default (`ProjectCard.tsx`,
+`admin/gallery/page.tsx`):** each project card now leads with just its
+cover photo, like the public site already shows it, with a small "+N
+more" badge if it has extra photos, instead of laying out every single
+photo thumbnail on every card all the time. A new "Manage Photos" toggle
+reveals the individual thumbnails, the per-photo delete control, and the
+add-another-photo tile only when you actually want them, editing the
+title, category, and featured flag is unchanged, still inline on the
+card. This is meant to make scanning dozens of real projects at once
+noticeably calmer without losing any of the existing photo management.
+
+**Verified for real, not assumed:** `tsc --noEmit` came back clean and a
+full production build generated all 13 frontend routes with zero
+errors. The real database was queried directly to confirm the actual
+category counts behind the gallery grouping (41 window projects and 54
+window photos, 24 door projects and 32 door photos, 1 shower cubicle
+project and 2 shower cubicle photos, 88 photos total), and the grouping
+algorithm itself was run against that exact shape in an isolated script
+to confirm the section counts and photo ordering come out correct.

@@ -1,16 +1,27 @@
 /**
- * About page, a Server Component so it can fetch settings directly with
- * await, same pattern as the home page. Shows the company story, the real
- * founder bio (admin-editable), and the map, none of this is hardcoded
- * beyond the one-time company story paragraph below.
+ * About page, a Server Component so it can fetch settings and real project
+ * photos directly with await, same pattern as the home page. Shows the
+ * company story, three honest reasons to hire PBS, a small strip of real
+ * finished work, the real founder bio (admin-editable), and the map, none
+ * of this is hardcoded beyond the one-time company story paragraph below.
  */
+import Link from "next/link";
 import AboutFounder from "@/components/home/AboutFounder";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LocationMap from "@/components/layout/LocationMap";
-import { getSiteSettings } from "@/lib/api";
+import { getProjects, getSiteSettings } from "@/lib/api";
+import { categoryLabel } from "@/lib/categories";
+import { mediaUrl } from "@/lib/media";
+import type { Project } from "@/types";
 
 export default async function AboutPage() {
-  const settings = await getSiteSettings();
+  const [settings, projects] = await Promise.all([getSiteSettings(), getProjects()]);
   const years = settings.founded_year ? new Date().getFullYear() - settings.founded_year : null;
+
+  const workSample = [...(projects as Project[])]
+    .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
+    .slice(0, 4)
+    .filter((p) => p.media[0]);
 
   return (
     <main>
@@ -31,9 +42,54 @@ export default async function AboutPage() {
         </div>
       </section>
 
+      <WhyChooseUs />
+
       <AboutFounder settings={settings} />
 
-      <section className="px-6 md:px-8 py-20 bg-neutral-50">
+      {workSample.length > 0 && (
+        <section className="px-6 md:px-8 py-20 bg-neutral-50">
+          <div className="max-w-5xl mx-auto">
+            <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3 text-center">
+              Real Work
+            </p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight text-center mb-10">
+              A few completed jobs
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {workSample.map((p) => (
+                <Link
+                  key={p.id}
+                  href="/gallery"
+                  className="group relative aspect-square rounded-xl overflow-hidden bg-neutral-900 shadow-sm hover:shadow-lg transition-shadow"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={mediaUrl(p.media[0].image_url)}
+                    alt={p.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 pt-8 pb-2.5">
+                    <span className="text-white/70 text-[10px] font-semibold uppercase tracking-widest">
+                      {categoryLabel(p.category)}
+                    </span>
+                    <p className="text-white text-xs font-semibold truncate">{p.title}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="text-center mt-10">
+              <Link
+                href="/gallery"
+                className="inline-block bg-dark text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:bg-orange transition"
+              >
+                View Full Gallery
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className={`px-6 md:px-8 py-20 ${workSample.length > 0 ? "bg-white" : "bg-neutral-50"}`}>
         <div className="max-w-5xl mx-auto">
           <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3 text-center">
             Find Us

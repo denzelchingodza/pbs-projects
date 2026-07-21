@@ -20,7 +20,7 @@ export default async function GalleryPage() {
             eyebrow="Portfolio"
             title="The Full Gallery"
             intro={
-              `Every photo we have from ${photoCount} completed installations, filter by category, tap any photo to view it full size, or start the slideshow.` +
+              `Every photo we have from ${photoCount} completed installations, organized by category below. Filter to just one, tap any photo to view it full size, or start the slideshow.` +
               (hasVideo ? " Anything with a play icon is a short video walkthrough." : "")
             }
           />
