@@ -38,19 +38,19 @@ export default function AdminDashboardPage() {
       {error && <p className="text-sm text-red-600 mb-6">{error}</p>}
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-        <div className="bg-white border border-neutral-200 rounded-xl p-6">
+        <div className="bg-white border border-neutral-200 border-l-4 border-l-dark rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="text-3xl font-bold text-dark">{quotes?.length ?? "..."}</div>
           <div className="text-sm text-neutral-500 mt-1">Total Quote Requests</div>
         </div>
-        <div className="bg-white border border-neutral-200 rounded-xl p-6">
+        <div className="bg-white border border-neutral-200 border-l-4 border-l-orange rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="text-3xl font-bold text-orange">{newCount ?? "..."}</div>
           <div className="text-sm text-neutral-500 mt-1">New, Not Yet Contacted</div>
         </div>
-        <div className="bg-white border border-neutral-200 rounded-xl p-6">
+        <div className="bg-white border border-neutral-200 border-l-4 border-l-dark rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="text-3xl font-bold text-dark">{gallery?.length ?? "..."}</div>
           <div className="text-sm text-neutral-500 mt-1">Gallery Projects</div>
         </div>
-        <div className="bg-white border border-neutral-200 rounded-xl p-6">
+        <div className="bg-white border border-neutral-200 border-l-4 border-l-orange rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="text-3xl font-bold text-orange">{pendingTestimonials ?? "..."}</div>
           <div className="text-sm text-neutral-500 mt-1">Testimonials Awaiting Review</div>
         </div>
@@ -59,7 +59,7 @@ export default function AdminDashboardPage() {
       <div className="flex flex-wrap gap-4 mb-10">
         <Link
           href="/admin/quotes"
-          className="bg-dark text-white text-sm font-semibold px-5 py-3 rounded-md hover:bg-orange transition"
+          className="bg-orange text-white text-sm font-semibold px-5 py-3 rounded-md hover:brightness-95 transition"
         >
           Review Quotes
         </Link>
@@ -77,7 +77,7 @@ export default function AdminDashboardPage() {
         </Link>
       </div>
 
-      <div className="bg-white border border-neutral-200 rounded-xl p-6 max-w-xl">
+      <div className="bg-white border border-neutral-200 rounded-xl p-6 max-w-xl shadow-sm">
         <p className="text-sm font-semibold text-dark mb-3">Getting started</p>
         <ol className="text-sm text-neutral-600 space-y-2.5 list-decimal list-inside">
           <li>

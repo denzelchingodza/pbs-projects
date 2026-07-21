@@ -24,6 +24,10 @@ export default function AdminQuotesPage() {
       <p className="text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 rounded-md px-4 py-2.5 mb-8 inline-block">
         Move each one through the pipeline as you work it: New &rarr; Contacted &rarr;
         Quoted &rarr; Won or Lost. The status dropdown on each card updates it instantly.
+        Once a lead has been contacted, quoted, won, or lost, a Delete option
+        appears so you can clear it out once the job is done or it did not go
+        anywhere. Brand new leads cannot be deleted until they have been
+        followed up on.
       </p>
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
@@ -36,6 +40,7 @@ export default function AdminQuotesPage() {
           onChange={(updated) =>
             setQuotes((prev) => prev?.map((q) => (q.id === updated.id ? updated : q)) ?? null)
           }
+          onDeleted={(id) => setQuotes((prev) => prev?.filter((q) => q.id !== id) ?? null)}
         />
       )}
     </div>

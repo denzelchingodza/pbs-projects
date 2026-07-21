@@ -56,6 +56,28 @@ def update_quote_status(
     return quote
 
 
+@router.delete("/quotes/{quote_id}")
+def delete_quote(
+    quote_id: int,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    """Removes a quote request. Only allowed once it has actually been acted
+    on (contacted, quoted, won, or lost), a brand new lead that hasn't been
+    visited yet can't be deleted by accident, it has to be worked first."""
+    quote = db.query(QuoteRequest).filter(QuoteRequest.id == quote_id).first()
+    if not quote:
+        raise HTTPException(status_code=404, detail="Quote not found")
+    if quote.status == "new":
+        raise HTTPException(
+            status_code=400,
+            detail="This lead hasn't been contacted yet. Move it to Contacted, Quoted, Won, or Lost before deleting it.",
+        )
+    db.delete(quote)
+    db.commit()
+    return {"deleted": True}
+
+
 # ---------- Gallery management ----------
 #
 # A "project" is a real job, it can have one photo or several (the same job

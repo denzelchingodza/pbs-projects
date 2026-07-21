@@ -70,7 +70,7 @@ export default function ProjectCard({
   }
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-xl p-4">
+    <div className="bg-white border border-neutral-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex flex-wrap gap-3 mb-4">
         {project.media.map((m) => (
           <div key={m.id} className="relative w-20 h-20 rounded-lg overflow-hidden bg-neutral-900 shrink-0 group">

@@ -6,9 +6,14 @@
  * pipeline documented in docs/project-brief.md: new -> contacted -> quoted
  * -> won / lost. Renders as stacked cards on mobile instead of a squeezed
  * table, since this data has too many fields to fit a phone-width table.
+ *
+ * Delete notes: a lead can only be deleted once it has actually been
+ * visited, contacted or further along, a brand new "New" lead can't be
+ * removed by accident before anyone has followed up on it, the backend
+ * enforces this too so it can't be bypassed from the browser.
  */
 import { useState } from "react";
-import { updateQuoteStatus } from "@/lib/adminApi";
+import { deleteQuote, updateQuoteStatus } from "@/lib/adminApi";
 import type { AdminQuote, QuoteStatus } from "@/types";
 
 const STATUSES: QuoteStatus[] = ["new", "contacted", "quoted", "won", "lost"];
@@ -24,11 +29,14 @@ const STATUS_STYLES: Record<QuoteStatus, string> = {
 export default function QuoteTable({
   quotes,
   onChange,
+  onDeleted,
 }: {
   quotes: AdminQuote[];
   onChange: (updated: AdminQuote) => void;
+  onDeleted: (id: number) => void;
 }) {
   const [updatingId, setUpdatingId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const [error, setError] = useState("");
 
   async function handleStatusChange(quote: AdminQuote, status: QuoteStatus) {
@@ -44,6 +52,22 @@ export default function QuoteTable({
     }
   }
 
+  async function handleDelete(quote: AdminQuote) {
+    if (!window.confirm(`Delete the quote request from ${quote.full_name}? This cannot be undone.`)) {
+      return;
+    }
+    setDeletingId(quote.id);
+    setError("");
+    try {
+      await deleteQuote(quote.id);
+      onDeleted(quote.id);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete quote.");
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   if (quotes.length === 0) {
     return <p className="text-sm text-neutral-400">No quote requests yet.</p>;
   }
@@ -53,7 +77,10 @@ export default function QuoteTable({
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
       <div className="grid gap-4">
         {quotes.map((q) => (
-          <div key={q.id} className="bg-white border border-neutral-200 rounded-xl p-5">
+          <div
+            key={q.id}
+            className="bg-white border border-neutral-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
+          >
             <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
               <div>
                 <div className="font-semibold text-dark">{q.full_name}</div>
@@ -75,19 +102,33 @@ export default function QuoteTable({
             )}
             {q.details && <p className="text-sm text-neutral-600 mb-3">{q.details}</p>}
 
-            <label className="block text-xs font-medium text-neutral-500 mb-1">Update Status</label>
-            <select
-              value={q.status}
-              disabled={updatingId === q.id}
-              onChange={(e) => handleStatusChange(q, e.target.value as QuoteStatus)}
-              className="border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow disabled:opacity-60"
-            >
-              {STATUSES.map((s) => (
-                <option key={s} value={s}>
-                  {s.charAt(0).toUpperCase() + s.slice(1)}
-                </option>
-              ))}
-            </select>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <label className="block text-xs font-medium text-neutral-500 mb-1">Update Status</label>
+                <select
+                  value={q.status}
+                  disabled={updatingId === q.id}
+                  onChange={(e) => handleStatusChange(q, e.target.value as QuoteStatus)}
+                  className="border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow disabled:opacity-60"
+                >
+                  {STATUSES.map((s) => (
+                    <option key={s} value={s}>
+                      {s.charAt(0).toUpperCase() + s.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {q.status !== "new" && (
+                <button
+                  onClick={() => handleDelete(q)}
+                  disabled={deletingId === q.id}
+                  className="text-sm font-medium text-red-600 hover:text-red-700 disabled:opacity-50 transition-colors"
+                >
+                  {deletingId === q.id ? "Deleting..." : "Delete"}
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>

@@ -949,3 +949,76 @@ reduced motion turned on, using Tailwind's `motion-reduce` variant.
 
 **Verified:** `tsc --noEmit` came back clean and a full production build
 generated all 13 frontend routes with zero errors.
+
+---
+
+## Stage 18: Header simplified, the real logo shape, a chat bubble, deletable quotes
+
+**Context:** direct feedback once the two tier header and the back and
+forward buttons from Stage 17 were actually seen, the small back and
+forward buttons on the header did not look good and should go, and the
+email and phone number on the top strip were not needed there. A real
+reference image of the actual company logo was shared too, PBS large and
+bold, PROJECTS smaller and spaced out on its own line underneath, both
+below the orange roof icon, not what the site currently had. On top of
+that, the WhatsApp button needed to actually invite a click instead of
+only showing its label on hover, and the admin side needed a real
+redesign pass plus the ability to delete a quote once it has been
+visited or the job is finished.
+
+**Header, back to one bar (`Navbar.tsx`):** removed the dark contact
+strip and the back and forward buttons entirely, both are gone now, the
+`HistoryNav.tsx` file was removed along with them. The header is a single
+clean orange bar again, logo on the left, navigation and the Get a Quote
+button on the right, the same on desktop and on the phone. Contact
+details already live in the footer and on the Contact page, so nothing
+about reaching the business was actually lost, it is just not crowding
+the header anymore.
+
+**Logo, matching the real mark (`Logo.tsx`):** rebuilt to match the
+reference image exactly, the orange roof icon on top, "PBS" large and
+bold underneath it, and "PROJECTS" smaller with wide letter spacing on
+its own line below that. Still comes in the same three color treatments
+depending on the background it sits on (default, dark, and the orange
+navbar's onOrange mode), so it stays readable everywhere it is used,
+navbar, footer, mobile drawer, and the admin sidebar.
+
+**WhatsApp button, now it actually greets you (`WhatsAppFloat.tsx`,
+`globals.css`):** instead of a label that only ever showed on hover
+(easy to miss, and hover does not exist on a phone anyway), a real
+speech bubble now pops open a couple of seconds after the page loads,
+saying "Need help with a project? Chat to us, or reach us here on
+WhatsApp, we usually reply fast," with its own close button so it does
+not sit there forever. It only shows once per page load, added a small
+pop in animation so it reads as a message arriving rather than a box
+just appearing.
+
+**Quotes can now be deleted, carefully (`routers/admin.py`,
+`lib/adminApi.ts`, `QuoteTable.tsx`):** added a real
+`DELETE /api/admin/quotes/{id}` endpoint, but only once a lead is past
+"New," a brand new, not yet contacted lead cannot be deleted by
+accident, it has to be moved to Contacted, Quoted, Won, or Lost first.
+The Delete button on each quote card only appears once that condition
+is met, and asks for a confirmation before it actually removes anything.
+The guidance text above the quote list now explains this rule plainly.
+
+**Admin panel, a proper redesign pass (`AdminNav.tsx`,
+`admin/dashboard/page.tsx`, `ProjectCard.tsx`,
+`TestimonialModerationList.tsx`):** the sidebar now marks the active
+section with a real orange accent bar instead of a plain background
+tint, and Log Out is now its own clearly marked red bordered button
+instead of blending in with the other links. The dashboard's stat cards
+got a colored left accent bar (orange for the numbers that need
+attention, dark for plain totals) and a soft shadow that lifts slightly
+on hover, the same hover lift was added to project cards and testimonial
+cards in the admin panel so the whole admin experience feels like one
+consistent, considered design instead of a set of plain bordered boxes.
+
+**Verified for real, not assumed:** `tsc --noEmit` came back clean and a
+full production build generated all 13 frontend routes with zero
+errors. The backend's new delete rule was tested directly against the
+real database models, not just read through, inserting a "New" test
+quote and a "Contacted" test quote and calling the actual delete
+function for both, confirming the "New" one is correctly blocked with
+a clear message and the "Contacted" one deletes cleanly, then removing
+both test rows so the real database was left exactly as it was before.

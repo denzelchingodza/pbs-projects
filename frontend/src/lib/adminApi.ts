@@ -80,6 +80,12 @@ export async function updateQuoteStatus(
   });
 }
 
+/** Only succeeds once a quote is past "new" (contacted, quoted, won, or
+ * lost), the backend rejects deleting a lead that hasn't been visited yet. */
+export async function deleteQuote(id: number): Promise<void> {
+  await authedFetch(`/admin/quotes/${id}`, { method: "DELETE" });
+}
+
 export async function getAdminGallery(): Promise<Project[]> {
   // Reuses the public gallery read, admin login isn't required to view what's
   // already public, only to add/remove/edit projects, which is enforced below.

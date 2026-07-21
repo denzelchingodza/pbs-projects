@@ -16,20 +16,18 @@
  * of one (white text, orange for the primary action, WhatsApp's own green
  * for the chat link), each meaning something rather than decoration.
  *
- * Header redesign notes: now a real two tier bar instead of one flat block
- * of orange, a dark strip on top (contact info) reading as the "quiet"
- * layer, and the brand orange main bar underneath it carrying the actual
- * navigation, that contrast is what gives the header depth instead of
- * looking like a single undifferentiated color block. The logo uses its
- * `onOrange` treatment (see ui/Logo.tsx) so "Projects" and the roof icon
- * stay readable against the orange, and a pair of back/forward buttons
- * (see HistoryNav.tsx) sit next to it so visitors always have an obvious
- * way to retrace their steps.
+ * Header redesign notes: back to a single clean orange bar, the earlier
+ * two tier version (a dark contact strip above it) and the small back and
+ * forward buttons next to the logo were both tried and didn't land well,
+ * so both are gone now. Contact details live in the footer and the Contact
+ * page instead of crowding the header, and the WhatsApp float (see
+ * WhatsAppFloat.tsx) is the quick way to reach the business from anywhere
+ * on the site. The logo uses its `onOrange` treatment (see ui/Logo.tsx) so
+ * it stays readable against the orange bar, on desktop and on mobile.
  */
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
-import HistoryNav from "./HistoryNav";
 import type { SiteSettings } from "@/types";
 
 const NAV_LINKS = [
@@ -62,31 +60,15 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Dark top strip — contact info, the "quiet" layer under the main bar */}
-      <div className="hidden md:flex items-center justify-end gap-6 bg-dark px-8 py-2 text-xs text-white/70">
-        <a href={`mailto:${settings.email}`} className="hover:text-white transition-colors">
-          {settings.email}
-        </a>
-        <a
-          href={`tel:${settings.phone_primary.replace(/\s/g, "")}`}
-          className="hover:text-white transition-colors font-medium"
-        >
-          {settings.phone_primary}
-        </a>
-      </div>
-
-      {/* Main bar — brand orange, carries the actual navigation */}
+      {/* Single bar — brand orange, carries the logo and the navigation */}
       <div
         className={`bg-orange flex items-center justify-between px-4 md:px-8 py-3 transition-shadow ${
           scrolled ? "shadow-lg" : "shadow-sm"
         }`}
       >
-        <div className="flex items-center gap-1 md:gap-3">
-          <HistoryNav />
-          <Link href="/" className="px-1">
-            <Logo onOrange />
-          </Link>
-        </div>
+        <Link href="/" className="px-1">
+          <Logo onOrange />
+        </Link>
 
         <nav className="hidden md:flex items-center gap-9">
           {NAV_LINKS.map((link) => (

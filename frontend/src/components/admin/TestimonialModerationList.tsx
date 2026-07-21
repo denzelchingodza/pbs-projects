@@ -58,7 +58,10 @@ export default function TestimonialModerationList({
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
       <div className="grid gap-4">
         {visible.map((t) => (
-          <div key={t.id} className="bg-white border border-neutral-200 rounded-xl p-5">
+          <div
+            key={t.id}
+            className="bg-white border border-neutral-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
+          >
             <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
               <div>
                 <div className="font-semibold text-dark">{t.client_name}</div>
