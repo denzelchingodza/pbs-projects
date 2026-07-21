@@ -38,31 +38,40 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
             {[...projects]
               .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
               .slice(0, 6)
-              .map((p) => (
-              <div key={p.id} className="relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900">
-                {p.media_type === "video" ? (
-                  <video
-                    src={mediaUrl(p.image_url)}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    className="aspect-[4/3] object-cover w-full"
-                  />
-                ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={mediaUrl(p.image_url)}
-                    alt={p.title}
-                    className="aspect-[4/3] object-cover w-full"
-                  />
-                )}
-                <span className="absolute top-3 left-3 bg-white/90 text-dark text-xs font-semibold px-3 py-1 rounded-full">
-                  {categoryLabel(p.category)}
-                </span>
-              </div>
-            ))}
+              .map((p) => {
+                const cover = p.media[0];
+                if (!cover) return null;
+                return (
+                  <div key={p.id} className="relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900">
+                    {cover.media_type === "video" ? (
+                      <video
+                        src={mediaUrl(cover.image_url)}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        className="aspect-[4/3] object-cover w-full"
+                      />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={mediaUrl(cover.image_url)}
+                        alt={p.title}
+                        className="aspect-[4/3] object-cover w-full"
+                      />
+                    )}
+                    <span className="absolute top-3 left-3 bg-white/90 text-dark text-xs font-semibold px-3 py-1 rounded-full">
+                      {categoryLabel(p.category)}
+                    </span>
+                    {p.media.length > 1 && (
+                      <span className="absolute top-3 right-3 bg-black/60 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">
+                        +{p.media.length - 1} more
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
           </div>
         )}
       </div>

@@ -8,14 +8,26 @@ export interface Product {
 
 export type MediaType = "image" | "video";
 
+export interface ProjectMedia {
+  id: number;
+  image_url: string;
+  media_type: MediaType;
+}
+
+/**
+ * A Project is a real job, it can have one photo or several (the same site
+ * photographed more than once). `media` is every photo/video for that job,
+ * in upload order, `media[0]` is treated as the project's cover photo
+ * everywhere it's shown as a single card (homepage, gallery grid).
+ */
 export interface Project {
   id: number;
   title: string;
   category: string;
-  image_url: string;
-  media_type: MediaType;
   before_image_url?: string;
   is_featured?: boolean;
+  created_at?: string;
+  media: ProjectMedia[];
 }
 
 export interface QuoteRequest {
@@ -42,12 +54,15 @@ export interface SiteSettings {
   founded_year?: number;
 }
 
+export type TestimonialStatus = "pending" | "approved";
+
 export interface Testimonial {
   id: number;
   client_name: string;
   client_role?: string;
   quote: string;
   rating: number;
+  status?: TestimonialStatus;
 }
 
 export type QuoteStatus = "new" | "contacted" | "quoted" | "won" | "lost";

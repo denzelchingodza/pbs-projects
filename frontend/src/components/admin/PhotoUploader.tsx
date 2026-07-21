@@ -1,8 +1,13 @@
 "use client";
 
 /**
- * Upload form for POST /api/admin/gallery (multipart: title, category,
- * is_featured, file). Accepts both photos and short videos, the backend
+ * Starts a brand new project (a real job) with its first photo or video,
+ * POST /api/admin/gallery. If a job has more than one photo, don't create a
+ * second project for it here, use the "Add photo" tile on the project's own
+ * card further down the page instead, that's what actually keeps a 3 photo
+ * job as 1 project instead of 3 unrelated ones.
+ *
+ * Accepts both photos and short videos, the backend
  * (app/services/image_service.py) tells them apart by file extension and
  * treats them very differently: photos get auto-resized, videos are stored
  * exactly as uploaded (no compression, see that file's docstring for why).
@@ -10,7 +15,7 @@
  * accepted formats before the admin picks a file, not after a failed upload.
  */
 import { useState } from "react";
-import { uploadGalleryPhoto } from "@/lib/adminApi";
+import { createProject } from "@/lib/adminApi";
 import { GALLERY_CATEGORIES } from "@/lib/categories";
 import { IMAGE_ACCEPT, MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, VIDEO_ACCEPT, validateMediaFile } from "@/lib/media";
 
@@ -41,7 +46,7 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
     }
 
     try {
-      await uploadGalleryPhoto(data);
+      await createProject(data);
       form.reset();
       setStatus("idle");
       onUploaded();
@@ -54,11 +59,14 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
   return (
     <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
       <div className="bg-neutral-50 border-b border-neutral-200 px-6 py-4">
-        <p className="text-sm font-semibold text-dark">Add a photo or video</p>
+        <p className="text-sm font-semibold text-dark">Start a new project</p>
         <p className="text-xs text-neutral-500 mt-1.5 leading-relaxed">
-          Category decides which section it lands in below and which filter shows
-          it on the public portfolio page. Photos are automatically resized for
-          phones after upload, so any reasonably sized photo works.
+          Use this for a job you haven&apos;t added yet. Category decides which
+          section it lands in below and which filter shows it on the public
+          portfolio page. Photos are automatically resized for phones after
+          upload, so any reasonably sized photo works. Got more photos of a
+          job that&apos;s already listed below? Use the &quot;Add photo&quot; tile on
+          that project&apos;s own card instead of starting a new one here.
         </p>
         <div className="mt-3 flex flex-col gap-1 text-xs text-neutral-600">
           <p>
@@ -124,7 +132,7 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
           disabled={status === "submitting"}
           className="bg-orange text-white font-semibold py-3 rounded-md hover:brightness-95 transition disabled:opacity-60"
         >
-          {status === "submitting" ? "Uploading..." : "Upload"}
+          {status === "submitting" ? "Creating..." : "Create Project"}
         </button>
       </form>
     </div>

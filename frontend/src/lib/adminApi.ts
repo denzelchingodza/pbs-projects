@@ -5,7 +5,7 @@
  * server-side fetches in lib/api.ts.
  */
 import { clearToken, getToken, setToken } from "./auth";
-import type { AdminQuote, AdminUser, Project, QuoteStatus } from "@/types";
+import type { AdminQuote, AdminUser, Project, QuoteStatus, Testimonial } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
@@ -82,18 +82,58 @@ export async function updateQuoteStatus(
 
 export async function getAdminGallery(): Promise<Project[]> {
   // Reuses the public gallery read, admin login isn't required to view what's
-  // already public, only to add/remove photos, which is enforced below.
+  // already public, only to add/remove/edit projects, which is enforced below.
   const res = await fetch(`${API_URL}/gallery/`);
-  if (!res.ok) throw new Error("Could not load gallery photos.");
+  if (!res.ok) throw new Error("Could not load gallery projects.");
   return res.json();
 }
 
-export async function uploadGalleryPhoto(formData: FormData): Promise<Project> {
+/** Starts a brand new project with its first photo or video. */
+export async function createProject(formData: FormData): Promise<Project> {
   // No Content-Type header here on purpose, the browser sets the correct
   // multipart boundary itself when the body is a FormData object.
   return authedFetch("/admin/gallery", { method: "POST", body: formData });
 }
 
-export async function deleteGalleryPhoto(id: number): Promise<void> {
-  await authedFetch(`/admin/gallery/${id}`, { method: "DELETE" });
+/** Adds another photo or video to a project that already exists. */
+export async function addProjectMedia(projectId: number, file: File): Promise<Project> {
+  const formData = new FormData();
+  formData.append("file", file);
+  return authedFetch(`/admin/gallery/${projectId}/media`, { method: "POST", body: formData });
+}
+
+export async function updateProject(
+  projectId: number,
+  payload: { title?: string; category?: string; is_featured?: boolean }
+): Promise<Project> {
+  return authedFetch(`/admin/gallery/${projectId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
+/** Removes one photo/video from a project. If it was the only one, the
+ * project itself disappears too (the backend handles that). */
+export async function deleteProjectMedia(projectId: number, mediaId: number): Promise<void> {
+  await authedFetch(`/admin/gallery/${projectId}/media/${mediaId}`, { method: "DELETE" });
+}
+
+/** Removes a whole project and every photo/video that belongs to it. */
+export async function deleteProject(projectId: number): Promise<void> {
+  await authedFetch(`/admin/gallery/${projectId}`, { method: "DELETE" });
+}
+
+// ---------- Testimonial moderation ----------
+
+export async function getAdminTestimonials(): Promise<Testimonial[]> {
+  return authedFetch("/admin/testimonials");
+}
+
+export async function approveTestimonial(id: number): Promise<Testimonial> {
+  return authedFetch(`/admin/testimonials/${id}`, { method: "PATCH" });
+}
+
+export async function deleteTestimonial(id: number): Promise<void> {
+  await authedFetch(`/admin/testimonials/${id}`, { method: "DELETE" });
 }

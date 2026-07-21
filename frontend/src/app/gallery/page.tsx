@@ -8,8 +8,8 @@ import type { Project } from "@/types";
 
 export default async function GalleryPage() {
   const projects: Project[] = await getProjects();
-  const beforeAfterExample = projects.find((p) => p.before_image_url);
-  const hasVideo = projects.some((p) => p.media_type === "video");
+  const beforeAfterExample = projects.find((p) => p.before_image_url && p.media[0]);
+  const hasVideo = projects.some((p) => p.media.some((m) => m.media_type === "video"));
 
   return (
     <main>
@@ -32,7 +32,7 @@ export default async function GalleryPage() {
               <SectionHeading eyebrow="Before and After" title="See the Difference" />
               <BeforeAfterSlider
                 beforeSrc={mediaUrl(beforeAfterExample.before_image_url!)}
-                afterSrc={mediaUrl(beforeAfterExample.image_url)}
+                afterSrc={mediaUrl(beforeAfterExample.media[0].image_url)}
               />
             </div>
           )}

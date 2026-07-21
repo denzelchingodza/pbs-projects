@@ -15,6 +15,7 @@ const LINKS = [
   { href: "/admin/dashboard", label: "Dashboard" },
   { href: "/admin/gallery", label: "Gallery" },
   { href: "/admin/quotes", label: "Quotes" },
+  { href: "/admin/testimonials", label: "Testimonials" },
 ];
 
 export default function AdminNav() {

@@ -66,3 +66,17 @@ export async function getProjects(category?: string) {
     return [];
   }
 }
+
+/**
+ * Submits a real customer's testimonial. It comes back with status
+ * "pending", it won't show on the site until the admin approves it, see
+ * routers/testimonials.py.
+ */
+export async function submitTestimonial(payload: {
+  client_name: string;
+  client_role?: string;
+  quote: string;
+  rating: number;
+}) {
+  return apiPost("/testimonials/", payload);
+}
