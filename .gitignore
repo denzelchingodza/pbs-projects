@@ -16,6 +16,10 @@ backend/.env
 *.db
 *.sqlite3
 
+# Uploaded gallery photos and videos (admin panel uploads), stays local
+# just like the database itself, not something to keep in git history.
+backend/static/uploads/
+
 # OS / editor
 .DS_Store
 .vscode/

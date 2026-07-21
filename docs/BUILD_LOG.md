@@ -656,3 +656,67 @@ a "Chat with us" label that fades in on hover on desktop.
 production `next build`, compiled, linted, type-checked, and statically
 generated all 13 routes with zero errors (same Google Fonts sandbox
 workaround as every stage since 9, confirmed unrelated to this code).
+
+---
+
+## Stage 13: The real 88 job photos, sorted and uploaded
+
+**Context:** the real photo folder had 88 loose site photos, on top of the
+one already used for the homepage hero. The ask was to get them into the
+gallery, with photos from the same job site sitting close together
+instead of appearing in a random order.
+
+**Why this needed a real plan first:** the `Project` table has no "job" or
+"site" field, only `category`. The gallery groups strictly by category, so
+"same site, close together" only means something within a category, in
+whatever order the rows were inserted (there was previously no explicit
+sort at all, more on that below). So each photo first needed a category
+(windows, doors, or shower cubicles, based on what's actually in the
+photo) and a same site grouping, worked out by eye: matching brick or
+plaster color, roof material, and background details like a specific
+neighboring house or a car in frame.
+
+**Backend (`routers/gallery.py`):** added `.order_by(Project.id)` to the
+public listing query. Previously there was no explicit sort at all, so
+SQLite happened to return rows in insertion order, but nothing guaranteed
+that. Now it's explicit: rows come back in the order they were uploaded,
+on purpose, since that's what makes the same site grouping hold up.
+
+**How the photos actually got in:** not through 88 clicks in the admin
+panel. Ran the real backend locally against the real project database,
+logged in as the admin account, and sent each photo to the same
+`/api/admin/gallery` endpoint the admin panel itself uses, one request per
+photo, in the planned order: all 54 window photos first (grouped by site),
+then all 32 door photos (grouped by site), then the 2 shower cubicle
+photos. Titles were written per photo or per small group (for example
+"Bay window installation," "Security door installation," "Stable style
+door installation") rather than one generic label repeated 88 times.
+
+**Homepage teaser fix:** `FeaturedWork.tsx` used to just show whichever 6
+photos happened to be first in the list, which with 54 window photos
+uploaded first would have meant the homepage teaser showed six window
+shots and nothing else. Marked 6 varied photos as featured (a mix of
+windows, doors, and the shower cubicle) directly in the database, and
+changed `FeaturedWork.tsx` to sort featured photos first before taking the
+first 6, so the homepage keeps showing a spread of the actual product
+range instead of whatever uploaded earliest.
+
+**What stays local, on purpose:** the uploaded photo files
+(`backend/static/uploads/`) and the database itself (`pbs_projects.db`)
+were already both meant to stay off git, the same way they would if
+someone uploaded these 88 photos by hand through the real admin panel.
+Added `backend/static/uploads/` to `.gitignore` to make that explicit,
+so a future real admin upload never accidentally becomes a huge binary
+git commit. The one code change that is committed is the `gallery.py`
+ordering fix and the `FeaturedWork.tsx` sort fix, the photos themselves
+live wherever the site actually runs, exactly like every other
+admin-uploaded photo already does.
+
+**Verified against the real running backend:** started the actual FastAPI
+server against the real `pbs_projects.db`, uploaded all 88 photos, and
+confirmed: `select count(*) from projects` returns 88, the category
+counts match the plan exactly (54 windows, 32 doors, 2 shower cubicles),
+every uploaded file on disk is a valid, correctly sized JPEG, and
+`/api/gallery/?category=windows` (and the unfiltered list) come back in
+ascending id order, meaning the site clustering holds. `tsc --noEmit` on
+the changed frontend file came back clean.

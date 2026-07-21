@@ -31,7 +31,13 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
-            {projects.slice(0, 6).map((p) => (
+            {/* Featured photos (picked in the admin panel) lead the teaser, so
+                this stays a varied sample of the work instead of just
+                whichever six photos happen to have been uploaded first. */}
+            {[...projects]
+              .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
+              .slice(0, 6)
+              .map((p) => (
               <div key={p.id} className="relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900">
                 {p.media_type === "video" ? (
                   <video
