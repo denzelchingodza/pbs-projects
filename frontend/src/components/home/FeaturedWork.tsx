@@ -10,6 +10,7 @@
 import type { Project } from "@/types";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { categoryLabel } from "@/lib/categories";
+import { mediaUrl } from "@/lib/media";
 
 export default function FeaturedWork({ projects }: { projects: Project[] }) {
   return (
@@ -41,7 +42,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
               <div key={p.id} className="relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900">
                 {p.media_type === "video" ? (
                   <video
-                    src={p.image_url}
+                    src={mediaUrl(p.image_url)}
                     autoPlay
                     muted
                     loop
@@ -52,7 +53,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={p.image_url}
+                    src={mediaUrl(p.image_url)}
                     alt={p.title}
                     className="aspect-[4/3] object-cover w-full"
                   />

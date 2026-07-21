@@ -3,6 +3,7 @@ import GalleryExplorer from "@/components/gallery/GalleryExplorer";
 import BeforeAfterSlider from "@/components/gallery/BeforeAfterSlider";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { getProjects } from "@/lib/api";
+import { mediaUrl } from "@/lib/media";
 import type { Project } from "@/types";
 
 export default async function GalleryPage() {
@@ -30,8 +31,8 @@ export default async function GalleryPage() {
             <div className="mt-20">
               <SectionHeading eyebrow="Before and After" title="See the Difference" />
               <BeforeAfterSlider
-                beforeSrc={beforeAfterExample.before_image_url!}
-                afterSrc={beforeAfterExample.image_url}
+                beforeSrc={mediaUrl(beforeAfterExample.before_image_url!)}
+                afterSrc={mediaUrl(beforeAfterExample.image_url)}
               />
             </div>
           )}

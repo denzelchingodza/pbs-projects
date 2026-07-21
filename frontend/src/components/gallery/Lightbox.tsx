@@ -7,6 +7,7 @@
  */
 import { useEffect } from "react";
 import type { Project } from "@/types";
+import { mediaUrl } from "@/lib/media";
 
 export default function Lightbox({
   projects,
@@ -68,7 +69,7 @@ export default function Lightbox({
 
       {current.media_type === "video" ? (
         <video
-          src={current.image_url}
+          src={mediaUrl(current.image_url)}
           controls
           autoPlay
           playsInline
@@ -78,7 +79,7 @@ export default function Lightbox({
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={current.image_url}
+          src={mediaUrl(current.image_url)}
           alt={current.title}
           className="max-w-full max-h-full rounded-lg"
           onClick={(e) => e.stopPropagation()}

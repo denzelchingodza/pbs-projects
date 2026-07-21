@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import PhotoUploader from "@/components/admin/PhotoUploader";
 import { GALLERY_CATEGORIES } from "@/lib/categories";
 import { deleteGalleryPhoto, getAdminGallery } from "@/lib/adminApi";
+import { mediaUrl } from "@/lib/media";
 import type { Project } from "@/types";
 
 export default function AdminGalleryPage() {
@@ -78,7 +79,7 @@ export default function AdminGalleryPage() {
                       <div key={p.id} className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
                         {p.media_type === "video" ? (
                           <video
-                            src={p.image_url}
+                            src={mediaUrl(p.image_url)}
                             controls
                             playsInline
                             preload="metadata"
@@ -86,7 +87,7 @@ export default function AdminGalleryPage() {
                           />
                         ) : (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={p.image_url} alt={p.title} className="w-full aspect-[4/3] object-cover" />
+                          <img src={mediaUrl(p.image_url)} alt={p.title} className="w-full aspect-[4/3] object-cover" />
                         )}
                         <div className="p-4">
                           <div className="flex items-start justify-between gap-2">

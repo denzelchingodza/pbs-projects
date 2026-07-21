@@ -5,6 +5,7 @@
  * than a static frame that looks identical to a photo.
  */
 import type { Project } from "@/types";
+import { mediaUrl } from "@/lib/media";
 
 function PlayBadge() {
   return (
@@ -44,7 +45,7 @@ export default function GalleryGrid({
         >
           {p.media_type === "video" ? (
             <video
-              src={p.image_url}
+              src={mediaUrl(p.image_url)}
               muted
               playsInline
               preload="metadata"
@@ -53,7 +54,7 @@ export default function GalleryGrid({
           ) : (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={p.image_url}
+              src={mediaUrl(p.image_url)}
               alt={p.title}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />

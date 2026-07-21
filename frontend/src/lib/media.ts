@@ -5,6 +5,29 @@
  * rejected. The backend re-checks all of this independently either way,
  * this is purely a faster/friendlier first check.
  */
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+// Uploaded photos and videos are served by the backend itself (FastAPI's
+// static file mount), not by Next.js, so a path like "/static/uploads/x.jpg"
+// coming back from the API is only ever correct relative to the backend's
+// own address, never the frontend's. Rendering it as-is works by accident
+// in a deployment where both happen to share one domain, and breaks
+// everywhere else (including plain local development, frontend on :3000,
+// backend on :8000), the photo silently fails to load. Strip the trailing
+// "/api" off the API base to get the backend's origin, then always resolve
+// media paths against that instead of leaving them relative to whatever
+// page the browser happens to be on.
+const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");
+
+/**
+ * Turns a photo or video URL from the backend into one that will actually
+ * load in the browser, regardless of what page it's rendered on.
+ */
+export function mediaUrl(path: string): string {
+  if (!path) return path;
+  if (/^https?:\/\//i.test(path)) return path; // already a full URL (e.g. future cloud storage)
+  return `${API_ORIGIN}${path.startsWith("/") ? "" : "/"}${path}`;
+}
 export const IMAGE_ACCEPT = ".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp";
 export const VIDEO_ACCEPT = ".mp4,.mov,.webm,video/mp4,video/quicktime,video/webm";
 
