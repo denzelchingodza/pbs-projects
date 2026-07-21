@@ -1022,3 +1022,28 @@ quote and a "Contacted" test quote and calling the actual delete
 function for both, confirming the "New" one is correctly blocked with
 a clear message and the "Contacted" one deletes cleanly, then removing
 both test rows so the real database was left exactly as it was before.
+
+---
+
+## Stage 19: The header is white now, so the real logo shows in its true colors
+
+**Context:** the orange header looked good structurally, but the logo on
+it was rendered entirely in white (icon, "PBS", and "PROJECTS" all one
+flat color) just to stay visible against the orange, which meant it did
+not actually look like the real company logo anymore, an orange roof
+icon, a dark "PBS," and a gray "PROJECTS" underneath it. The ask was
+plain: either find a way to keep the logo in its real colors, or change
+the bar itself so it can.
+
+**The fix (`Navbar.tsx`):** the main bar is now white instead of orange,
+with a thin bottom border and a soft shadow so it still reads as a
+distinct bar sitting above the page rather than blending into it. The
+logo uses its plain, true color rendering (`Logo.tsx`'s default mode,
+no recoloring needed), the exact same look as the reference image,
+orange icon, dark "PBS," gray "PROJECTS." The nav links are now dark
+text that turns orange on hover, and "Get a Quote" is a solid orange
+button, so the brand color still shows up clearly in the header, just
+through the button and the link hover state instead of the whole bar.
+
+**Verified:** `tsc --noEmit` came back clean and a full production build
+generated all 13 frontend routes with zero errors.

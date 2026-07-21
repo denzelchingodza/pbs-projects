@@ -16,14 +16,21 @@
  * of one (white text, orange for the primary action, WhatsApp's own green
  * for the chat link), each meaning something rather than decoration.
  *
- * Header redesign notes: back to a single clean orange bar, the earlier
- * two tier version (a dark contact strip above it) and the small back and
- * forward buttons next to the logo were both tried and didn't land well,
- * so both are gone now. Contact details live in the footer and the Contact
- * page instead of crowding the header, and the WhatsApp float (see
+ * Header redesign notes: back to a single clean bar, the earlier two tier
+ * version (a dark contact strip above it) and the small back and forward
+ * buttons next to the logo were both tried and didn't land well, so both
+ * are gone now. Contact details live in the footer and the Contact page
+ * instead of crowding the header, and the WhatsApp float (see
  * WhatsAppFloat.tsx) is the quick way to reach the business from anywhere
- * on the site. The logo uses its `onOrange` treatment (see ui/Logo.tsx) so
- * it stays readable against the orange bar, on desktop and on mobile.
+ * on the site.
+ *
+ * The bar itself is white, not orange, on purpose: the real company logo
+ * (see ui/Logo.tsx) is an orange roof icon with a dark "PBS" and a gray
+ * "PROJECTS" underneath it, matching the actual flyer exactly. Putting
+ * that on an orange bar meant recoloring it to all white just to stay
+ * readable, which lost the logo's real colors entirely. White keeps the
+ * logo exactly as designed and clearly visible, the orange still shows up
+ * throughout the bar as the "Get a Quote" button and the link hover color.
  */
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -60,14 +67,14 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Single bar — brand orange, carries the logo and the navigation */}
+      {/* Single bar — white, so the real logo shows in its true colors */}
       <div
-        className={`bg-orange flex items-center justify-between px-4 md:px-8 py-3 transition-shadow ${
-          scrolled ? "shadow-lg" : "shadow-sm"
+        className={`bg-white border-b border-neutral-100 flex items-center justify-between px-4 md:px-8 py-3 transition-shadow ${
+          scrolled ? "shadow-md" : "shadow-sm"
         }`}
       >
         <Link href="/" className="px-1">
-          <Logo onOrange />
+          <Logo />
         </Link>
 
         <nav className="hidden md:flex items-center gap-9">
@@ -75,21 +82,21 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-white/90 hover:text-white transition-colors"
+              className="text-sm font-medium text-dark/80 hover:text-orange transition-colors"
             >
               {link.label}
             </Link>
           ))}
           <Link
             href="/#quote"
-            className="bg-dark text-white text-sm font-semibold px-5 py-2.5 rounded-md hover:bg-black transition-colors"
+            className="bg-orange text-white text-sm font-semibold px-5 py-2.5 rounded-md hover:brightness-95 transition"
           >
             Get a Quote
           </Link>
         </nav>
 
         <button
-          className="md:hidden text-2xl text-white"
+          className="md:hidden text-2xl text-dark"
           aria-label="Toggle menu"
           onClick={() => setOpen((v) => !v)}
         >
