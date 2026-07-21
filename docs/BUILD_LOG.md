@@ -908,3 +908,44 @@ generated all 13 frontend routes with zero errors. The Products and
 Stats changes were confirmed directly against the real database (the
 6 product descriptions updated, and the stats section no longer
 depends on `projects.length` at all).
+
+---
+
+## Stage 17: Header polish, a moving hero, the logo back on the flyer
+
+**Context:** direct feedback on the new orange header once it was actually
+visible, it read as one flat block of color rather than something
+designed, the roof icon sat beside "PBS Projects" instead of above it
+(the flyer has it stacked), the hero photo just sat still, and getting
+around the site once you'd clicked into a page felt like it needed an
+easier way back.
+
+**Header, now two tiers (`Navbar.tsx`):** a dark strip on top carries the
+contact details, the brand orange bar underneath carries the logo and
+navigation, that contrast between the two is what gives the header actual
+depth instead of reading as a single undifferentiated color block. Added
+a plain "Home" link alongside Our Work, Products, and About, so getting
+back to the homepage doesn't rely on remembering the logo is clickable.
+
+**Logo, restacked (`Logo.tsx`):** the roof/arc icon now sits directly
+above "PBS Projects" instead of beside it, matching the actual flyer
+this was always meant to recreate. Used everywhere the logo appears
+(navbar, mobile drawer, footer, admin sidebar), still comes in three
+color treatments depending on what's behind it (default, dark, and the
+orange navbar's `onOrange` mode).
+
+**Back and forward navigation (new `HistoryNav.tsx`):** two small
+buttons next to the logo that call the browser's own back/forward
+history, so there's always an obvious, tappable way to retrace your
+steps around the site, not just the browser's own back button (which
+isn't always obvious to reach for, especially on mobile).
+
+**Hero photo, given some life (`Hero.tsx`, `globals.css`):** added a
+slow, continuous zoom (roughly 1 to 1.08 scale over 22 seconds, drifting
+back and forth rather than resetting with a jump) using a plain CSS
+keyframe animation, `next/image` handles the actual photo, the animation
+is just a transform on top of it. Skipped entirely for anyone with
+reduced motion turned on, using Tailwind's `motion-reduce` variant.
+
+**Verified:** `tsc --noEmit` came back clean and a full production build
+generated all 13 frontend routes with zero errors.

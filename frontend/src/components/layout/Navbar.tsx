@@ -16,19 +16,24 @@
  * of one (white text, orange for the primary action, WhatsApp's own green
  * for the chat link), each meaning something rather than decoration.
  *
- * Header redesign notes: the bar itself is now the brand orange instead of
- * plain white, so the very first thing on every page is unmistakably PBS's
- * own color rather than a neutral shell. The logo switches to its
+ * Header redesign notes: now a real two tier bar instead of one flat block
+ * of orange, a dark strip on top (contact info) reading as the "quiet"
+ * layer, and the brand orange main bar underneath it carrying the actual
+ * navigation, that contrast is what gives the header depth instead of
+ * looking like a single undifferentiated color block. The logo uses its
  * `onOrange` treatment (see ui/Logo.tsx) so "Projects" and the roof icon
- * stay readable instead of orange disappearing into orange, and the primary
- * button stays dark so it still reads as a button against the orange field.
+ * stay readable against the orange, and a pair of back/forward buttons
+ * (see HistoryNav.tsx) sit next to it so visitors always have an obvious
+ * way to retrace their steps.
  */
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
+import HistoryNav from "./HistoryNav";
 import type { SiteSettings } from "@/types";
 
 const NAV_LINKS = [
+  { href: "/", label: "Home" },
   { href: "/#work", label: "Our Work" },
   { href: "/#products", label: "Products" },
   { href: "/about", label: "About" },
@@ -56,9 +61,9 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
   const waDigits = settings.whatsapp_number.replace(/[^\d]/g, "");
 
   return (
-    <header className="sticky top-0 z-50 bg-orange">
-      {/* Thin top strip — contact info, hidden on mobile to save space */}
-      <div className="hidden md:flex items-center justify-end gap-6 px-8 py-2 text-xs text-white/80 border-b border-white/15">
+    <header className="sticky top-0 z-50">
+      {/* Dark top strip — contact info, the "quiet" layer under the main bar */}
+      <div className="hidden md:flex items-center justify-end gap-6 bg-dark px-8 py-2 text-xs text-white/70">
         <a href={`mailto:${settings.email}`} className="hover:text-white transition-colors">
           {settings.email}
         </a>
@@ -70,14 +75,18 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
         </a>
       </div>
 
+      {/* Main bar — brand orange, carries the actual navigation */}
       <div
-        className={`flex items-center justify-between px-6 md:px-8 py-4 transition-shadow ${
-          scrolled ? "shadow-md" : ""
+        className={`bg-orange flex items-center justify-between px-4 md:px-8 py-3 transition-shadow ${
+          scrolled ? "shadow-lg" : "shadow-sm"
         }`}
       >
-        <Link href="/">
-          <Logo onOrange />
-        </Link>
+        <div className="flex items-center gap-1 md:gap-3">
+          <HistoryNav />
+          <Link href="/" className="px-1">
+            <Logo onOrange />
+          </Link>
+        </div>
 
         <nav className="hidden md:flex items-center gap-9">
           {NAV_LINKS.map((link) => (

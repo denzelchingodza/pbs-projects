@@ -73,7 +73,7 @@ export default function Hero() {
               fill
               priority
               sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover"
+              className="object-cover animate-hero-zoom motion-reduce:animate-none"
             />
           </div>
         </div>

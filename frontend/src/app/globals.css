@@ -12,3 +12,21 @@ html {
   background-color: #e8622d;
   color: #ffffff;
 }
+
+/* Slow, subtle "Ken Burns" drift on the homepage hero photo, on for as long
+   as someone's actually looking at the page, alternating in and out rather
+   than snapping back, so it never feels like a jump cut. Skipped entirely
+   for anyone with reduced motion turned on (see the motion-reduce variant
+   applied alongside this class in Hero.tsx). */
+@keyframes hero-zoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+.animate-hero-zoom {
+  animation: hero-zoom 22s ease-in-out infinite alternate;
+}
