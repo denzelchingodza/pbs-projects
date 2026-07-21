@@ -4,6 +4,7 @@ customers use to submit their own.
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core.rate_limit import rate_limit
 from app.database import get_db
 from app.models.testimonial import Testimonial
 from app.schemas.testimonial import TestimonialCreate, TestimonialOut
@@ -19,7 +20,7 @@ def list_testimonials(db: Session = Depends(get_db)):
     return db.query(Testimonial).filter(Testimonial.status == "approved").all()
 
 
-@router.post("/", response_model=TestimonialOut)
+@router.post("/", response_model=TestimonialOut, dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300))])
 def submit_testimonial(payload: TestimonialCreate, db: Session = Depends(get_db)):
     if payload.website:
         # Honeypot field was filled in, almost certainly a bot. Silently reject.

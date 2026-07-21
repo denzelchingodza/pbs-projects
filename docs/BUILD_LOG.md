@@ -1157,3 +1157,61 @@ errors. The new project was verified directly against the real database
 after uploading, not just assumed to have worked, exact project and
 media counts before and after matched the plan (66 to 67 projects, 88 to
 94 media rows, 1 new video row).
+
+---
+
+## Stage 22: Real password rotation, and basic spam protection on public forms
+
+**Context:** after being asked directly for an honest rating of the site
+and how to close the gap toward a genuinely production ready one, the
+single biggest real risk turned out to be a plain security gap, the
+admin account was still using the placeholder password it was first set
+up with (changeme123), and there was no way to change it at all short of
+editing the database by hand. On top of that, the quote and testimonial
+forms had a honeypot against simple bots but nothing stopping the same
+form from being submitted over and over in a short window.
+
+**A real way to change the password (`routers/auth.py`,
+`schemas/user.py`):** new `POST /api/auth/change-password`, requires the
+current password before accepting a new one (so a session left open on
+a shared computer cannot be used to lock the real owner out), and
+rejects a new password under 8 characters or identical to the current
+one. New admin page at `/admin/settings` with a real form for this
+(new `ChangePasswordForm.tsx`), added to the sidebar.
+
+**The real password, actually rotated:** ran the new endpoint against
+the real running backend and the real database, changing the admin
+account from the original placeholder password to a genuinely random
+new one. Confirmed the old password now correctly fails to log in, and
+the new one works. The new password has been shared with Denzel
+directly and is not written anywhere in this file or in the codebase.
+
+**Basic rate limiting on public forms (new `core/rate_limit.py`,
+`routers/quotes.py`, `routers/testimonials.py`):** both the quote
+request and testimonial submission endpoints now allow at most 5
+submissions per IP address every 5 minutes, on top of the honeypot spam
+guard already in place. Simple in memory counter, no new dependency
+needed, appropriate for this app's single process deployment, noted in
+the code that this would need a shared store like Redis if this ever
+ran across multiple worker processes or servers.
+
+**Verified for real, not assumed:** `tsc --noEmit` came back clean and
+a full production build generated all 14 frontend routes (up from 13,
+the new Settings page) with zero errors. Against the real running
+backend: logged in with the old password, changed it through the new
+endpoint, confirmed the old password now returns 401 and the new one
+logs in successfully, confirmed the endpoint correctly rejects a
+too-short new password and an incorrect current password with clear
+messages, and sent 6 rapid test quote submissions to confirm the first
+5 succeed and the 6th is correctly blocked with a 429. The 5 test quote
+rows created during that check were deleted afterward so the real
+database was left exactly as it should be, holding only genuine
+customer submissions.
+
+**Still open, for the deployment stage specifically:** CORS is
+currently locked to the local dev server address only, correct for now
+since the site has no real domain yet, but will need updating the
+moment there is one. No automated test suite, no production hosting, no
+object storage for photos and video (still local disk), and no
+automated backups, all genuinely separate pieces of work from this
+security pass.

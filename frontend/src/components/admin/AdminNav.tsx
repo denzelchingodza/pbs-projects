@@ -22,6 +22,7 @@ const LINKS = [
   { href: "/admin/gallery", label: "Gallery" },
   { href: "/admin/quotes", label: "Quotes" },
   { href: "/admin/testimonials", label: "Testimonials" },
+  { href: "/admin/settings", label: "Settings" },
 ];
 
 export default function AdminNav() {

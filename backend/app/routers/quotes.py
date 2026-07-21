@@ -2,6 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core.rate_limit import rate_limit
 from app.database import get_db
 from app.models.quote import QuoteRequest
 from app.schemas.quote import QuoteCreate, QuoteOut
@@ -10,7 +11,7 @@ from app.services.whatsapp_service import notify_new_quote
 router = APIRouter()
 
 
-@router.post("/", response_model=QuoteOut)
+@router.post("/", response_model=QuoteOut, dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300))])
 def submit_quote(payload: QuoteCreate, db: Session = Depends(get_db)):
     if payload.website:
         # Honeypot field was filled in -> almost certainly a bot. Silently reject.

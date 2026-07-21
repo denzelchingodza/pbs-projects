@@ -65,6 +65,17 @@ export async function getCurrentAdmin(): Promise<AdminUser> {
   return authedFetch("/auth/me");
 }
 
+/** Requires the current password to prove it's really the account owner,
+ * the backend rejects anything under 8 characters or identical to the
+ * current password. */
+export async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
+  await authedFetch("/auth/change-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+  });
+}
+
 export async function getAdminQuotes(): Promise<AdminQuote[]> {
   return authedFetch("/admin/quotes");
 }
