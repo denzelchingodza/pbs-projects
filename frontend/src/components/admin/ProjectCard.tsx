@@ -2,7 +2,7 @@
 
 /**
  * One project (job) in the admin gallery. Redesign notes: showing every
- * single photo as its own thumbnail on every card at once (the previous
+ * single photo as its own thumbnail on every card at once (an earlier
  * version) got overwhelming fast once there were dozens of real projects,
  * some with 3 or 4 photos each, it read as a wall of thumbnails rather
  * than a list of jobs. Now each card leads with just its cover photo (like
@@ -11,9 +11,18 @@
  * controls, and the "add another photo" tile all live behind a "Manage
  * Photos" toggle instead of always being on screen. Editing the title,
  * category, and featured flag still happens inline, no separate page.
+ *
+ * Confirmation notes: deleting a photo or a whole project used to rely on
+ * the browser's own native confirm() popup, a plain system dialog with no
+ * PBS styling at all. Both now use the shared ConfirmDialog instead, and
+ * every action that succeeds (saving an edit, removing a photo, deleting
+ * a project) shows a real toast message inside the app, not just a
+ * silent refresh.
  */
 import { useState } from "react";
 import AddPhotoButton from "./AddPhotoButton";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/components/ui/ToastProvider";
 import { GALLERY_CATEGORIES, categoryLabel } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
 import { deleteProject, deleteProjectMedia, updateProject } from "@/lib/adminApi";
@@ -26,6 +35,7 @@ export default function ProjectCard({
   project: Project;
   onChanged: () => void;
 }) {
+  const { showToast } = useToast();
   const [editing, setEditing] = useState(false);
   const [managingPhotos, setManagingPhotos] = useState(false);
   const [title, setTitle] = useState(project.title);
@@ -33,6 +43,8 @@ export default function ProjectCard({
   const [featured, setFeatured] = useState(!!project.is_featured);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [confirmPhotoId, setConfirmPhotoId] = useState<number | null>(null);
+  const [confirmDeleteProject, setConfirmDeleteProject] = useState(false);
 
   const cover = project.media[0];
   const extraCount = project.media.length - 1;
@@ -44,6 +56,7 @@ export default function ProjectCard({
       await updateProject(project.id, { title, category, is_featured: featured });
       setEditing(false);
       onChanged();
+      showToast("Project updated.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not save changes.");
     } finally {
@@ -51,31 +64,32 @@ export default function ProjectCard({
     }
   }
 
-  async function handleDeletePhoto(mediaId: number) {
-    if (!confirm("Remove this photo from the project? This can't be undone.")) return;
+  async function handleDeletePhoto() {
+    if (confirmPhotoId === null) return;
     setError("");
     try {
-      await deleteProjectMedia(project.id, mediaId);
+      await deleteProjectMedia(project.id, confirmPhotoId);
       onChanged();
+      showToast("Photo removed.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not remove that photo.");
+      showToast(err instanceof Error ? err.message : "Could not remove that photo.", "error");
+    } finally {
+      setConfirmPhotoId(null);
     }
   }
 
   async function handleDeleteProject() {
-    const warning =
-      project.media.length > 1
-        ? `Delete this whole project and all ${project.media.length} of its photos? This can't be undone.`
-        : "Delete this project? This can't be undone.";
-    if (!confirm(warning)) return;
     setBusy(true);
     setError("");
     try {
       await deleteProject(project.id);
       onChanged();
+      showToast("Project deleted.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not delete this project.");
+      showToast(err instanceof Error ? err.message : "Could not delete this project.", "error");
       setBusy(false);
+    } finally {
+      setConfirmDeleteProject(false);
     }
   }
 
@@ -174,7 +188,7 @@ export default function ProjectCard({
                 {managingPhotos ? "Hide Photos" : "Manage Photos"}
               </button>
               <button
-                onClick={handleDeleteProject}
+                onClick={() => setConfirmDeleteProject(true)}
                 disabled={busy}
                 className="text-xs font-semibold text-red-600 hover:text-red-700 disabled:opacity-60 ml-auto"
               >
@@ -199,7 +213,7 @@ export default function ProjectCard({
                     <img src={mediaUrl(m.image_url)} alt={project.title} className="w-full h-full object-cover" />
                   )}
                   <button
-                    onClick={() => handleDeletePhoto(m.id)}
+                    onClick={() => setConfirmPhotoId(m.id)}
                     className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/70 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                     aria-label="Remove this photo"
                     title="Remove this photo"
@@ -208,13 +222,41 @@ export default function ProjectCard({
                   </button>
                 </div>
               ))}
-              <AddPhotoButton projectId={project.id} onAdded={onChanged} onError={setError} />
+              <AddPhotoButton
+                projectId={project.id}
+                onAdded={() => {
+                  onChanged();
+                  showToast("Photo added.");
+                }}
+                onError={(msg) => showToast(msg, "error")}
+              />
             </div>
           </div>
         )}
 
         {error && <p className="text-xs text-red-600 mt-3">{error}</p>}
       </div>
+
+      <ConfirmDialog
+        open={confirmPhotoId !== null}
+        title="Remove this photo?"
+        message="This photo will be permanently removed from the project. This cannot be undone."
+        onConfirm={handleDeletePhoto}
+        onCancel={() => setConfirmPhotoId(null)}
+      />
+
+      <ConfirmDialog
+        open={confirmDeleteProject}
+        title="Delete this project?"
+        message={
+          project.media.length > 1
+            ? `This will delete the whole project and all ${project.media.length} of its photos. This cannot be undone.`
+            : "This project will be permanently deleted. This cannot be undone."
+        }
+        busy={busy}
+        onConfirm={handleDeleteProject}
+        onCancel={() => setConfirmDeleteProject(false)}
+      />
     </div>
   );
 }

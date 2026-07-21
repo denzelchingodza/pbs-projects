@@ -10,9 +10,14 @@
  * Delete notes: a lead can only be deleted once it has actually been
  * visited, contacted or further along, a brand new "New" lead can't be
  * removed by accident before anyone has followed up on it, the backend
- * enforces this too so it can't be bypassed from the browser.
+ * enforces this too so it can't be bypassed from the browser. The
+ * confirmation itself uses the shared ConfirmDialog rather than the
+ * browser's own native confirm() popup, and both a status change and a
+ * delete show a real toast message inside the app when they succeed.
  */
 import { useState } from "react";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/components/ui/ToastProvider";
 import { deleteQuote, updateQuoteStatus } from "@/lib/adminApi";
 import type { AdminQuote, QuoteStatus } from "@/types";
 
@@ -35,36 +40,36 @@ export default function QuoteTable({
   onChange: (updated: AdminQuote) => void;
   onDeleted: (id: number) => void;
 }) {
+  const { showToast } = useToast();
   const [updatingId, setUpdatingId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
-  const [error, setError] = useState("");
+  const [confirmQuote, setConfirmQuote] = useState<AdminQuote | null>(null);
 
   async function handleStatusChange(quote: AdminQuote, status: QuoteStatus) {
     setUpdatingId(quote.id);
-    setError("");
     try {
       const updated = await updateQuoteStatus(quote.id, { status });
       onChange(updated);
+      showToast("Status updated.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update status.");
+      showToast(err instanceof Error ? err.message : "Failed to update status.", "error");
     } finally {
       setUpdatingId(null);
     }
   }
 
-  async function handleDelete(quote: AdminQuote) {
-    if (!window.confirm(`Delete the quote request from ${quote.full_name}? This cannot be undone.`)) {
-      return;
-    }
-    setDeletingId(quote.id);
-    setError("");
+  async function handleDelete() {
+    if (!confirmQuote) return;
+    setDeletingId(confirmQuote.id);
     try {
-      await deleteQuote(quote.id);
-      onDeleted(quote.id);
+      await deleteQuote(confirmQuote.id);
+      onDeleted(confirmQuote.id);
+      showToast("Quote request deleted.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete quote.");
+      showToast(err instanceof Error ? err.message : "Failed to delete quote.", "error");
     } finally {
       setDeletingId(null);
+      setConfirmQuote(null);
     }
   }
 
@@ -74,7 +79,6 @@ export default function QuoteTable({
 
   return (
     <div>
-      {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
       <div className="grid gap-4">
         {quotes.map((q) => (
           <div
@@ -121,7 +125,7 @@ export default function QuoteTable({
 
               {q.status !== "new" && (
                 <button
-                  onClick={() => handleDelete(q)}
+                  onClick={() => setConfirmQuote(q)}
                   disabled={deletingId === q.id}
                   className="text-sm font-medium text-red-600 hover:text-red-700 disabled:opacity-50 transition-colors"
                 >
@@ -132,6 +136,19 @@ export default function QuoteTable({
           </div>
         ))}
       </div>
+
+      <ConfirmDialog
+        open={confirmQuote !== null}
+        title="Delete this quote request?"
+        message={
+          confirmQuote
+            ? `The quote request from ${confirmQuote.full_name} will be permanently deleted. This cannot be undone.`
+            : ""
+        }
+        busy={confirmQuote !== null && deletingId === confirmQuote.id}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmQuote(null)}
+      />
     </div>
   );
 }

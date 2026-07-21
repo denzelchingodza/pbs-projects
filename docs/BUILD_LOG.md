@@ -1108,3 +1108,52 @@ window photos, 24 door projects and 32 door photos, 1 shower cubicle
 project and 2 shower cubicle photos, 88 photos total), and the grouping
 algorithm itself was run against that exact shape in an isolated script
 to confirm the section counts and photo ordering come out correct.
+
+---
+
+## Stage 21: A new video job added, and no more browser popups in the admin panel
+
+**Context:** two separate asks. First, a real finished job, 5 photos and a
+short video walkthrough of a newly built home's windows and doors,
+needed to go into the gallery, added to the pbs-projects folder directly
+rather than through the admin panel by hand. Second, a plain description
+of something confusing in the admin panel, doing an action would show
+"an html option," which is the browser's own native confirm() popup, a
+plain gray system dialog with no PBS styling at all that looks nothing
+like the rest of the app, plus several actions had no visible
+confirmation once they actually succeeded beyond the page quietly
+refreshing.
+
+**The new job, uploaded for real:** the 5 new photos and the video all
+show the same newly built home, brick walls, a dark tile roof, and the
+real PBS branded car parked out front in one of them, awning windows on
+every wall, a sliding patio door, and a hinged aluminum security door.
+Started the real backend against the real database and sent the exact
+same requests the admin panel itself would send: created one new
+project (Windows category, since windows are the majority of what is
+shown), then attached the remaining 4 photos and the video to that same
+project, so it is 1 job with 6 pieces of media, not 6 separate gallery
+entries. Confirmed directly against the database afterward, 67 total
+projects now (up from 66), 94 total media rows (93 images and 1 video,
+up from 88 images and 0 videos), and the new project's own row lists all
+6 files in the order they were added.
+
+**No more browser popups (new `ConfirmDialog.tsx`, new
+`ToastProvider.tsx`):** every place that used to call the browser's own
+confirm() before deleting something, removing a photo or a whole project
+in the admin gallery, deleting a quote request, deleting a testimonial,
+now shows a real dialog built to match the app instead, a dimmed
+backdrop, a white card, a plain language question, and Cancel or Delete
+buttons in the app's own colors. Wired a small toast notification system
+into the admin panel too, mounted once in the admin layout, so saving an
+edit, uploading a photo, adding a photo, deleting something, approving a
+testimonial, or changing a quote's status now all show a real, visible
+confirmation message inside the app itself for a few seconds, not just a
+silent refresh you have to trust worked.
+
+**Verified for real, not assumed:** `tsc --noEmit` came back clean and a
+full production build generated all 13 frontend routes with zero
+errors. The new project was verified directly against the real database
+after uploading, not just assumed to have worked, exact project and
+media counts before and after matched the plan (66 to 67 projects, 88 to
+94 media rows, 1 new video row).

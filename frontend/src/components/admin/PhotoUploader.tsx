@@ -15,11 +15,13 @@
  * accepted formats before the admin picks a file, not after a failed upload.
  */
 import { useState } from "react";
+import { useToast } from "@/components/ui/ToastProvider";
 import { createProject } from "@/lib/adminApi";
 import { GALLERY_CATEGORIES } from "@/lib/categories";
 import { IMAGE_ACCEPT, MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, VIDEO_ACCEPT, validateMediaFile } from "@/lib/media";
 
 export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }) {
+  const { showToast } = useToast();
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -50,6 +52,7 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
       form.reset();
       setStatus("idle");
       onUploaded();
+      showToast("Project created.");
     } catch (err) {
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : "Upload failed. Please try again.");

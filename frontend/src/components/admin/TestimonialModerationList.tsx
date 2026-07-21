@@ -4,8 +4,14 @@
  * Real customers can submit their own testimonial from the site now (see
  * app/testimonial/page.tsx), it lands here as "pending" and stays off the
  * homepage until approved, so nothing unmoderated goes public automatically.
+ *
+ * Deleting one now goes through the shared ConfirmDialog instead of the
+ * browser's native confirm() popup, and both approving and deleting show
+ * a real toast message inside the app when they succeed.
  */
 import { useState } from "react";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/components/ui/ToastProvider";
 import { approveTestimonial, deleteTestimonial } from "@/lib/adminApi";
 import type { Testimonial } from "@/types";
 
@@ -16,34 +22,36 @@ export default function TestimonialModerationList({
   testimonials: Testimonial[];
   onChange: (updated: Testimonial) => void;
 }) {
+  const { showToast } = useToast();
   const [busyId, setBusyId] = useState<number | null>(null);
   const [removedIds, setRemovedIds] = useState<Set<number>>(new Set());
-  const [error, setError] = useState("");
+  const [confirmTestimonial, setConfirmTestimonial] = useState<Testimonial | null>(null);
 
   async function handleApprove(t: Testimonial) {
     setBusyId(t.id);
-    setError("");
     try {
       const updated = await approveTestimonial(t.id);
       onChange(updated);
+      showToast("Testimonial approved, now showing on the homepage.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to approve.");
+      showToast(err instanceof Error ? err.message : "Failed to approve.", "error");
     } finally {
       setBusyId(null);
     }
   }
 
-  async function handleDelete(t: Testimonial) {
-    if (!confirm("Delete this testimonial? This can't be undone.")) return;
-    setBusyId(t.id);
-    setError("");
+  async function handleDelete() {
+    if (!confirmTestimonial) return;
+    setBusyId(confirmTestimonial.id);
     try {
-      await deleteTestimonial(t.id);
-      setRemovedIds((prev) => new Set(prev).add(t.id));
+      await deleteTestimonial(confirmTestimonial.id);
+      setRemovedIds((prev) => new Set(prev).add(confirmTestimonial.id));
+      showToast("Testimonial deleted.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete.");
+      showToast(err instanceof Error ? err.message : "Failed to delete.", "error");
     } finally {
       setBusyId(null);
+      setConfirmTestimonial(null);
     }
   }
 
@@ -55,7 +63,6 @@ export default function TestimonialModerationList({
 
   return (
     <div>
-      {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
       <div className="grid gap-4">
         {visible.map((t) => (
           <div
@@ -93,7 +100,7 @@ export default function TestimonialModerationList({
                 </button>
               )}
               <button
-                onClick={() => handleDelete(t)}
+                onClick={() => setConfirmTestimonial(t)}
                 disabled={busyId === t.id}
                 className="text-xs font-semibold text-red-600 hover:text-red-700 disabled:opacity-60"
               >
@@ -103,6 +110,19 @@ export default function TestimonialModerationList({
           </div>
         ))}
       </div>
+
+      <ConfirmDialog
+        open={confirmTestimonial !== null}
+        title="Delete this testimonial?"
+        message={
+          confirmTestimonial
+            ? `The testimonial from ${confirmTestimonial.client_name} will be permanently deleted. This cannot be undone.`
+            : ""
+        }
+        busy={confirmTestimonial !== null && busyId === confirmTestimonial.id}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmTestimonial(null)}
+      />
     </div>
   );
 }

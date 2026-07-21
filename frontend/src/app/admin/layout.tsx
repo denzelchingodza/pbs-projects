@@ -12,6 +12,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import AdminNav from "@/components/admin/AdminNav";
+import { ToastProvider } from "@/components/ui/ToastProvider";
 import { getCurrentAdmin } from "@/lib/adminApi";
 import { getToken } from "@/lib/auth";
 
@@ -45,9 +46,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 md:flex">
-      <AdminNav />
-      <main className="flex-1 px-6 md:px-10 py-8 md:py-10 max-w-5xl w-full mx-auto">{children}</main>
-    </div>
+    <ToastProvider>
+      <div className="min-h-screen bg-neutral-50 md:flex">
+        <AdminNav />
+        <main className="flex-1 px-6 md:px-10 py-8 md:py-10 max-w-5xl w-full mx-auto">{children}</main>
+      </div>
+    </ToastProvider>
   );
 }
