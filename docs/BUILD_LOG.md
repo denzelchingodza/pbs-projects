@@ -1215,3 +1215,60 @@ moment there is one. No automated test suite, no production hosting, no
 object storage for photos and video (still local disk), and no
 automated backups, all genuinely separate pieces of work from this
 security pass.
+
+---
+
+## Stage 23: A Shona and English language switch
+
+**Context:** since this is a real Zimbabwean business, the ask was for
+key parts of the site, the forms and the homepage and About page content
+specifically, to be readable in Shona too, with a real toggle so a
+visitor can pick their language rather than the two mixed together.
+Denzel is providing the actual Shona wording himself rather than having
+it guessed at, this stage builds the mechanism and gets every English
+string ready to receive that text, the real Shona words themselves are
+a separate, direct follow up.
+
+**A small dictionary, not a heavy library (new `lib/i18n.ts`):** this
+site only ever needs two languages and a fixed set of strings, so
+instead of pulling in a full i18n framework, there is one plain object
+mapping each piece of text to its English version and, once supplied,
+its Shona version. If a Shona string is missing, it quietly falls back
+to English rather than showing something blank or broken, so the
+toggle is always safe to flip even before every translation is in.
+Handles simple {placeholder} substitution too, for the one sentence on
+the About page that has the real business name and years in business
+built into the middle of it.
+
+**The switch itself (new `components/i18n/LanguageProvider.tsx`,
+`LanguageToggle.tsx`, `T.tsx`):** a small EN / SN pill in the header,
+present on both desktop and mobile, remembers the visitor's choice in
+their browser so it stays picked across pages and future visits.
+`<T k="hero.title" />` is the small helper used everywhere translated
+text needs to show up, it works even inside pages that fetch their own
+data on the server, since it is just a small piece that reads the
+current language on its own.
+
+**Where it is wired in so far:** the navigation labels and Get a Quote
+button, the entire homepage (hero, stats labels, products heading,
+featured work section, testimonials section, the quote section
+heading), both the quote form and testimonial form (every label,
+placeholder, button state, and success or error message), and the
+About page (the intro, the new Why Choose Us section, the Meet the
+Founder label and fallback bio text, the Real Work section, and Find
+Us). Real, admin entered content, product descriptions, project
+titles, the founder's actual bio, real customer testimonials, stays
+exactly as written by whoever entered it, only the site's own static
+wording switches language.
+
+**Verified for real, not assumed:** `tsc --noEmit` came back clean and
+a full production build generated all 14 frontend routes with zero
+errors. The template placeholder substitution was tested directly in
+an isolated script with a real example sentence and a business name
+containing punctuation, confirming it fills in correctly without
+needing regex escaping.
+
+**Still to come:** the actual Shona text for every key above, Denzel is
+typing these directly, once supplied they get added to `lib/i18n.ts`
+and show up everywhere that key is already wired in, no other code
+changes needed.

@@ -7,6 +7,7 @@
  * the first thing visible on the page.
  */
 import Image from "next/image";
+import T from "@/components/i18n/T";
 
 const HERO_IMAGE = "/images/hero.jpg";
 
@@ -28,25 +29,23 @@ export default function Hero() {
             Harare · Zimbabwe
           </p>
           <h1 className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-dark">
-            Glass &amp; aluminum work you can trust
+            <T k="hero.title" />
           </h1>
           <p className="mt-6 text-neutral-500 text-[15px] leading-relaxed max-w-md">
-            Windows, doors, shower cubicles, shop fronts, suspended ceilings and
-            cabinets, installed by a team that&apos;s been in the trade for
-            years, not just in business for three.
+            <T k="hero.subtitle" />
           </p>
           <div className="mt-9 flex flex-wrap gap-4">
             <a
               href="#quote"
               className="bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
             >
-              Get a Free Quote
+              <T k="hero.ctaQuote" />
             </a>
             <a
               href="#work"
               className="border border-neutral-300 text-dark px-7 py-3.5 rounded-md font-semibold text-sm hover:border-dark transition"
             >
-              View Our Work
+              <T k="hero.ctaWork" />
             </a>
           </div>
 

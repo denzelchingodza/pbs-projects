@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Redesign notes: swapped the orange left-border card for a plain neutral
  * card with a large quotation mark and an initials avatar circle — reads
@@ -8,10 +10,17 @@
  * were zero testimonials), so the "leave a testimonial" link is always
  * reachable, real customers now submit their own through the site instead
  * of this only ever showing seeded content.
+ *
+ * Now a Client Component so its heading and empty state follow the
+ * current language, the testimonials themselves (real customer quotes)
+ * are shown exactly as submitted, in whichever language they were
+ * written in.
  */
 import Link from "next/link";
 import type { Testimonial } from "@/types";
 import SectionHeading from "@/components/ui/SectionHeading";
+import { t } from "@/lib/i18n";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
 
 function initials(name: string) {
   return name
@@ -23,20 +32,21 @@ function initials(name: string) {
 }
 
 export default function Testimonials({ testimonials }: { testimonials: Testimonial[] }) {
+  const { lang } = useLanguage();
   return (
     <section className="px-6 md:px-8 py-20 bg-white">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
-          eyebrow="Testimonials"
-          title="What Clients Say"
-          intro="Had work done by us? Leave your own testimonial, real feedback helps the next customer decide."
+          eyebrow={t("testimonials.eyebrow", lang)}
+          title={t("testimonials.title", lang)}
+          intro={t("testimonials.intro", lang)}
         />
 
         {testimonials.length === 0 ? (
           <div className="bg-neutral-50 border border-neutral-200 rounded-xl py-16 px-6 text-center">
-            <p className="font-semibold text-dark">No testimonials yet</p>
+            <p className="font-semibold text-dark">{t("testimonials.emptyTitle", lang)}</p>
             <p className="text-sm text-neutral-500 mt-1.5 max-w-sm mx-auto">
-              Be the first to share how your job went.
+              {t("testimonials.emptyBody", lang)}
             </p>
           </div>
         ) : (
@@ -74,7 +84,7 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
             href="/testimonial"
             className="inline-block border border-neutral-300 text-dark px-7 py-3.5 rounded-md font-semibold text-sm hover:border-orange hover:text-orange transition"
           >
-            Share Your Experience
+            {t("testimonials.shareLink", lang)}
           </Link>
         </div>
       </div>

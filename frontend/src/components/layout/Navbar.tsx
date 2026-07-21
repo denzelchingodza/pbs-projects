@@ -31,17 +31,24 @@
  * readable, which lost the logo's real colors entirely. White keeps the
  * logo exactly as designed and clearly visible, the orange still shows up
  * throughout the bar as the "Get a Quote" button and the link hover color.
+ *
+ * Language notes: the small EN / SN switch (LanguageToggle.tsx) lives here
+ * since the header is the one place present on every page, nav labels use
+ * <T> (see components/i18n/T.tsx) so they follow whichever language is
+ * currently selected, same as the translated text further down the page.
  */
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
+import T from "@/components/i18n/T";
+import LanguageToggle from "@/components/i18n/LanguageToggle";
 import type { SiteSettings } from "@/types";
 
 const NAV_LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/#work", label: "Our Work" },
-  { href: "/#products", label: "Products" },
-  { href: "/about", label: "About" },
+  { href: "/", key: "nav.home" },
+  { href: "/#work", key: "nav.ourWork" },
+  { href: "/#products", key: "nav.products" },
+  { href: "/about", key: "nav.about" },
 ];
 
 export default function Navbar({ settings }: { settings: SiteSettings }) {
@@ -84,24 +91,28 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
               href={link.href}
               className="text-sm font-medium text-dark/80 hover:text-orange transition-colors"
             >
-              {link.label}
+              <T k={link.key} />
             </Link>
           ))}
           <Link
             href="/#quote"
             className="bg-orange text-white text-sm font-semibold px-5 py-2.5 rounded-md hover:brightness-95 transition"
           >
-            Get a Quote
+            <T k="nav.getQuote" />
           </Link>
+          <LanguageToggle />
         </nav>
 
-        <button
-          className="md:hidden text-2xl text-dark"
-          aria-label="Toggle menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? "✕" : "☰"}
-        </button>
+        <div className="flex items-center gap-3 md:hidden">
+          <LanguageToggle />
+          <button
+            className="text-2xl text-dark"
+            aria-label="Toggle menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? "✕" : "☰"}
+          </button>
+        </div>
       </div>
 
       {/* Backdrop — dims and blocks the page behind the drawer, tap to close */}
@@ -138,7 +149,7 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
               onClick={() => setOpen(false)}
               className="text-base font-semibold text-white px-3 py-3 rounded-md hover:bg-white/5 transition-colors"
             >
-              {link.label}
+              <T k={link.key} />
             </Link>
           ))}
         </div>
@@ -168,7 +179,7 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
           onClick={() => setOpen(false)}
           className="mt-auto bg-orange text-white text-center text-sm font-semibold py-3.5 rounded-md hover:brightness-95 transition"
         >
-          Get a Quote
+          <T k="nav.getQuote" />
         </Link>
       </nav>
     </header>

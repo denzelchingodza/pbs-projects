@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * The homepage's main sales pitch: a small, hand-picked set of real jobs
  * (whatever the admin has marked "Feature this"), shown big and with a real
@@ -6,12 +8,20 @@
  * grid, each captioned with its own title and a one-line note on what that
  * kind of work actually involves, then a clear way into the complete
  * gallery for anyone who wants to see everything.
+ *
+ * Now a Client Component so the section heading, empty state, and button
+ * can follow the current language (useLanguage()), the per-category blurb
+ * lines and project titles themselves stay English for now, same as
+ * product descriptions, those live as plain data rather than in the
+ * translation dictionary.
  */
 import Link from "next/link";
 import type { Project } from "@/types";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { categoryLabel } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
+import { t } from "@/lib/i18n";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
 
 const CATEGORY_BLURB: Record<string, string> = {
   windows: "Aluminum framed and built to size for the opening.",
@@ -72,6 +82,7 @@ function Card({
 }
 
 export default function FeaturedWork({ projects }: { projects: Project[] }) {
+  const { lang } = useLanguage();
   const highlights = [...projects]
     .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
     .slice(0, 5);
@@ -80,17 +91,16 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
     <section id="work" className="px-6 md:px-8 py-20 bg-neutral-50">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
-          eyebrow="Portfolio"
-          title="Our Work"
-          intro="A look at real installations, straight from completed jobs, updated directly by the PBS team."
+          eyebrow={t("work.eyebrow", lang)}
+          title={t("work.title", lang)}
+          intro={t("work.intro", lang)}
         />
 
         {highlights.length === 0 ? (
           <div className="bg-white border border-neutral-200 rounded-xl py-16 px-6 text-center">
-            <p className="font-semibold text-dark">Project photos coming soon</p>
+            <p className="font-semibold text-dark">{t("work.comingSoonTitle", lang)}</p>
             <p className="text-sm text-neutral-500 mt-1.5 max-w-sm mx-auto">
-              We&apos;re adding photos of our recent installations, check back shortly,
-              or view examples of our product categories above.
+              {t("work.comingSoonBody", lang)}
             </p>
           </div>
         ) : (
@@ -106,7 +116,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
             href="/gallery"
             className="inline-block bg-dark text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:bg-orange transition"
           >
-            View Full Gallery
+            {t("work.viewGallery", lang)}
           </Link>
         </div>
       </div>

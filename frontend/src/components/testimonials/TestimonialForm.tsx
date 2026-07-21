@@ -13,10 +13,13 @@
  */
 import { useState } from "react";
 import { submitTestimonial } from "@/lib/api";
+import { t } from "@/lib/i18n";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
 
 const RATINGS = [5, 4, 3, 2, 1];
 
 export default function TestimonialForm() {
+  const { lang } = useLanguage();
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -44,7 +47,7 @@ export default function TestimonialForm() {
       form.reset();
     } catch {
       setStatus("error");
-      setErrorMsg("Something went wrong sending your testimonial. Please try again, or WhatsApp us directly.");
+      setErrorMsg(t("testimonialForm.errorMsg", lang));
     }
   }
 
@@ -54,11 +57,8 @@ export default function TestimonialForm() {
         <div className="w-14 h-14 rounded-full bg-orange text-white flex items-center justify-center text-2xl mx-auto mb-4">
           ✓
         </div>
-        <h3 className="font-semibold text-lg text-dark">Thank You!</h3>
-        <p className="text-sm text-neutral-500 mt-2">
-          We appreciate you taking the time. It will show on the site once
-          we&apos;ve had a look, usually within a day or two.
-        </p>
+        <h3 className="font-semibold text-lg text-dark">{t("testimonialForm.successTitle", lang)}</h3>
+        <p className="text-sm text-neutral-500 mt-2">{t("testimonialForm.successBody", lang)}</p>
       </div>
     );
   }
@@ -75,7 +75,7 @@ export default function TestimonialForm() {
         aria-hidden="true"
       />
 
-      <label className="block text-sm font-medium mb-1">Your Name</label>
+      <label className="block text-sm font-medium mb-1">{t("testimonialForm.yourName", lang)}</label>
       <input
         name="client_name"
         required
@@ -83,14 +83,14 @@ export default function TestimonialForm() {
         className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
       />
 
-      <label className="block text-sm font-medium mb-1">Role (optional)</label>
+      <label className="block text-sm font-medium mb-1">{t("testimonialForm.role", lang)}</label>
       <input
         name="client_role"
-        placeholder="e.g. Homeowner, Waterfalls"
+        placeholder={t("testimonialForm.rolePlaceholder", lang)}
         className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
       />
 
-      <label className="block text-sm font-medium mb-1">Rating</label>
+      <label className="block text-sm font-medium mb-1">{t("testimonialForm.rating", lang)}</label>
       <select
         name="rating"
         defaultValue={5}
@@ -104,12 +104,12 @@ export default function TestimonialForm() {
         ))}
       </select>
 
-      <label className="block text-sm font-medium mb-1">Your Experience</label>
+      <label className="block text-sm font-medium mb-1">{t("testimonialForm.experience", lang)}</label>
       <textarea
         name="quote"
         required
         rows={4}
-        placeholder="Tell us how the job went..."
+        placeholder={t("testimonialForm.experiencePlaceholder", lang)}
         className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
       />
 
@@ -120,7 +120,7 @@ export default function TestimonialForm() {
         disabled={status === "submitting"}
         className="w-full bg-orange text-white font-semibold py-3 rounded-md hover:brightness-95 transition disabled:opacity-60"
       >
-        {status === "submitting" ? "Sending..." : "Submit Testimonial"}
+        {status === "submitting" ? t("testimonialForm.sending", lang) : t("testimonialForm.submit", lang)}
       </button>
     </form>
   );

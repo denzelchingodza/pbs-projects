@@ -1,10 +1,19 @@
+"use client";
+
 /**
  * Three real reasons to hire PBS, used on the About page just above the
  * founder section. Plain inline SVG icons (no icon library needed for
  * three simple shapes), each paired with a short, honest line rather than
  * generic marketing language, this is meant to read like something a real
  * tradesman would say about his own work.
+ *
+ * Now a Client Component so the three titles and body lines follow the
+ * current language, see lib/i18n.ts for the English and (once supplied)
+ * Shona text.
  */
+import { t } from "@/lib/i18n";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
+
 function IconBadge({ children }: { children: React.ReactNode }) {
   return (
     <span className="w-12 h-12 rounded-full bg-orange/10 flex items-center justify-center shrink-0">
@@ -15,8 +24,8 @@ function IconBadge({ children }: { children: React.ReactNode }) {
 
 const VALUES = [
   {
-    title: "Real trade experience",
-    body: "Years actually cutting, fitting, and sealing glass and aluminum, not just running a business that sells it.",
+    titleKey: "whyChooseUs.title1",
+    bodyKey: "whyChooseUs.body1",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8622D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M14 2 4.5 11.5a2.1 2.1 0 0 0 3 3L17.5 5" />
@@ -26,8 +35,8 @@ const VALUES = [
     ),
   },
   {
-    title: "Measured and built to fit",
-    body: "Every window, door, or cubicle is measured for its own opening and built to that size, not sold off a shelf.",
+    titleKey: "whyChooseUs.title2",
+    bodyKey: "whyChooseUs.body2",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8622D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="7" width="18" height="10" rx="1" />
@@ -36,8 +45,8 @@ const VALUES = [
     ),
   },
   {
-    title: "Local, based in Harare",
-    body: "On the ground in Zimbabwe, available for a site visit, a straight quote, and support after the job is done.",
+    titleKey: "whyChooseUs.title3",
+    bodyKey: "whyChooseUs.body3",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8622D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" />
@@ -48,16 +57,17 @@ const VALUES = [
 ];
 
 export default function WhyChooseUs() {
+  const { lang } = useLanguage();
   return (
     <section className="px-6 md:px-8 py-16 bg-neutral-50">
       <div className="max-w-5xl mx-auto grid sm:grid-cols-3 gap-8">
         {VALUES.map((v) => (
-          <div key={v.title} className="text-center sm:text-left">
+          <div key={v.titleKey} className="text-center sm:text-left">
             <div className="flex justify-center sm:justify-start mb-4">
               <IconBadge>{v.icon}</IconBadge>
             </div>
-            <h3 className="font-semibold text-dark mb-1.5">{v.title}</h3>
-            <p className="text-sm text-neutral-500 leading-relaxed">{v.body}</p>
+            <h3 className="font-semibold text-dark mb-1.5">{t(v.titleKey, lang)}</h3>
+            <p className="text-sm text-neutral-500 leading-relaxed">{t(v.bodyKey, lang)}</p>
           </div>
         ))}
       </div>

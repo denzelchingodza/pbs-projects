@@ -9,6 +9,7 @@ import Link from "next/link";
 import AboutFounder from "@/components/home/AboutFounder";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LocationMap from "@/components/layout/LocationMap";
+import T from "@/components/i18n/T";
 import { getProjects, getSiteSettings } from "@/lib/api";
 import { categoryLabel } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
@@ -28,16 +29,17 @@ export default async function AboutPage() {
       <section className="px-6 md:px-8 pt-16 pb-14 md:pt-20 bg-white">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-4">
-            About Us
+            <T k="about.eyebrow" />
           </p>
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-dark">
-            Built on real trade experience, not just a business plan
+            <T k="about.title" />
           </h1>
           <p className="mt-5 text-neutral-500 text-[15px] leading-relaxed">
-            {settings.business_name} is a Harare based glass and aluminum specialist,
-            {years !== null ? ` running for ${years}+ years, ` : " "}
-            covering windows, doors, shower cubicles, shop fronts, suspended
-            ceilings and cabinets for homes, shops, and offices across Zimbabwe.
+            {years !== null ? (
+              <T k="about.introWithYears" values={{ business: settings.business_name, years }} />
+            ) : (
+              <T k="about.introNoYears" values={{ business: settings.business_name }} />
+            )}
           </p>
         </div>
       </section>
@@ -50,10 +52,10 @@ export default async function AboutPage() {
         <section className="px-6 md:px-8 py-20 bg-neutral-50">
           <div className="max-w-5xl mx-auto">
             <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3 text-center">
-              Real Work
+              <T k="about.realWorkEyebrow" />
             </p>
             <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight text-center mb-10">
-              A few completed jobs
+              <T k="about.realWorkTitle" />
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {workSample.map((p) => (
@@ -82,7 +84,7 @@ export default async function AboutPage() {
                 href="/gallery"
                 className="inline-block bg-dark text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:bg-orange transition"
               >
-                View Full Gallery
+                <T k="work.viewGallery" />
               </Link>
             </div>
           </div>
@@ -92,7 +94,7 @@ export default async function AboutPage() {
       <section className={`px-6 md:px-8 py-20 ${workSample.length > 0 ? "bg-white" : "bg-neutral-50"}`}>
         <div className="max-w-5xl mx-auto">
           <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3 text-center">
-            Find Us
+            <T k="about.findUs" />
           </p>
           <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight text-center mb-8">
             {settings.address}

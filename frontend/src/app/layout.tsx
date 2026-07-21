@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
 import PublicChrome from "@/components/layout/PublicChrome";
+import { LanguageProvider } from "@/components/i18n/LanguageProvider";
 import { getSiteSettings } from "@/lib/api";
 
 // next/font downloads Inter once at build time and self-hosts it (no request
@@ -30,14 +31,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-sans text-dark antialiased">
-        <PublicChrome>
-          <Navbar settings={settings} />
-        </PublicChrome>
-        {children}
-        <PublicChrome>
-          <Footer settings={settings} />
-          <WhatsAppFloat settings={settings} />
-        </PublicChrome>
+        <LanguageProvider>
+          <PublicChrome>
+            <Navbar settings={settings} />
+          </PublicChrome>
+          {children}
+          <PublicChrome>
+            <Footer settings={settings} />
+            <WhatsAppFloat settings={settings} />
+          </PublicChrome>
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -9,9 +9,12 @@
  */
 import { useState } from "react";
 import { apiPost } from "@/lib/api";
+import { t } from "@/lib/i18n";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
 import type { Product } from "@/types";
 
 export default function QuoteForm({ products }: { products: Product[] }) {
+  const { lang } = useLanguage();
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -41,7 +44,7 @@ export default function QuoteForm({ products }: { products: Product[] }) {
       form.reset();
     } catch {
       setStatus("error");
-      setErrorMsg("Something went wrong sending your request. Please try again, or WhatsApp us directly.");
+      setErrorMsg(t("quoteForm.errorMsg", lang));
     }
   }
 
@@ -51,10 +54,8 @@ export default function QuoteForm({ products }: { products: Product[] }) {
         <div className="w-14 h-14 rounded-full bg-orange text-white flex items-center justify-center text-2xl mx-auto mb-4">
           ✓
         </div>
-        <h3 className="font-semibold text-lg text-dark">Request Sent!</h3>
-        <p className="text-sm text-neutral-500 mt-2">
-          Thanks, we&apos;ll be in touch shortly to follow up on your quote.
-        </p>
+        <h3 className="font-semibold text-lg text-dark">{t("quoteForm.successTitle", lang)}</h3>
+        <p className="text-sm text-neutral-500 mt-2">{t("quoteForm.successBody", lang)}</p>
       </div>
     );
   }
@@ -71,7 +72,7 @@ export default function QuoteForm({ products }: { products: Product[] }) {
         aria-hidden="true"
       />
 
-      <label className="block text-sm font-medium mb-1">Full Name</label>
+      <label className="block text-sm font-medium mb-1">{t("quoteForm.fullName", lang)}</label>
       <input
         name="full_name"
         required
@@ -81,7 +82,7 @@ export default function QuoteForm({ products }: { products: Product[] }) {
 
       <div className="grid sm:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Phone / WhatsApp</label>
+          <label className="block text-sm font-medium mb-1">{t("quoteForm.phone", lang)}</label>
           <input
             name="phone"
             required
@@ -90,7 +91,7 @@ export default function QuoteForm({ products }: { products: Product[] }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Product</label>
+          <label className="block text-sm font-medium mb-1">{t("quoteForm.product", lang)}</label>
           <select
             name="product"
             className="w-full border border-neutral-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
@@ -104,11 +105,11 @@ export default function QuoteForm({ products }: { products: Product[] }) {
         </div>
       </div>
 
-      <label className="block text-sm font-medium mb-1">Tell us about the job</label>
+      <label className="block text-sm font-medium mb-1">{t("quoteForm.details", lang)}</label>
       <textarea
         name="details"
         rows={4}
-        placeholder="Rough size, location, timeline..."
+        placeholder={t("quoteForm.detailsPlaceholder", lang)}
         className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
       />
 
@@ -119,7 +120,7 @@ export default function QuoteForm({ products }: { products: Product[] }) {
         disabled={status === "submitting"}
         className="w-full bg-orange text-white font-semibold py-3 rounded-md hover:brightness-95 transition disabled:opacity-60"
       >
-        {status === "submitting" ? "Sending..." : "Send Request"}
+        {status === "submitting" ? t("quoteForm.sending", lang) : t("quoteForm.send", lang)}
       </button>
     </form>
   );

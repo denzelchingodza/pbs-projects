@@ -8,6 +8,7 @@
  * where.
  */
 import type { SiteSettings } from "@/types";
+import T from "@/components/i18n/T";
 
 export default function Stats({ settings }: { settings: SiteSettings }) {
   const years = settings.founded_year ? new Date().getFullYear() - settings.founded_year : null;
@@ -15,20 +16,22 @@ export default function Stats({ settings }: { settings: SiteSettings }) {
   const city = addressParts[addressParts.length - 1]?.trim() || "Harare";
 
   const items = [
-    { value: years !== null ? `${years}+` : "New", label: "Years in Business" },
-    { value: "6", label: "Product Categories" },
-    { value: city, label: "Based, Serving All Zimbabwe" },
+    { value: years !== null ? `${years}+` : "New", key: "stats.years" },
+    { value: "6", key: "stats.categories" },
+    { value: city, key: "stats.based" },
   ];
 
   return (
     <section className="border-y border-neutral-100 bg-neutral-50">
       <div className="max-w-6xl mx-auto grid grid-cols-3 divide-x divide-neutral-200 px-6 md:px-8">
         {items.map((item) => (
-          <div key={item.label} className="py-10 text-center">
+          <div key={item.key} className="py-10 text-center">
             <div className="text-3xl sm:text-4xl font-bold text-dark tracking-tight">
               {item.value}
             </div>
-            <div className="text-neutral-500 text-xs sm:text-sm mt-1.5">{item.label}</div>
+            <div className="text-neutral-500 text-xs sm:text-sm mt-1.5">
+              <T k={item.key} />
+            </div>
           </div>
         ))}
       </div>
