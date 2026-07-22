@@ -1368,3 +1368,53 @@ public page (home, about, gallery, products, quote, testimonial,
 contact) still loads. The test quote row created during this check was
 deleted from the real database afterward. A full production build still
 generates all 16 routes with zero errors.
+
+## Stage 26: SEO basics, real icons, and shareable link previews
+
+Denzel asked what else could push the site toward 100%, this stage
+covers the highest impact, most overdue piece: right now nothing on the
+site helps Google understand it, and sharing a link on WhatsApp showed
+a bare title with no preview image, both fixed here. Real content
+additions (FAQ, service area, pricing guidance) are next, waiting on a
+few real facts from Denzel before writing anything.
+
+**Real icons, finally.** `public/manifest.json` had been pointing at
+`icon-192.png` and `icon-512.png` since early in the project, neither
+file actually existed, so the site could never properly install as an
+app or show a real icon, only a blank placeholder. Generated both,
+plus a matching `favicon.ico`, from the real logo mark (the orange
+roof line over "PBS", same as the navbar), not a generic placeholder.
+Also generated a proper Open Graph share image (`og-image.jpg`, on
+brand, dark background, orange accents), before this, sharing the
+site's link anywhere showed no image and a plain, unstyled title.
+
+**Metadata that actually describes each page.** `layout.tsx` now sets
+a title template so every page reads "Page Name | PBS Projects" in the
+browser tab and in search results, plus a real description, keywords,
+and full Open Graph and Twitter card tags using the new icon and share
+image. Every page (`about`, `contact`, `gallery`, `products`, `quote`,
+`testimonial`) got its own specific title and description instead of
+inheriting one generic line for the whole site.
+
+**LocalBusiness structured data.** Added `components/seo/StructuredData.tsx`,
+plain JSON-LD, using only real, already-recorded settings (business name,
+address, phone, email, map coordinates if set), nothing invented. This
+is what lets Google show a proper business listing (map pin, phone
+number, hours if ever recorded) instead of just a plain search result.
+
+**Sitemap and robots.txt.** Added `app/sitemap.ts` and `app/robots.ts`,
+Next.js generates real `/sitemap.xml` and `/robots.txt` files from
+these automatically, listing every real public page so search engines
+can find and crawl them, while keeping the admin panel out of it
+entirely, there's nothing there worth indexing.
+
+**One thing to know:** the site doesn't have a real public domain yet,
+so `lib/seo.ts` uses a placeholder (`pbsprojects.co.zw`) for now, one
+line to update once a real domain exists, everything else (the
+sitemap, Open Graph tags, structured data) builds off that single value.
+
+**Verified for real, not assumed:** `tsc --noEmit` came back clean and
+a full production build generated all 19 routes, including the new
+`/sitemap.xml` and `/robots.txt`, with zero errors. Opened the
+generated icon and Open Graph image directly to confirm they render
+correctly, not just that the build succeeded.

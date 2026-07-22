@@ -4,8 +4,14 @@
  * (components/home/ProductsOverview.tsx); this page is the full version
  * with more room per product and a direct link into the quote form.
  */
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getProducts } from "@/lib/api";
+
+export const metadata: Metadata = {
+  title: "Products & Services",
+  description: "Windows, doors, shower cubicles, shop fronts, suspended ceilings and cabinets, made and fitted by PBS Projects in Harare.",
+};
 
 export default async function ProductsPage() {
   const products = await getProducts();

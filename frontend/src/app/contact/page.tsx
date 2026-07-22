@@ -5,8 +5,14 @@
  * /quote, those two pages cover "I want to submit details", this page
  * covers "I just want to reach someone right now."
  */
+import type { Metadata } from "next";
 import LocationMap from "@/components/layout/LocationMap";
 import { getSiteSettings } from "@/lib/api";
+
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description: "Call, WhatsApp, or email PBS Projects directly, or find us at our Waterfalls, Harare workshop.",
+};
 
 export default async function ContactPage() {
   const settings = await getSiteSettings();

@@ -5,6 +5,7 @@
  * finished work, the real founder bio (admin-editable), and the map, none
  * of this is hardcoded beyond the one-time company story paragraph below.
  */
+import type { Metadata } from "next";
 import Link from "next/link";
 import AboutFounder from "@/components/home/AboutFounder";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
@@ -14,6 +15,11 @@ import { getProjects, getSiteSettings } from "@/lib/api";
 import { categoryLabel } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
 import type { Project } from "@/types";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Meet the team behind PBS Projects, and see why customers in Harare trust us with their windows, doors, and shop fronts.",
+};
 
 export default async function AboutPage() {
   const [settings, projects] = await Promise.all([getSiteSettings(), getProjects()]);

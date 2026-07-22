@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import GalleryExplorer from "@/components/gallery/GalleryExplorer";
 import BeforeAfterSlider from "@/components/gallery/BeforeAfterSlider";
@@ -5,6 +6,11 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { getProjects } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 import type { Project } from "@/types";
+
+export const metadata: Metadata = {
+  title: "Our Work",
+  description: "Real finished jobs, windows, doors, shower cubicles, shop fronts, and more, from PBS Projects in Harare.",
+};
 
 export default async function GalleryPage() {
   const projects: Project[] = await getProjects();
