@@ -1507,3 +1507,14 @@ details rejected, login rate limit trips independently of the quote
 form's own limit, the backup script runs clean end to end and produces
 a real, valid, restorable backup. `alembic check` confirms no schema
 drift between the models and the existing migrations.
+
+## Stage 28: Add a way back to the real site from the admin panel
+
+Denzel asked for the admin portal to have a direct gateway back to the
+main website. Added a "View Site" link at the top of `AdminNav.tsx`,
+above the section links, opens the homepage in a new tab rather than
+navigating the admin tab away, so the logged in admin session stays
+exactly where it was.
+
+Verified with a clean `tsc --noEmit` and a full production build (19
+routes, zero errors).

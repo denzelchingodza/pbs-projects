@@ -42,6 +42,25 @@ export default function AdminNav() {
       </div>
 
       <div className="flex md:flex-col px-3 py-3 gap-1 overflow-x-auto md:overflow-visible md:flex-1">
+        {/* Opens in a new tab on purpose: it's a quick way to check what a
+            real visitor sees, not a way to navigate away from the admin
+            session, the admin tab stays exactly where it was. */}
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-4 py-2.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors border-l-[3px] border-transparent text-neutral-500 hover:bg-neutral-50 hover:text-dark flex items-center gap-2"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <path d="M15 3h6v6" />
+            <path d="M10 14 21 3" />
+          </svg>
+          View Site
+        </a>
+
+        <div className="hidden md:block border-t border-neutral-100 my-2" />
+
         {LINKS.map((link) => {
           const active = pathname === link.href;
           return (
