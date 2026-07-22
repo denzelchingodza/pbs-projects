@@ -15,8 +15,17 @@ router = APIRouter()
 # site is opened on a phone through the Next.js dev proxy.
 
 
-@router.post("", response_model=QuoteOut, include_in_schema=False, dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300))])
-@router.post("/", response_model=QuoteOut, dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300))])
+@router.post(
+    "",
+    response_model=QuoteOut,
+    include_in_schema=False,
+    dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300, scope="quote_submit"))],
+)
+@router.post(
+    "/",
+    response_model=QuoteOut,
+    dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300, scope="quote_submit"))],
+)
 def submit_quote(payload: QuoteCreate, db: Session = Depends(get_db)):
     if payload.website:
         # Honeypot field was filled in -> almost certainly a bot. Silently reject.

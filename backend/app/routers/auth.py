@@ -10,6 +10,7 @@ flow, never through an open registration endpoint.
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.core.rate_limit import rate_limit
 from app.database import get_db
 from app.models.user import User
 from app.core.security import hash_password, verify_password, create_access_token
@@ -21,7 +22,19 @@ router = APIRouter()
 MIN_PASSWORD_LENGTH = 8
 
 
-@router.post("/login", response_model=Token)
+# There's only ever one or two real admin accounts on this whole site, which
+# makes login the single most attractive target for anyone trying to break
+# in, guess the password enough times and eventually one guess lands. This
+# was the one write endpoint in the entire backend with no rate limit on it
+# at all. Capped tighter than the public quote/testimonial forms (10 tries
+# per 15 minutes instead of 5 per 5 minutes), since a real admin mistyping
+# their own password a couple of times shouldn't get locked out, but a
+# script trying thousands of passwords a minute should.
+@router.post(
+    "/login",
+    response_model=Token,
+    dependencies=[Depends(rate_limit(max_requests=10, window_seconds=900, scope="login"))],
+)
 def login(credentials: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == credentials.email).first()
 

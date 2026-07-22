@@ -1418,3 +1418,92 @@ a full production build generated all 19 routes, including the new
 `/sitemap.xml` and `/robots.txt`, with zero errors. Opened the
 generated icon and Open Graph image directly to confirm they render
 correctly, not just that the build succeeded.
+
+## Stage 27: Backend audit, security, storage, and pipelines
+
+Denzel asked for a full pass over the backend itself, security, storage,
+and pipelines, not more features, since a small project should be small
+and solid rather than wide. Went through every router, service, model,
+and script by hand rather than assuming anything was fine, found and
+fixed five real issues, three of them nothing to do with what was asked
+for but worth fixing anyway.
+
+**Login had no rate limit at all.** Every public form already had one
+(Stage 20), the one admin login endpoint, the single most attractive
+target on the whole site, did not. Added a limit of 10 attempts per 15
+minutes (routers/auth.py), looser than the public forms since a real
+admin mistyping their own password shouldn't get locked out, but a
+script guessing passwords nonstop now gets stopped cold.
+
+**The rate limiter itself had a real bug.** It kept one shared counter
+per IP address across every endpoint that used it, discovered by
+actually testing the new login limit end to end and watching it trip
+early, a handful of quote form submissions had already used up part of
+the login endpoint's separate budget, since both were, invisibly, the
+same counter. Fixed in `app/core/rate_limit.py` by keying on the
+endpoint plus the IP instead of just the IP, added a regression test
+(`tests/test_rate_limit.py`) proving the two are independent now.
+
+**The test suite was writing into the real database.** `tests/conftest.py`
+handed every test a client wired straight to the live app with no
+override at all, meaning `pytest` was inserting rows like the "Test
+User" quote directly into the same database behind the real site. Caught
+this by actually running the existing tests and checking the real
+database before and after, not by inspecting the code and assuming it
+was fine. Rewrote conftest to give every test its own throwaway SQLite
+database, verified clean now with a real before/after row count diff.
+One more layer to this: my first fix for it still had test helper
+functions importing the real `SessionLocal` directly, which bypasses the
+override entirely, caught the same way, by running the suite and finding
+a stray "admin@test.com" user sitting in the real users table afterward.
+Fixed properly the second time and reverified.
+
+**Two forms had no size limit on their text fields.** Quote and
+testimonial submissions are public and unauthenticated, `details`,
+`quote`, names, and roles had no length cap, an easy way to stuff the
+database with an oversized payload. Added real limits in
+`schemas/quote.py` and `schemas/testimonial.py` (a real name or quote is
+never anywhere close to these), plus locked quote status updates and
+testimonial ratings to their actual valid values instead of accepting
+any string or number.
+
+**The backup script would have failed the first time anyone ran it.**
+`scripts/backup_db.sh` called `pg_dump`, a Postgres-only tool, the site
+has run on SQLite this entire time. It also never touched the 39MB of
+real uploaded photos and videos, only the database. Rewritten to detect
+which one is actually in use, take a safe, consistent SQLite snapshot
+(or a Postgres dump if this ever moves off SQLite), archive the uploads
+folder alongside it, and keep the most recent 14 backups of each. Ran it
+for real against the real database and real uploads folder, opened the
+resulting backup file and confirmed the real data was actually inside
+it, not just that the script exited cleanly.
+
+**Smaller things fixed along the way:** a corrupt or fake "image" upload
+used to crash with a raw, unhandled error and leave an orphaned file on
+disk forever, now caught cleanly and the partial file removed
+(`services/image_service.py`). The server now prints a loud warning on
+startup if `SECRET_KEY` is ever left as its placeholder default, instead
+of silently signing every login session with a value anyone could read.
+One leftover em dash in a real user-facing error message
+(`core/deps.py`) was replaced, matching the no-dash rule already applied
+everywhere else on the site.
+
+**One honest note, not something I fixed:** while testing all of this
+against the real server, noticed the one real quote request that had
+been sitting in the database (Denzel's own test of the quote form from
+his phone) is no longer there. Nothing in this pass deletes quote rows,
+and a full before/after check confirmed the test suite never touched the
+real database, so this doesn't look like something this work caused,
+most likely it was deleted through the admin panel in the normal course
+of using it. Flagging it plainly rather than staying quiet about it, a
+backup taken partway through this session does still have that row in
+it if it's wanted back.
+
+**Verified for real, not assumed:** all 13 backend tests pass against an
+isolated database, confirmed with a real before/after row count diff
+that the real database was untouched by the final run. Ran the actual
+server and hit the fixed endpoints directly with curl, oversized quote
+details rejected, login rate limit trips independently of the quote
+form's own limit, the backup script runs clean end to end and produces
+a real, valid, restorable backup. `alembic check` confirms no schema
+drift between the models and the existing migrations.

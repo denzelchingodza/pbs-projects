@@ -3,14 +3,33 @@ FastAPI entrypoint for the PBS Projects backend.
 Run locally with: uvicorn app.main:app --reload
 """
 import os
+import sys
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from app.config import settings as app_settings
 from app.routers import auth, products, gallery, quotes, admin, settings, testimonials
 
 app = FastAPI(title="PBS Projects API", version="0.1.0")
+
+# The real secret key lives in backend/.env (gitignored) and is what every
+# admin login token is signed with, if that file is ever missing (a fresh
+# clone that skipped copying .env, or a real server that was never
+# configured), app/config.py quietly falls back to a placeholder value
+# instead of failing. A server signing tokens with a placeholder anyone can
+# read straight out of this file's own history is the same as having no
+# signature at all. This can't silently pass, print a warning loud enough to
+# notice on every startup until it's fixed.
+if app_settings.secret_key == "dev-secret-change-me":
+    print(
+        "\n"
+        "WARNING: SECRET_KEY is still the placeholder value.\n"
+        "Set a real SECRET_KEY in backend/.env before this is used for anything real,\n"
+        "admin login sessions are not safe until this is changed.\n",
+        file=sys.stderr,
+    )
 
 app.add_middleware(
     CORSMiddleware,

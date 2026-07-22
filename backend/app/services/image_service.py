@@ -64,16 +64,27 @@ def save_image_upload(file_bytes: bytes, original_filename: str) -> dict:
     with open(full_path, "wb") as f:
         f.write(file_bytes)
 
-    img = Image.open(full_path)
-    img = img.convert("RGB") if img.mode in ("RGBA", "P") and ext in (".jpg", ".jpeg") else img
-    img.thumbnail((MAX_WIDTH, MAX_WIDTH))
-    img.save(full_path, optimize=True, quality=82)
+    # A file can have a .jpg name and still not actually be a valid image
+    # (renamed, corrupted, or something else entirely), Pillow raises when
+    # that happens. Without this, that error would surface as a raw 500 to
+    # whoever uploaded it, and the bad file would sit on disk forever since
+    # nothing ever cleans it up. Catch it, delete what was just written, and
+    # report it the same clean way an unsupported extension already is.
+    try:
+        img = Image.open(full_path)
+        img = img.convert("RGB") if img.mode in ("RGBA", "P") and ext in (".jpg", ".jpeg") else img
+        img.thumbnail((MAX_WIDTH, MAX_WIDTH))
+        img.save(full_path, optimize=True, quality=82)
 
-    thumb_name = f"thumb_{unique_name}"
-    thumb_path = os.path.join(UPLOAD_DIR, thumb_name)
-    thumb = img.copy()
-    thumb.thumbnail((THUMB_WIDTH, THUMB_WIDTH))
-    thumb.save(thumb_path, optimize=True, quality=80)
+        thumb_name = f"thumb_{unique_name}"
+        thumb_path = os.path.join(UPLOAD_DIR, thumb_name)
+        thumb = img.copy()
+        thumb.thumbnail((THUMB_WIDTH, THUMB_WIDTH))
+        thumb.save(thumb_path, optimize=True, quality=80)
+    except Exception:
+        if os.path.exists(full_path):
+            os.remove(full_path)
+        raise UnsupportedFileError("That file isn't a valid, readable image.")
 
     return {
         "image_url": f"/{full_path}",

@@ -22,7 +22,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 def get_current_admin(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
     credentials_error = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Invalid or expired admin session — please log in again.",
+        detail="Invalid or expired admin session, please log in again.",
         headers={"WWW-Authenticate": "Bearer"},
     )
     email = decode_access_token(token)

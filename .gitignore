@@ -20,6 +20,10 @@ backend/.env
 # just like the database itself, not something to keep in git history.
 backend/static/uploads/
 
+# Local backups (scripts/backup_db.sh), real customer data, never belongs
+# in git history any more than the database or uploads it's a copy of.
+backend/backups/
+
 # OS / editor
 .DS_Store
 .vscode/

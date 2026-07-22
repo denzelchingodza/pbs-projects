@@ -26,15 +26,24 @@ def list_testimonials(db: Session = Depends(get_db)):
     return db.query(Testimonial).filter(Testimonial.status == "approved").all()
 
 
-@router.post("", response_model=TestimonialOut, include_in_schema=False, dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300))])
-@router.post("/", response_model=TestimonialOut, dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300))])
+@router.post(
+    "",
+    response_model=TestimonialOut,
+    include_in_schema=False,
+    dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300, scope="testimonial_submit"))],
+)
+@router.post(
+    "/",
+    response_model=TestimonialOut,
+    dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300, scope="testimonial_submit"))],
+)
 def submit_testimonial(payload: TestimonialCreate, db: Session = Depends(get_db)):
     if payload.website:
         # Honeypot field was filled in, almost certainly a bot. Silently reject.
         raise HTTPException(status_code=400, detail="Invalid submission")
 
-    if not (1 <= payload.rating <= 5):
-        raise HTTPException(status_code=400, detail="Rating must be between 1 and 5.")
+    # rating is already constrained to 1 to 5 by the schema (schemas/testimonial.py),
+    # a request outside that range never reaches this line at all.
 
     testimonial = Testimonial(
         client_name=payload.client_name,
