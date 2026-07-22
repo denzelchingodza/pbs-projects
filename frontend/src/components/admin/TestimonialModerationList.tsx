@@ -58,7 +58,7 @@ export default function TestimonialModerationList({
   const visible = testimonials.filter((t) => !removedIds.has(t.id));
 
   if (visible.length === 0) {
-    return <p className="text-sm text-neutral-400">No testimonials yet.</p>;
+    return <p className="text-sm text-neutral-500">No testimonials yet.</p>;
   }
 
   return (

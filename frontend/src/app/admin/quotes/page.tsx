@@ -33,7 +33,7 @@ export default function AdminQuotesPage() {
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
       {quotes === null ? (
-        <p className="text-sm text-neutral-400">Loading quote requests...</p>
+        <p className="text-sm text-neutral-500">Loading quote requests...</p>
       ) : (
         <QuoteTable
           quotes={quotes}

@@ -74,7 +74,7 @@ export default function QuoteTable({
   }
 
   if (quotes.length === 0) {
-    return <p className="text-sm text-neutral-400">No quote requests yet.</p>;
+    return <p className="text-sm text-neutral-500">No quote requests yet.</p>;
   }
 
   return (

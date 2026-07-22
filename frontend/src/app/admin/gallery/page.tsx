@@ -43,7 +43,7 @@ export default function AdminGalleryPage() {
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
       {projects === null ? (
-        <p className="text-sm text-neutral-400">Loading projects...</p>
+        <p className="text-sm text-neutral-500">Loading projects...</p>
       ) : (
         <div className="flex flex-col gap-10">
           {GALLERY_CATEGORIES.map((cat) => {
@@ -52,14 +52,14 @@ export default function AdminGalleryPage() {
               <div key={cat.value}>
                 <div className="flex items-baseline gap-2 mb-4">
                   <h2 className="text-sm font-semibold text-dark">{cat.label}</h2>
-                  <span className="text-xs text-neutral-400">
+                  <span className="text-xs text-neutral-500">
                     {catProjects.length} {catProjects.length === 1 ? "project" : "projects"}
                   </span>
                 </div>
 
                 {catProjects.length === 0 ? (
                   <div className="border border-dashed border-neutral-300 rounded-xl py-6 text-center">
-                    <p className="text-xs text-neutral-400">No projects in this category yet.</p>
+                    <p className="text-xs text-neutral-500">No projects in this category yet.</p>
                   </div>
                 ) : (
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">

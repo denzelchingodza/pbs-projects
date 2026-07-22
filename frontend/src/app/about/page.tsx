@@ -7,6 +7,7 @@
  */
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import AboutFounder from "@/components/home/AboutFounder";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LocationMap from "@/components/layout/LocationMap";
@@ -70,11 +71,12 @@ export default async function AboutPage() {
                   href="/gallery"
                   className="group relative aspect-square rounded-xl overflow-hidden bg-neutral-900 shadow-sm hover:shadow-lg transition-shadow"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={mediaUrl(p.media[0].image_url)}
                     alt={p.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 pt-8 pb-2.5">
                     <span className="text-white/70 text-[10px] font-semibold uppercase tracking-widest">

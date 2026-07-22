@@ -8,7 +8,13 @@
  * admin panel's own design. Used anywhere a destructive action (deleting
  * a photo, a whole project, a quote, or a testimonial) needs a "are you
  * sure" step before it actually happens.
+ *
+ * role="dialog"/aria-modal tell a screen reader this is a modal, not just
+ * another chunk of the page, and Escape closes it the same way clicking
+ * the backdrop does, so a keyboard-only user isn't stuck once it's open.
  */
+import { useEffect } from "react";
+
 export default function ConfirmDialog({
   open,
   title,
@@ -28,6 +34,15 @@ export default function ConfirmDialog({
   onConfirm: () => void;
   onCancel: () => void;
 }) {
+  useEffect(() => {
+    if (!open) return;
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onCancel();
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [open, onCancel]);
+
   if (!open) return null;
 
   return (
@@ -36,10 +51,13 @@ export default function ConfirmDialog({
       onClick={onCancel}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-dialog-title"
         className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="font-bold text-dark text-lg mb-2">{title}</h3>
+        <h3 id="confirm-dialog-title" className="font-bold text-dark text-lg mb-2">{title}</h3>
         <p className="text-sm text-neutral-600 leading-relaxed mb-6">{message}</p>
         <div className="flex justify-end gap-3">
           <button

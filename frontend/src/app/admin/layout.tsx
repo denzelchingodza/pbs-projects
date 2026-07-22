@@ -39,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!checked) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50 text-neutral-400 text-sm">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50 text-neutral-500 text-sm">
         Checking admin session...
       </div>
     );

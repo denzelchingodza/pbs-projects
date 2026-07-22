@@ -10,6 +10,7 @@
  * full (filtered) list, tracked with a running index across every section
  * so previous/next in the Lightbox moves through the whole list correctly.
  */
+import Image from "next/image";
 import type { PhotoItem } from "./types";
 import { mediaUrl } from "@/lib/media";
 import { GALLERY_CATEGORIES, categoryLabel } from "@/lib/categories";
@@ -41,11 +42,12 @@ function Tile({ item, onOpen }: { item: PhotoItem; onOpen: () => void }) {
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={mediaUrl(item.image_url)}
           alt={item.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
       )}
       {item.media_type === "video" && <PlayBadge />}
@@ -107,7 +109,7 @@ export default function GalleryGrid({
             <h3 className="text-lg font-bold text-dark tracking-tight">
               {categoryLabel(section.category)}
             </h3>
-            <span className="text-sm text-neutral-400">
+            <span className="text-sm text-neutral-500">
               {section.slice.length} {section.slice.length === 1 ? "photo" : "photos"}
             </span>
           </div>

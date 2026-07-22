@@ -1518,3 +1518,60 @@ exactly where it was.
 
 Verified with a clean `tsc --noEmit` and a full production build (19
 routes, zero errors).
+
+## Stage 29: Frontend quality pass, image speed and accessibility
+
+Denzel asked what would actually improve frontend quality, then picked
+image loading speed and an accessibility/consistency pass to tackle
+first, out of a longer list of ideas.
+
+**Real photos now use Next.js's Image component instead of plain img
+tags.** Eight spots across the site (About page work samples, the
+founder photo, homepage Featured Work covers, the gallery grid, the
+before/after slider, and both the cover photo and per-photo thumbnails
+in the admin panel) were all plain `<img>` tags, meaning every photo
+loaded at full size regardless of the device, nothing was lazy loaded
+below the fold, and nothing served a smaller version to a phone than a
+desktop. Converted all eight to Next's Image component with real `sizes`
+values matched to how big each one actually renders at each breakpoint,
+this is the single biggest real page-speed improvement available, most
+visitors are on a phone. Added `sharp` as a real dependency, Next's
+image optimizer needs it once this runs on a real server instead of
+Vercel. One image, the full-size Lightbox viewer, was deliberately left
+as a plain img, it needs to size itself to each photo's own natural
+shape capped by the screen, which Image's `fill` mode can't do without
+knowing that shape in advance, the right call there is leaving it alone,
+not forcing a bad fit.
+
+**Keyboard and screen reader gaps, closed.** A full spot-check turned up
+real, specific problems, not vague concerns: every button and link on
+the whole site relied purely on the browser's own unstyled default focus
+outline, present but inconsistent and sometimes barely visible (the dark
+mobile menu in particular). One CSS rule in `globals.css` now gives every
+interactive element a real, consistent focus ring when navigated to by
+keyboard, without adding anything for an ordinary mouse click. The
+in-app confirm dialog (`ConfirmDialog.tsx`) had no way to close with
+Escape and no `role="dialog"` for a screen reader to recognize it as a
+modal, both added. The mobile menu drawer had the same two gaps, both
+fixed the same way. Toast notifications (`ToastProvider.tsx`) appeared
+with no announcement at all for a screen reader user, `aria-live`
+fixed that.
+
+**A real contrast problem, measured, not guessed.** `text-neutral-400`
+(Tailwind's default gray, #A3A3A3) on a white background works out to
+roughly 2.5:1 contrast, well under the 4.5:1 the accepted accessibility
+standard calls for body text, meaning this text was genuinely hard to
+read for anyone with low vision, not just a theoretical concern. It
+showed up 13 times across the site, mostly loading and empty states,
+footer text, and hint text like "At least 8 characters", all real
+content someone actually needs to read. Bumped to `text-neutral-500`
+everywhere it appeared (roughly 4.7:1, clears the bar).
+
+**One small but real fix along the way:** admin panel photo thumbnails
+in "Manage Photos" all shared the exact same alt text (the project's
+title), a screen reader user managing five photos on one job heard the
+same description five times with no way to tell them apart. Each now
+reads "Project Title, photo 2" and so on.
+
+**Verified for real, not assumed:** `tsc --noEmit` came back clean, and
+a full production build generated all 19 routes with zero errors.

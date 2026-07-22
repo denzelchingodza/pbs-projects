@@ -30,7 +30,7 @@ export default function AdminTestimonialsPage() {
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
       {testimonials === null ? (
-        <p className="text-sm text-neutral-400">Loading testimonials...</p>
+        <p className="text-sm text-neutral-500">Loading testimonials...</p>
       ) : (
         <TestimonialModerationList
           testimonials={testimonials}

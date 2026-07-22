@@ -38,7 +38,7 @@ export default function AdminNav() {
     <nav className="md:w-60 shrink-0 bg-white border-b md:border-b-0 md:border-r border-neutral-200 md:min-h-screen md:flex md:flex-col">
       <div className="px-6 py-5 border-b border-neutral-100 hidden md:block">
         <Logo />
-        <p className="text-xs text-neutral-400 mt-2 uppercase tracking-widest font-semibold">Admin Panel</p>
+        <p className="text-xs text-neutral-500 mt-2 uppercase tracking-widest font-semibold">Admin Panel</p>
       </div>
 
       <div className="flex md:flex-col px-3 py-3 gap-1 overflow-x-auto md:overflow-visible md:flex-1">

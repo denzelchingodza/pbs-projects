@@ -47,7 +47,15 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <div className="fixed bottom-6 right-6 z-[300] flex flex-col gap-2.5 items-end">
+      {/* aria-live announces new toasts to screen readers as they appear,
+          without this, someone using a screen reader saving an edit or
+          deleting a photo gets no confirmation at all, sighted admins see
+          the toast, nobody else knows the action actually went through. */}
+      <div
+        role="status"
+        aria-live="polite"
+        className="fixed bottom-6 right-6 z-[300] flex flex-col gap-2.5 items-end"
+      >
         {toasts.map((t) => (
           <button
             key={t.id}

@@ -11,6 +11,7 @@
  * bio text follow the current language, the real bio itself is admin
  * entered content and shows exactly as written.
  */
+import Image from "next/image";
 import type { SiteSettings } from "@/types";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
@@ -33,12 +34,15 @@ export default function AboutFounder({ settings }: { settings: SiteSettings }) {
     <section className="px-6 md:px-8 py-20 bg-white">
       <div className="max-w-5xl mx-auto grid md:grid-cols-[220px_1fr] gap-10 items-start">
         {settings.owner_photo_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={settings.owner_photo_url}
-            alt={name}
-            className="w-full aspect-square object-cover rounded-2xl shadow-md ring-4 ring-orange/10"
-          />
+          <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-md ring-4 ring-orange/10">
+            <Image
+              src={settings.owner_photo_url}
+              alt={name}
+              fill
+              sizes="220px"
+              className="object-cover"
+            />
+          </div>
         ) : (
           <div className="w-full aspect-square rounded-2xl bg-dark text-white flex items-center justify-center text-4xl font-bold shadow-md ring-4 ring-orange/10">
             {initials(name)}

@@ -16,7 +16,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 pb-8 border-b border-neutral-700">
         <div>
           <Logo className="mb-3" dark />
-          <p className="text-sm text-neutral-400 leading-relaxed">
+          <p className="text-sm text-neutral-500 leading-relaxed">
             Glass &amp; aluminum specialists based in Harare, serving clients across Zimbabwe.
           </p>
         </div>

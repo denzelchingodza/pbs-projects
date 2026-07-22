@@ -20,6 +20,7 @@
  * silent refresh.
  */
 import { useState } from "react";
+import Image from "next/image";
 import AddPhotoButton from "./AddPhotoButton";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/ToastProvider";
@@ -100,8 +101,13 @@ export default function ProjectCard({
           {cover.media_type === "video" ? (
             <video src={mediaUrl(cover.image_url)} muted playsInline preload="metadata" className="w-full h-full object-cover" />
           ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={mediaUrl(cover.image_url)} alt={project.title} className="w-full h-full object-cover" />
+            <Image
+              src={mediaUrl(cover.image_url)}
+              alt={project.title}
+              fill
+              sizes="(max-width: 768px) 50vw, 300px"
+              className="object-cover"
+            />
           )}
           {extraCount > 0 && (
             <span className="absolute bottom-2 right-2 bg-black/70 text-white text-xs font-semibold px-2.5 py-1 rounded-full">
@@ -170,7 +176,7 @@ export default function ProjectCard({
         ) : (
           <div>
             <div className="text-sm font-semibold text-dark">{project.title}</div>
-            <div className="text-xs text-neutral-400 mt-1">
+            <div className="text-xs text-neutral-500 mt-1">
               {categoryLabel(project.category)} &middot; {project.media.length}{" "}
               {project.media.length === 1 ? "photo" : "photos"}
             </div>
@@ -200,17 +206,22 @@ export default function ProjectCard({
 
         {managingPhotos && !editing && (
           <div className="mt-4 pt-4 border-t border-neutral-100">
-            <p className="text-xs text-neutral-400 mb-3">
+            <p className="text-xs text-neutral-500 mb-3">
               Every photo and video in this project. Hover one to remove it, or add another below.
             </p>
             <div className="flex flex-wrap gap-3">
-              {project.media.map((m) => (
+              {project.media.map((m, i) => (
                 <div key={m.id} className="relative w-20 h-20 rounded-lg overflow-hidden bg-neutral-900 shrink-0 group">
                   {m.media_type === "video" ? (
                     <video src={mediaUrl(m.image_url)} muted playsInline preload="metadata" className="w-full h-full object-cover" />
                   ) : (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={mediaUrl(m.image_url)} alt={project.title} className="w-full h-full object-cover" />
+                    <Image
+                      src={mediaUrl(m.image_url)}
+                      alt={`${project.title}, photo ${i + 1}`}
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
                   )}
                   <button
                     onClick={() => setConfirmPhotoId(m.id)}

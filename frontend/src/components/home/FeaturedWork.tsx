@@ -16,6 +16,7 @@
  * translation dictionary.
  */
 import Link from "next/link";
+import Image from "next/image";
 import type { Project } from "@/types";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { categoryLabel } from "@/lib/categories";
@@ -59,11 +60,12 @@ function Card({
           className="absolute inset-0 w-full h-full object-cover"
         />
       ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={mediaUrl(cover.image_url)}
           alt={project.title}
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          sizes={big ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 25vw"}
+          className="object-cover"
         />
       )}
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent px-4 pt-12 pb-4">

@@ -70,6 +70,17 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
     };
   }, [open]);
 
+  // Escape closes the drawer, same as tapping the backdrop, a keyboard-only
+  // visitor has no other way to dismiss it once it's open.
+  useEffect(() => {
+    if (!open) return;
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [open]);
+
   const waDigits = settings.whatsapp_number.replace(/[^\d]/g, "");
 
   return (
@@ -126,6 +137,9 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
 
       {/* Mobile menu panel */}
       <nav
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
         className={`md:hidden fixed top-0 right-0 h-screen w-[78%] max-w-xs bg-dark flex flex-col p-6 transition-transform duration-300 z-50 ${
           open ? "translate-x-0" : "translate-x-full"
         }`}

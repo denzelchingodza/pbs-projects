@@ -7,6 +7,7 @@
  * work to feel right on phones, which is our main audience).
  */
 import { useState } from "react";
+import Image from "next/image";
 
 export default function BeforeAfterSlider({
   beforeSrc,
@@ -19,13 +20,13 @@ export default function BeforeAfterSlider({
 
   return (
     <div className="relative max-w-2xl mx-auto aspect-video rounded-xl overflow-hidden select-none shadow-lg">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={beforeSrc} alt="Before" className="absolute inset-0 w-full h-full object-cover" />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image src={beforeSrc} alt="Before" fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover" />
+      <Image
         src={afterSrc}
         alt="After"
-        className="absolute inset-0 w-full h-full object-cover"
+        fill
+        sizes="(max-width: 768px) 100vw, 672px"
+        className="object-cover"
         style={{ clipPath: `inset(0 0 0 ${position}%)` }}
       />
       <div

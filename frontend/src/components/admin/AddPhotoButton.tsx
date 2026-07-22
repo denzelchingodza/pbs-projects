@@ -48,7 +48,7 @@ export default function AddPhotoButton({
       className={`shrink-0 w-20 h-20 rounded-lg border-2 border-dashed flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${
         busy
           ? "border-neutral-200 text-neutral-300"
-          : "border-neutral-300 text-neutral-400 hover:border-orange hover:text-orange"
+          : "border-neutral-300 text-neutral-500 hover:border-orange hover:text-orange"
       }`}
     >
       <span className="text-xl leading-none">{busy ? "..." : "+"}</span>

@@ -73,7 +73,7 @@ export default function ChangePasswordForm() {
         onChange={(e) => setNewPassword(e.target.value)}
         className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-1 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
       />
-      <p className="text-xs text-neutral-400 mb-4">At least 8 characters.</p>
+      <p className="text-xs text-neutral-500 mb-4">At least 8 characters.</p>
 
       <label className="block text-sm font-medium mb-1">Confirm New Password</label>
       <input

@@ -13,6 +13,24 @@ html {
   color: #ffffff;
 }
 
+/* Every button and link across the whole site relied on the browser's own
+   default focus outline, present but never actually styled, so it looked
+   different (or in some cases barely visible, especially on the dark
+   mobile menu) everywhere it happened to show up. :focus-visible only
+   applies this when someone is actually tabbing through the page with a
+   keyboard, not on an ordinary mouse click, so it never adds a visible
+   ring around something a mouse user just clicked. */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #e8622d;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* Slow, subtle "Ken Burns" drift on the homepage hero photo, on for as long
    as someone's actually looking at the page, alternating in and out rather
    than snapping back, so it never feels like a jump cut. Skipped entirely
