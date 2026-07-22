@@ -1,21 +1,21 @@
 /**
  * Thin fetch wrapper for calling the FastAPI backend from the Next.js frontend.
  *
- * NEXT_PUBLIC_API_URL always wins if it's set. Otherwise, in the browser, the
- * API host follows whatever host the page itself was loaded from, so opening
- * the site from a phone at http://192.168.x.x:3000 automatically talks to
- * http://192.168.x.x:8000/api with no config file to edit. Server side (page
- * rendering on the Mac itself) there is no browser host to read, so it falls
- * back to localhost, which is correct since the backend runs on the same
- * machine as the Next.js server.
+ * NEXT_PUBLIC_API_URL always wins if it's set (for a real deployment where
+ * the API lives on its own domain). Otherwise: in the browser, this uses the
+ * relative path "/api", which next.config.js rewrites to the backend on this
+ * same machine, so it always goes to whatever host the page was actually
+ * opened from (the computer or a phone on the same network), with nothing
+ * to configure. Server side (pages rendering on the Mac itself, before any
+ * HTML reaches a browser), a relative URL can't be used at all, so this
+ * falls back to a plain localhost address, which is correct there since the
+ * backend runs on the same machine as the Next.js server doing the render.
  */
 import type { SiteSettings } from "@/types";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
-  (typeof window !== "undefined"
-    ? `http://${window.location.hostname}:8000/api`
-    : "http://localhost:8000/api");
+  (typeof window !== "undefined" ? "/api" : "http://localhost:8000/api");
 
 export async function apiGet(path: string) {
   const res = await fetch(`${API_URL}${path}`, { next: { revalidate: 60 } });

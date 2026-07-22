@@ -1318,3 +1318,53 @@ phone, connected to the same WiFi, open a browser to
 a full production build generated all 16 frontend routes with zero
 errors. Confirmed by inspecting `git status` that only the four
 intended files changed.
+
+## Stage 25: Fix photos and forms not working on a phone
+
+After Stage 24, opening the site on a phone loaded the pages, but photos
+were still broken, and testing further would have shown the quote and
+testimonial forms failing too. Both had the same root cause: Stage 24
+only changed which host the browser talks to, it did not change how that
+host reaches the backend, and two separate problems were hiding underneath.
+
+**The real fix: a proxy, not a guess.** `frontend/next.config.js` now
+proxies `/api/*` and `/static/*` straight through to the backend on this
+same machine (`rewrites()`). The browser only ever talks to whichever
+host it already opened the page on, whether that's the computer or a
+phone's view of the Mac's network address, and this Next.js server
+quietly forwards the request to the backend over its own localhost,
+which is always correct since both run on the same machine. This
+replaces the previous approach of trying to guess the right address in
+`lib/api.ts`, `lib/adminApi.ts`, and `lib/media.ts`, all three are now
+much simpler, plain relative paths, with no host guessing left to get
+wrong. `lib/media.ts` in particular was still hardcoded to
+`localhost:8000` even after Stage 24, which is the direct reason photos
+never loaded on a phone, that one was missed the first time round.
+
+**The second problem: a redirect that leaked the backend's own address.**
+FastAPI expects certain routes with a trailing slash (`/api/gallery/`),
+Next's proxy strips that slash before forwarding, which made FastAPI
+issue its own redirect back to the slash version, using its own address
+in that redirect (`http://127.0.0.1:8000/...`). A phone follows that
+redirect and lands on itself, not the Mac, breaking the request. Fixed
+on both sides: `skipTrailingSlashRedirect: true` in
+`frontend/next.config.js` stops Next from mangling the slash before the
+proxy even runs, and the affected backend routes
+(`routers/settings.py`, `quotes.py`, `gallery.py`, `testimonials.py`,
+`products.py`) are now each registered both with and without the
+trailing slash, so neither form ever needs a redirect at all. This is
+exactly the routes behind gallery browsing, product listings, site
+settings, and the quote and testimonial submission forms, real
+functionality, not just the photos.
+
+**Verified for real, not assumed:** ran the actual backend and frontend
+together, then curled every affected endpoint through the same proxy
+path a phone would use: `/api/gallery/`, `/api/testimonials/`,
+`/api/products/`, `/api/settings/`, a real POST to `/api/quotes/`, and a
+real uploaded photo at `/static/uploads/...`, all came back 200 with no
+redirect, where before the photo returned nothing usable and the
+trailing-slash routes redirected to the backend's own address. Every
+public page (home, about, gallery, products, quote, testimonial,
+contact) still loads. The test quote row created during this check was
+deleted from the real database afterward. A full production build still
+generates all 16 routes with zero errors.

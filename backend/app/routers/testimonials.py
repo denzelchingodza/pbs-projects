@@ -12,7 +12,13 @@ from app.services.whatsapp_service import notify_new_testimonial
 
 router = APIRouter()
 
+# Registered both with and without the trailing slash, see the comment in
+# routers/settings.py, this is what keeps testimonials loading and the
+# submission form working when the site is opened on a phone through the
+# Next.js dev proxy.
 
+
+@router.get("", response_model=list[TestimonialOut], include_in_schema=False)
 @router.get("/", response_model=list[TestimonialOut])
 def list_testimonials(db: Session = Depends(get_db)):
     # Only approved testimonials are public, a fresh submission sits as
@@ -20,6 +26,7 @@ def list_testimonials(db: Session = Depends(get_db)):
     return db.query(Testimonial).filter(Testimonial.status == "approved").all()
 
 
+@router.post("", response_model=TestimonialOut, include_in_schema=False, dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300))])
 @router.post("/", response_model=TestimonialOut, dependencies=[Depends(rate_limit(max_requests=5, window_seconds=300))])
 def submit_testimonial(payload: TestimonialCreate, db: Session = Depends(get_db)):
     if payload.website:

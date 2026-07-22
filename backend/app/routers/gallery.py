@@ -11,7 +11,12 @@ from app.schemas.project import ProjectOut
 
 router = APIRouter()
 
+# Registered both with and without the trailing slash, see the comment in
+# routers/settings.py, this is what keeps gallery data loading correctly
+# when the site is opened on a phone through the Next.js dev proxy.
 
+
+@router.get("", response_model=list[ProjectOut], include_in_schema=False)
 @router.get("/", response_model=list[ProjectOut])
 def list_projects(category: str | None = Query(default=None), db: Session = Depends(get_db)):
     q = db.query(Project).options(selectinload(Project.media))
