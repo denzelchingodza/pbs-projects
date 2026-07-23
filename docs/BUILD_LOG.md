@@ -1676,3 +1676,22 @@ Changed the layout on the About page team section:
 
 Verified: tsc --noEmit clean, full production build clean, no dashes in
 any user facing text.
+
+## Stage 34: Give the name and role text real typographic weight
+
+Denzel felt the name/role/bio text next to each photo still looked basic,
+just three plain lines of roughly the same visual weight.
+
+Changed, per person:
+- The role is now a small pill (soft orange background, orange text)
+  instead of plain uppercase label text.
+- The name is bigger and heavier (extrabold, larger size) so it reads as
+  the clear headline of the block.
+- The bio now has a left rule next to it on desktop, set off like a quote
+  rather than a plain paragraph.
+- A large, very faint initials monogram sits behind the name on desktop
+  as a purely decorative touch, mirroring the kind of flourish agency and
+  studio team pages use, hidden on mobile where there is no room for it.
+
+Verified: tsc --noEmit clean, full production build clean, no dashes in
+any user facing text.

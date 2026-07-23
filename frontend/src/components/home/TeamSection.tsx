@@ -75,10 +75,30 @@ function TeamCard({ member, reversed }: { member: TeamMember; reversed: boolean 
           </div>
         )}
       </div>
-      <div className="flex-1 text-center md:text-left">
-        <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em]">{member.role}</p>
-        <h3 className="mt-2 font-bold text-dark text-2xl sm:text-3xl tracking-tight">{member.name}</h3>
-        <p className="mt-4 text-neutral-600 text-[15px] leading-relaxed max-w-md mx-auto md:mx-0">
+
+      {/* Text side: a large, faint initials monogram sits behind the name as
+          a purely decorative flourish (hidden on mobile, where there's no
+          room for it to breathe), the role is a small pill instead of plain
+          label text, and the bio reads as a set-off quote with a left rule
+          rather than a plain paragraph, so the block has real typographic
+          hierarchy instead of three same-weight lines stacked on each other. */}
+      <div className="relative flex-1 text-center md:text-left">
+        <span
+          aria-hidden="true"
+          className={`hidden md:block absolute -top-14 text-[130px] font-black text-neutral-100 leading-none select-none -z-10 ${
+            reversed ? "-right-2" : "-left-2"
+          }`}
+        >
+          {initials(member.name)}
+        </span>
+
+        <span className="inline-block bg-orange/10 text-orange text-[11px] font-semibold uppercase tracking-[0.2em] px-3 py-1 rounded-full">
+          {member.role}
+        </span>
+        <h3 className="mt-4 font-extrabold text-dark text-3xl sm:text-4xl tracking-tight">
+          {member.name}
+        </h3>
+        <p className="mt-5 text-neutral-600 text-[15px] leading-relaxed max-w-md mx-auto md:mx-0 md:border-l-2 md:border-orange/30 md:pl-4">
           {member.bio}
         </p>
       </div>
