@@ -13,7 +13,12 @@ import { useState } from "react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/ToastProvider";
 import { approveTestimonial, deleteTestimonial } from "@/lib/adminApi";
+import { revalidatePublicPaths } from "@/lib/revalidate";
 import type { Testimonial } from "@/types";
+
+// The homepage is the only public page that reads testimonials, see
+// lib/api.ts's getTestimonials() call site in app/page.tsx.
+const TESTIMONIAL_PUBLIC_PATHS = ["/"];
 
 export default function TestimonialModerationList({
   testimonials,
@@ -32,6 +37,7 @@ export default function TestimonialModerationList({
     try {
       const updated = await approveTestimonial(t.id);
       onChange(updated);
+      revalidatePublicPaths(TESTIMONIAL_PUBLIC_PATHS);
       showToast("Testimonial approved, now showing on the homepage.");
     } catch (err) {
       showToast(err instanceof Error ? err.message : "Failed to approve.", "error");
@@ -46,6 +52,7 @@ export default function TestimonialModerationList({
     try {
       await deleteTestimonial(confirmTestimonial.id);
       setRemovedIds((prev) => new Set(prev).add(confirmTestimonial.id));
+      revalidatePublicPaths(TESTIMONIAL_PUBLIC_PATHS);
       showToast("Testimonial deleted.");
     } catch (err) {
       showToast(err instanceof Error ? err.message : "Failed to delete.", "error");

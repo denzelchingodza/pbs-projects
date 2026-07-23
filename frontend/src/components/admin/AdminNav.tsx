@@ -11,23 +11,63 @@
  * section instead of a plain background tint, and Log Out is now a clear
  * red-bordered pill rather than blending in with the other links, so it
  * reads as a distinct, deliberate action instead of just another page.
+ *
+ * Notification badges: Quotes and Testimonials each carry a small count,
+ * new (unhandled) quote requests and pending (unmoderated) testimonials,
+ * so it's obvious something needs attention without opening every section
+ * to check. Counts are fetched here (not on the dashboard) since this is
+ * the one place present on every admin page, refreshed on every navigation
+ * and again every 45 seconds while the panel sits open.
  */
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "@/components/ui/Logo";
-import { logout } from "@/lib/adminApi";
+import { getAdminQuotes, getAdminTestimonials, logout } from "@/lib/adminApi";
 
-const LINKS = [
+const LINKS: { href: string; label: string; badgeKey?: "quotes" | "testimonials" }[] = [
   { href: "/admin/dashboard", label: "Dashboard" },
   { href: "/admin/gallery", label: "Gallery" },
-  { href: "/admin/quotes", label: "Quotes" },
-  { href: "/admin/testimonials", label: "Testimonials" },
+  { href: "/admin/quotes", label: "Quotes", badgeKey: "quotes" },
+  { href: "/admin/testimonials", label: "Testimonials", badgeKey: "testimonials" },
   { href: "/admin/settings", label: "Settings" },
 ];
+
+// How often to re-check while the panel is open. A plain interval is
+// enough for a two-person business checking this from one device at a
+// time, nothing fancier (websockets, push) is worth the complexity here.
+const POLL_MS = 45_000;
 
 export default function AdminNav() {
   const pathname = usePathname();
   const router = useRouter();
+  const [counts, setCounts] = useState({ quotes: 0, testimonials: 0 });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    function refreshCounts() {
+      Promise.all([getAdminQuotes(), getAdminTestimonials()])
+        .then(([quotes, testimonials]) => {
+          if (cancelled) return;
+          setCounts({
+            quotes: quotes.filter((q) => q.status === "new").length,
+            testimonials: testimonials.filter((t) => t.status === "pending").length,
+          });
+        })
+        .catch(() => {
+          // A failed check just leaves the badges at their last known
+          // value rather than showing an error in the sidebar.
+        });
+    }
+
+    refreshCounts();
+    const interval = setInterval(refreshCounts, POLL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [pathname]);
 
   function handleLogout() {
     logout();
@@ -63,17 +103,26 @@ export default function AdminNav() {
 
         {LINKS.map((link) => {
           const active = pathname === link.href;
+          const badgeCount = link.badgeKey ? counts[link.badgeKey] : 0;
           return (
             <Link
               key={link.href}
               href={link.href}
-              className={`px-4 py-2.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors border-l-[3px] ${
+              className={`px-4 py-2.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors border-l-[3px] flex items-center justify-between gap-3 ${
                 active
                   ? "bg-orange/10 text-orange border-orange"
                   : "text-neutral-600 hover:bg-neutral-50 border-transparent"
               }`}
             >
-              {link.label}
+              <span>{link.label}</span>
+              {badgeCount > 0 && (
+                <span
+                  className="bg-orange text-white text-[11px] font-bold leading-none rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1"
+                  aria-label={`${badgeCount} ${badgeCount === 1 ? "item needs" : "items need"} attention`}
+                >
+                  {badgeCount > 9 ? "9+" : badgeCount}
+                </span>
+              )}
             </Link>
           );
         })}

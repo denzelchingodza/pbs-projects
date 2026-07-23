@@ -11,19 +11,29 @@ import PhotoUploader from "@/components/admin/PhotoUploader";
 import ProjectCard from "@/components/admin/ProjectCard";
 import { GALLERY_CATEGORIES } from "@/lib/categories";
 import { getAdminGallery } from "@/lib/adminApi";
+import { revalidatePublicPaths } from "@/lib/revalidate";
 import type { Project } from "@/types";
+
+// Every public page that reads project/gallery data, see lib/api.ts's
+// getProjects() call sites: the homepage's featured work strip, the About
+// page's real work sample strip, and the full portfolio page itself.
+const GALLERY_PUBLIC_PATHS = ["/", "/about", "/gallery"];
 
 export default function AdminGalleryPage() {
   const [projects, setProjects] = useState<Project[] | null>(null);
   const [error, setError] = useState("");
 
-  function loadGallery() {
+  // `revalidate` is only true when this refetch follows an actual change
+  // (a new project, a deleted photo, and so on), not on the page's first
+  // load, so opening this page never forces a needless cache purge.
+  function loadGallery(revalidate = false) {
     getAdminGallery()
       .then(setProjects)
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load gallery projects."));
+    if (revalidate) revalidatePublicPaths(GALLERY_PUBLIC_PATHS);
   }
 
-  useEffect(loadGallery, []);
+  useEffect(() => loadGallery(), []);
 
   return (
     <div>
@@ -37,7 +47,7 @@ export default function AdminGalleryPage() {
       </p>
 
       <div className="mb-10">
-        <PhotoUploader onUploaded={loadGallery} />
+        <PhotoUploader onUploaded={() => loadGallery(true)} />
       </div>
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
@@ -64,7 +74,7 @@ export default function AdminGalleryPage() {
                 ) : (
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {catProjects.map((p) => (
-                      <ProjectCard key={p.id} project={p} onChanged={loadGallery} />
+                      <ProjectCard key={p.id} project={p} onChanged={() => loadGallery(true)} />
                     ))}
                   </div>
                 )}

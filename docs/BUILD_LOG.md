@@ -1695,3 +1695,41 @@ Changed, per person:
 
 Verified: tsc --noEmit clean, full production build clean, no dashes in
 any user facing text.
+
+## Stage 35: Instant admin-to-site updates, and quote/testimonial badges
+
+Two improvements Denzel asked for after a review of the admin panel: make
+admin changes show on the public site immediately, and surface new leads
+and pending testimonials in the sidebar instead of requiring a manual
+check of each page.
+
+Instant updates:
+- Public pages read data through lib/api.ts with a 60 second ISR cache
+  (`next: { revalidate: 60 }`), so previously an admin change could take
+  up to a minute to show to a real visitor.
+- Added a new route, app/api/revalidate/route.ts, that calls Next's
+  revalidatePath for a given list of paths. It lives inside Next's own
+  app directory, so it is resolved before the next.config.js rewrite that
+  sends every other /api/* request to the FastAPI backend, no collision.
+- Added lib/revalidate.ts's revalidatePublicPaths(), a best effort call
+  the admin panel fires right after a save succeeds. If it fails for any
+  reason the page still catches up within the normal 60 second window,
+  so this can never turn a successful admin save into a visible error.
+- Wired into admin/gallery/page.tsx (covers project create, project
+  edit, project delete, and photo/video add or remove, since all of
+  those already funnel through loadGallery()) and into
+  TestimonialModerationList.tsx's approve and delete actions.
+- Only revalidates the exact public pages that actually show that data:
+  home, about, and gallery for projects, home only for testimonials.
+
+Notification badges:
+- AdminNav.tsx now fetches quote and testimonial counts (refreshed on
+  every navigation and again every 45 seconds while the panel is open)
+  and shows a small orange badge on the Quotes and Testimonials links
+  when there is a new (unhandled) quote or a pending (unmoderated)
+  testimonial, so it is obvious something needs attention without
+  opening every section to check.
+
+Verified: tsc --noEmit clean, full production build clean (including the
+new /api/revalidate route showing as its own dynamic route, no conflict
+with the backend proxy), no dashes in any user facing text.
