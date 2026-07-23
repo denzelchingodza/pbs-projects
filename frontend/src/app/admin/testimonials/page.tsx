@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import PageHeader from "@/components/admin/PageHeader";
 import TestimonialModerationList from "@/components/admin/TestimonialModerationList";
 import { getAdminTestimonials } from "@/lib/adminApi";
 import type { Testimonial } from "@/types";
@@ -17,11 +18,10 @@ export default function AdminTestimonialsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-dark mb-1">Testimonials</h1>
-      <p className="text-neutral-500 text-sm mb-4">
-        Real customers can leave a testimonial from the site, pending ones stay
-        off the homepage until you approve them.
-      </p>
+      <PageHeader
+        title="Testimonials"
+        description="Real customers can leave a testimonial from the site, pending ones stay off the homepage until you approve them."
+      />
       <p className="text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 rounded-md px-4 py-2.5 mb-8 inline-block">
         Pending testimonials are listed first. Approve to show it on the
         homepage, or delete it if it&apos;s spam or not something you want to show.

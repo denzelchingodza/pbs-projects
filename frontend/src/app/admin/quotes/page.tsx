@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import PageHeader from "@/components/admin/PageHeader";
 import QuoteTable from "@/components/admin/QuoteTable";
 import { getAdminQuotes } from "@/lib/adminApi";
 import type { AdminQuote } from "@/types";
@@ -17,10 +18,7 @@ export default function AdminQuotesPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-dark mb-1">Quote Requests</h1>
-      <p className="text-neutral-500 text-sm mb-4">
-        Every enquiry submitted through the site, newest first.
-      </p>
+      <PageHeader title="Quote Requests" description="Every enquiry submitted through the site, newest first." />
       <p className="text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 rounded-md px-4 py-2.5 mb-8 inline-block">
         Move each one through the pipeline as you work it: New &rarr; Contacted &rarr;
         Quoted &rarr; Won or Lost. The status dropdown on each card updates it instantly.

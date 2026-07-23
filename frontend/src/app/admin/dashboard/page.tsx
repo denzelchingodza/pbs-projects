@@ -8,8 +8,75 @@
  */
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import PageHeader from "@/components/admin/PageHeader";
 import { getAdminGallery, getAdminQuotes, getAdminTestimonials } from "@/lib/adminApi";
 import type { AdminQuote, Project, Testimonial } from "@/types";
+
+function InboxIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 12h-6l-2 3h-4l-2-3H2" />
+      <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z" />
+    </svg>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </svg>
+  );
+}
+
+function GalleryStatIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <circle cx="9" cy="9" r="2" />
+      <path d="m21 15-3.1-3.1a2 2 0 0 0-2.83 0L6 21" />
+    </svg>
+  );
+}
+
+function StarStatIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  );
+}
+
+function StatCard({
+  icon,
+  value,
+  label,
+  tone,
+}: {
+  icon: React.ReactNode;
+  value: number | null;
+  label: string;
+  tone: "dark" | "orange";
+}) {
+  return (
+    <div className="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+      <div
+        className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 ${
+          tone === "orange" ? "bg-orange/10 text-orange" : "bg-dark/5 text-dark"
+        }`}
+      >
+        {icon}
+      </div>
+      <div>
+        <div className={`text-3xl font-bold ${tone === "orange" ? "text-orange" : "text-dark"}`}>
+          {value ?? "..."}
+        </div>
+        <div className="text-sm text-neutral-500 mt-1">{label}</div>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminDashboardPage() {
   const [quotes, setQuotes] = useState<AdminQuote[] | null>(null);
@@ -32,28 +99,20 @@ export default function AdminDashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-dark mb-1">Dashboard</h1>
-      <p className="text-neutral-500 text-sm mb-8">A quick overview of activity on the site.</p>
+      <PageHeader title="Dashboard" description="A quick overview of activity on the site." />
 
       {error && <p className="text-sm text-red-600 mb-6">{error}</p>}
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
-        <div className="bg-white border border-neutral-200 border-l-4 border-l-dark rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="text-3xl font-bold text-dark">{quotes?.length ?? "..."}</div>
-          <div className="text-sm text-neutral-500 mt-1">Total Quote Requests</div>
-        </div>
-        <div className="bg-white border border-neutral-200 border-l-4 border-l-orange rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="text-3xl font-bold text-orange">{newCount ?? "..."}</div>
-          <div className="text-sm text-neutral-500 mt-1">New, Not Yet Contacted</div>
-        </div>
-        <div className="bg-white border border-neutral-200 border-l-4 border-l-dark rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="text-3xl font-bold text-dark">{gallery?.length ?? "..."}</div>
-          <div className="text-sm text-neutral-500 mt-1">Gallery Projects</div>
-        </div>
-        <div className="bg-white border border-neutral-200 border-l-4 border-l-orange rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="text-3xl font-bold text-orange">{pendingTestimonials ?? "..."}</div>
-          <div className="text-sm text-neutral-500 mt-1">Testimonials Awaiting Review</div>
-        </div>
+        <StatCard icon={<InboxIcon />} value={quotes?.length ?? null} label="Total Quote Requests" tone="dark" />
+        <StatCard icon={<BellIcon />} value={newCount} label="New, Not Yet Contacted" tone="orange" />
+        <StatCard icon={<GalleryStatIcon />} value={gallery?.length ?? null} label="Gallery Projects" tone="dark" />
+        <StatCard
+          icon={<StarStatIcon />}
+          value={pendingTestimonials}
+          label="Testimonials Awaiting Review"
+          tone="orange"
+        />
       </div>
 
       <div className="flex flex-wrap gap-4 mb-10">

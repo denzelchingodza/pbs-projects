@@ -7,6 +7,7 @@
  * immediately obvious which product lines still need real photos.
  */
 import { useEffect, useState } from "react";
+import PageHeader from "@/components/admin/PageHeader";
 import PhotoUploader from "@/components/admin/PhotoUploader";
 import ProjectCard from "@/components/admin/ProjectCard";
 import { GALLERY_CATEGORIES } from "@/lib/categories";
@@ -37,14 +38,12 @@ export default function AdminGalleryPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-dark mb-1">Gallery</h1>
-      <p className="text-neutral-500 text-sm mb-8">
-        Projects are grouped by category below, so you can see at a glance which
-        product lines still need real photos. Each card shows its cover photo
-        first, tap &quot;Manage Photos&quot; on a card to see every photo in that
-        project, remove one, or add another, a project can have more than one
-        photo without creating a new one for the same job.
-      </p>
+      <PageHeader
+        title="Gallery"
+        description={
+          'Projects are grouped by category below, so you can see at a glance which product lines still need real photos. Each card shows its cover photo first, tap "Manage Photos" on a card to see every photo in that project, remove one, or add another, a project can have more than one photo without creating a new one for the same job.'
+        }
+      />
 
       <div className="mb-10">
         <PhotoUploader onUploaded={() => loadGallery(true)} />

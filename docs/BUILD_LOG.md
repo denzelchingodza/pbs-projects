@@ -1733,3 +1733,27 @@ Notification badges:
 Verified: tsc --noEmit clean, full production build clean (including the
 new /api/revalidate route showing as its own dynamic route, no conflict
 with the backend proxy), no dashes in any user facing text.
+
+## Stage 36: Redesign the admin panel's navigation and overall look
+
+Denzel asked whether the admin panel itself could look and navigate
+better, not just be functional.
+
+Changed:
+- AdminNav.tsx: every section (Dashboard, Gallery, Quotes, Testimonials,
+  Settings) now has its own small icon next to the label, so the sidebar
+  can be scanned at a glance instead of reading five lines of plain text.
+  The sidebar also now shows who is actually signed in (fetched from
+  auth/me) above the Log Out button, previously that was just a bare
+  button with no confirmation of whose session it was.
+- New shared component, components/admin/PageHeader.tsx: a consistent
+  title, description, and optional action slot with a bottom rule.
+  Applied to every admin page (Dashboard, Gallery, Quotes, Testimonials,
+  Settings), replacing five slightly different hand rolled <h1>/<p> pairs
+  with one consistent header treatment across the whole panel.
+- Dashboard stat cards now each have an icon in a colored circle (inbox,
+  bell, gallery, star) instead of a plain colored left border, matching
+  the icon language used in the sidebar.
+
+Verified: tsc --noEmit clean, full production build clean, no dashes in
+any user facing text.
