@@ -1616,3 +1616,31 @@ changes needed.
 
 **Verified for real, not assumed:** `tsc --noEmit` came back clean and a
 full production build generated all 19 routes with zero errors.
+
+## Stage 31: Team card layout, full photo beside description
+
+The team cards on the About page (Panashe Simbi, CEO, and Herbert
+Matembunze, Operations Manager) previously showed a small circular cropped
+headshot above the name and bio, the same pattern the old founder section
+used. Denzel sent the two real photos, on site shots in PBS branded polo
+shirts and caps, and asked for the full picture to show instead, with the
+description placed next to it rather than underneath.
+
+Changed:
+- TeamCard now renders a full, uncropped photo (portrait aspect ratio, not
+  cropped to a circle) on one side and the name, role, and bio on the
+  other, side by side on tablet and up, stacked on mobile.
+- Wired in the two real photo paths, expected at
+  frontend/public/images/team/panashe-simbi.jpg and
+  frontend/public/images/team/herbert-matembunze.jpg, in that order (CEO
+  first, per Denzel's confirmation).
+- The initials fallback badge is kept for whichever photo isn't present
+  yet, so the page never shows a broken image in the meantime.
+
+Note: the actual photo files themselves still need to be added, the
+version of the photos Denzel sent were not accessible from this session's
+file access, they will need to be resent so they can be saved to the paths
+above.
+
+Verified: tsc --noEmit clean, full production build clean, no dashes in
+any user facing text.
