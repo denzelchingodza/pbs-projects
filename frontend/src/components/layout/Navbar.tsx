@@ -36,23 +36,84 @@
  * since the header is the one place present on every page, nav labels use
  * <T> (see components/i18n/T.tsx) so they follow whichever language is
  * currently selected, same as the translated text further down the page.
+ *
+ * Second mobile drawer pass: the first version read as a plain list of
+ * links dropped into a dark box, a lot of empty space and no real visual
+ * design, like the desktop nav just narrowed down rather than a menu built
+ * for a phone. Each link now carries its own icon and a left accent bar on
+ * the current page, the phone/WhatsApp contact block is now a distinct
+ * card instead of two bare lines of text, and the drawer plus its backdrop
+ * now sit above the floating WhatsApp button (WhatsAppFloat.tsx, also
+ * fixed position at the same bottom right corner) instead of it bleeding
+ * through the open menu, which was the biggest source of the cluttered
+ * look, two separate WhatsApp entry points fighting for the same corner
+ * of the screen at once.
  */
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Logo from "@/components/ui/Logo";
 import Motto from "@/components/ui/Motto";
 import T from "@/components/i18n/T";
 import LanguageToggle from "@/components/i18n/LanguageToggle";
 import type { SiteSettings } from "@/types";
 
+function HomeIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9.5 12 3l9 6.5" />
+      <path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10" />
+    </svg>
+  );
+}
+
+function WorkIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <circle cx="9" cy="9" r="2" />
+      <path d="m21 15-3.1-3.1a2 2 0 0 0-2.83 0L6 21" />
+    </svg>
+  );
+}
+
+function ProductsIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73Z" />
+      <path d="M3.3 7 12 12l8.7-5" />
+      <path d="M12 22V12" />
+    </svg>
+  );
+}
+
+function AboutIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 16v-4" />
+      <path d="M12 8h.01" />
+    </svg>
+  );
+}
+
+function PhoneIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z" />
+    </svg>
+  );
+}
+
 const NAV_LINKS = [
-  { href: "/", key: "nav.home" },
-  { href: "/#work", key: "nav.ourWork" },
-  { href: "/#products", key: "nav.products" },
-  { href: "/about", key: "nav.about" },
+  { href: "/", key: "nav.home", icon: HomeIcon },
+  { href: "/#work", key: "nav.ourWork", icon: WorkIcon },
+  { href: "/#products", key: "nav.products", icon: ProductsIcon },
+  { href: "/about", key: "nav.about", icon: AboutIcon },
 ];
 
 export default function Navbar({ settings }: { settings: SiteSettings }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -131,21 +192,27 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
         </div>
       </div>
 
-      {/* Backdrop — dims and blocks the page behind the drawer, tap to close */}
+      {/* Backdrop — dims and blocks the page behind the drawer, tap to close.
+          z-[55], above the floating WhatsApp button's z-50, so it's fully
+          covered (and untappable) the moment the menu opens, instead of
+          showing through the dimmed backdrop like a second, competing
+          WhatsApp entry point. */}
       <div
         aria-hidden="true"
         onClick={() => setOpen(false)}
-        className={`md:hidden fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
+        className={`md:hidden fixed inset-0 bg-black/50 z-[55] transition-opacity duration-300 ${
           open ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       />
 
-      {/* Mobile menu panel */}
+      {/* Mobile menu panel. z-[60], above the backdrop and the floating
+          WhatsApp button, so the open drawer fully owns that corner of the
+          screen instead of the float bleeding through on top of it. */}
       <nav
         role="dialog"
         aria-modal="true"
         aria-label="Site menu"
-        className={`md:hidden fixed top-0 right-0 h-screen w-[78%] max-w-xs bg-dark flex flex-col p-6 transition-transform duration-300 z-50 ${
+        className={`md:hidden fixed top-0 right-0 h-screen w-[78%] max-w-xs bg-dark flex flex-col p-6 transition-transform duration-300 z-[60] ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -164,36 +231,52 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
         </div>
 
         <div className="flex flex-col gap-1 mt-4">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className="text-base font-semibold text-white px-3 py-3 rounded-md hover:bg-white/5 transition-colors"
-            >
-              <T k={link.key} />
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const active = pathname === link.href;
+            const Icon = link.icon;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={`flex items-center gap-3 text-base font-semibold px-3 py-3 rounded-md transition-colors border-l-[3px] ${
+                  active
+                    ? "bg-white/10 text-white border-orange"
+                    : "text-white/90 hover:bg-white/5 border-transparent"
+                }`}
+              >
+                <Icon />
+                <T k={link.key} />
+              </Link>
+            );
+          })}
         </div>
 
-        <div className="flex flex-col gap-2.5 mt-6 pt-6 border-t border-white/10">
-          <a
-            href={`tel:${settings.phone_primary.replace(/\s/g, "")}`}
-            className="text-sm font-medium text-white/70 px-3 hover:text-white transition-colors"
-          >
-            {settings.phone_primary}
-          </a>
-          <a
-            href={`https://wa.me/${waDigits}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm font-medium text-[#25D366] px-3 hover:brightness-110 transition"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.85 9.85 0 0 0 12.04 2zm4.51 12.02c-.2.58-1.2 1.13-1.65 1.17-.45.04-.87.2-2.94-.62-2.49-.98-4.06-3.52-4.19-3.68-.12-.16-1-1.33-1-2.53 0-1.2.64-1.79.86-2.04.23-.25.5-.31.66-.31h.47c.15 0 .35-.06.55.42.2.5.7 1.73.76 1.86.06.13.1.28.02.44-.09.16-.13.27-.25.41-.13.15-.27.33-.38.44-.13.13-.25.26-.11.51.15.25.65 1.07 1.4 1.73.96.86 1.77 1.12 2.02 1.25.25.12.4.1.54-.06.15-.16.62-.71.78-.96.16-.26.33-.21.55-.13.22.08 1.42.67 1.67.8.25.12.42.18.48.28.06.1.06.6-.14 1.18z" />
-            </svg>
-            Chat on WhatsApp
-          </a>
+        {/* Contact block: a distinct card instead of two bare lines of text,
+            same visual treatment (icon + label) as the nav links above it,
+            so the drawer reads as one designed surface rather than a list
+            with an afterthought tacked on underneath. */}
+        <div className="mt-6 pt-6 border-t border-white/10">
+          <div className="bg-white/5 rounded-xl p-4 flex flex-col gap-3.5">
+            <a
+              href={`tel:${settings.phone_primary.replace(/\s/g, "")}`}
+              className="flex items-center gap-3 text-sm font-medium text-white/80 hover:text-white transition-colors"
+            >
+              <PhoneIcon />
+              {settings.phone_primary}
+            </a>
+            <a
+              href={`https://wa.me/${waDigits}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 text-sm font-medium text-[#25D366] hover:brightness-110 transition"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.85 9.85 0 0 0 12.04 2zm4.51 12.02c-.2.58-1.2 1.13-1.65 1.17-.45.04-.87.2-2.94-.62-2.49-.98-4.06-3.52-4.19-3.68-.12-.16-1-1.33-1-2.53 0-1.2.64-1.79.86-2.04.23-.25.5-.31.66-.31h.47c.15 0 .35-.06.55.42.2.5.7 1.73.76 1.86.06.13.1.28.02.44-.09.16-.13.27-.25.41-.13.15-.27.33-.38.44-.13.13-.25.26-.11.51.15.25.65 1.07 1.4 1.73.96.86 1.77 1.12 2.02 1.25.25.12.4.1.54-.06.15-.16.62-.71.78-.96.16-.26.33-.21.55-.13.22.08 1.42.67 1.67.8.25.12.42.18.48.28.06.1.06.6-.14 1.18z" />
+              </svg>
+              Chat on WhatsApp
+            </a>
+          </div>
         </div>
 
         <Link

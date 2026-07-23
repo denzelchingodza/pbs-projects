@@ -8,10 +8,11 @@
  *
  * Redesign notes: each section now has its own icon next to the label, so
  * the sidebar can be scanned at a glance instead of reading five lines of
- * plain text, an orange left accent bar still marks the active section,
- * and the bottom of the sidebar now shows who is actually signed in above
- * the Log Out button, a small real detail that was missing before, this
- * was just a bare button with no confirmation of whose session it was.
+ * plain text, an orange left accent bar still marks the active section.
+ * There is deliberately no "signed in as" name shown anywhere here: this
+ * is a single shared admin login used by more than one person, so naming
+ * whoever happens to be the account's on-file name would misrepresent it
+ * as one specific person's personal account.
  *
  * Notification badges: Quotes and Testimonials each carry a small count,
  * new (unhandled) quote requests and pending (unmoderated) testimonials,
@@ -24,7 +25,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "@/components/ui/Logo";
-import { getAdminQuotes, getAdminTestimonials, getCurrentAdmin, logout } from "@/lib/adminApi";
+import { getAdminQuotes, getAdminTestimonials, logout } from "@/lib/adminApi";
 
 function DashboardIcon() {
   return (
@@ -95,7 +96,6 @@ export default function AdminNav() {
   const pathname = usePathname();
   const router = useRouter();
   const [counts, setCounts] = useState({ quotes: 0, testimonials: 0 });
-  const [adminName, setAdminName] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -122,22 +122,6 @@ export default function AdminNav() {
       clearInterval(interval);
     };
   }, [pathname]);
-
-  useEffect(() => {
-    let cancelled = false;
-    getCurrentAdmin()
-      .then((admin) => {
-        if (!cancelled) setAdminName(admin.name || admin.email);
-      })
-      .catch(() => {
-        // Sidebar just skips the "signed in as" line if this fails, the
-        // page level session check (admin/layout.tsx) already handles a
-        // genuinely expired session.
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   function handleLogout() {
     logout();
@@ -201,12 +185,7 @@ export default function AdminNav() {
           );
         })}
 
-        <div className="md:mt-auto md:pt-3 md:border-t border-neutral-100 flex md:flex-col items-center md:items-stretch gap-2 ml-2 md:ml-0">
-          {adminName && (
-            <p className="hidden md:block px-4 text-xs text-neutral-500 truncate">
-              Signed in as <span className="font-medium text-dark">{adminName}</span>
-            </p>
-          )}
+        <div className="md:mt-auto md:pt-3 md:border-t border-neutral-100 ml-2 md:ml-0">
           <button
             onClick={handleLogout}
             className="text-left px-4 py-2.5 rounded-md text-sm font-medium text-red-600 border border-red-200 hover:bg-red-50 transition-colors whitespace-nowrap"

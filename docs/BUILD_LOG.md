@@ -1757,3 +1757,37 @@ Changed:
 
 Verified: tsc --noEmit clean, full production build clean, no dashes in
 any user facing text.
+
+## Stage 37: Remove personalized admin name, redesign the mobile nav drawer
+
+Two things Denzel flagged after seeing the admin sidebar and a phone
+screenshot of the site's mobile menu.
+
+Admin sidebar: removed the "Signed in as [name]" line added in Stage 36.
+There is only one shared admin login, and more than one person manages
+this site, so naming whichever person's name happens to be on that one
+account misrepresented it as a personal account. The Log Out button is
+still there on its own, just without a name attached to it.
+
+Mobile nav drawer (Navbar.tsx): the phone view looked like the desktop
+nav just narrowed down rather than something designed for a phone, plain
+white text list, a lot of empty space, and the floating WhatsApp button
+(WhatsAppFloat.tsx, fixed to the same bottom right corner on every page)
+was bleeding through on top of the open drawer and its own "Chat on
+WhatsApp" link and "Get a Quote" button, two competing WhatsApp entry
+points overlapping in the same corner at once.
+
+Fixed:
+- The drawer and its backdrop now use a higher z-index (z-[60] and
+  z-[55]) than the floating WhatsApp button (z-50), so opening the menu
+  now fully covers that button instead of it showing through.
+- Each nav link (Home, Our Work, Products, About) now has its own icon
+  and highlights with a left accent bar when it is the current page,
+  matching the same visual language already used in the admin sidebar.
+- The phone number and WhatsApp chat link are now a distinct card (icon
+  plus label, soft background) instead of two bare lines of text just
+  sitting under the nav links.
+
+Verified: tsc --noEmit clean, full production build clean, no dashes in
+any new user facing text (two pre-existing dashes remain inside code
+comments only, exempt per the Stage 10 precedent).
