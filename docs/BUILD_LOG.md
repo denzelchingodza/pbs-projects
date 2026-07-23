@@ -1644,3 +1644,13 @@ above.
 
 Verified: tsc --noEmit clean, full production build clean, no dashes in
 any user facing text.
+
+## Stage 32: Add the real team photos
+
+Added the two real photo files Denzel provided to
+frontend/public/images/team/, panashe-simbi.jpg (CEO) and
+herbert-matembunze.jpg (Operations Manager), replacing the initials
+placeholders on the About page team cards.
+
+Verified: tsc --noEmit clean, full production build clean, no dashes in
+any user facing text.
