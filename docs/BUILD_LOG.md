@@ -1575,3 +1575,44 @@ reads "Project Title, photo 2" and so on.
 
 **Verified for real, not assumed:** `tsc --noEmit` came back clean, and
 a full production build generated all 19 routes with zero errors.
+
+## Stage 30: Company motto and a real leadership team
+
+Denzel gave the company motto, NDEZVEBASA, with a specific two color
+split ("NDE" orange, "ZVEBASA" the surrounding text color), and asked
+for it on the top bar and wherever else makes sense. Also asked to add
+the real leadership, CEO Panashe Simbi and Operations Manager Herbert
+Matembunze, to the About page with a short description based on each
+role.
+
+**The motto.** Built once as `components/ui/Motto.tsx` rather than
+retyping the two colored spans everywhere it shows up, so the exact
+styling can only ever drift in one place. Placed in the navbar next to
+the logo (both the desktop bar and the mobile menu), in the footer next
+to the logo, and on the About page under the intro, alongside the
+Harare, Zimbabwe location tag in the homepage hero. Present everywhere
+that already carries the brand identity, not scattered in unrelated
+places.
+
+**The leadership team.** Added `components/home/TeamSection.tsx` to the
+About page: Panashe Simbi (CEO) and Herbert Matembunze (Operations
+Manager), each with a short, honest description of what that role
+actually covers day to day, not invented personal history, just what a
+CEO and an Operations Manager genuinely do in a business like this. This
+replaces the page's old "Meet the Founder" section, which was still
+showing its generic, never filled in fallback text (no real name or
+photo had ever been set there), real named leadership in its place
+reads as a real team, not a placeholder. That component's own code and
+backend fields are left in place, unused for now rather than deleted, in
+case they're wanted for something else later.
+
+**Still waiting on:** the two real photos (mentioned as sitting in
+Downloads), Cowork's sandbox can't reach a folder that hasn't been
+shared with it, only the pbs-projects folder itself. Each team card
+falls back to the same initials-badge style the old founder section
+used until the real photos are dropped into the chat or the Downloads
+folder is shared, at which point they slot in directly, no other
+changes needed.
+
+**Verified for real, not assumed:** `tsc --noEmit` came back clean and a
+full production build generated all 19 routes with zero errors.

@@ -6,6 +6,7 @@
  */
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
+import Motto from "@/components/ui/Motto";
 import type { SiteSettings } from "@/types";
 
 export default function Footer({ settings }: { settings: SiteSettings }) {
@@ -16,6 +17,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 pb-8 border-b border-neutral-700">
         <div>
           <Logo className="mb-3" dark />
+          <Motto className="text-white/80 text-sm mb-2 block" />
           <p className="text-sm text-neutral-500 leading-relaxed">
             Glass &amp; aluminum specialists based in Harare, serving clients across Zimbabwe.
           </p>
