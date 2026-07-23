@@ -1791,3 +1791,22 @@ Fixed:
 Verified: tsc --noEmit clean, full production build clean, no dashes in
 any new user facing text (two pre-existing dashes remain inside code
 comments only, exempt per the Stage 10 precedent).
+
+## Stage 38: Tidy up the loose original photos at the repo root
+
+Denzel noticed the GitHub file listing was cluttered with 95 randomly
+named JPG/MP4 files sitting at the top level of the repo, the raw
+originals from the very first batch of real jobsite photos, left there
+since before they were sorted into real projects. Confirmed none of them
+are read by any code in frontend, backend, or docs, the site serves its
+own already organized copies from frontend/public instead.
+
+Denzel asked to keep them (in case they're still needed) rather than
+delete them, just organized properly. Moved all 95 files into a new
+original-photos/ folder with a short README explaining what they are,
+using `git mv` so their history is preserved rather than looking like a
+delete-and-re-add.
+
+Verified: no code references broken (grep confirmed before the move that
+nothing pointed at these files by their old root level path), git status
+clean after the move.
