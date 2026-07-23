@@ -1654,3 +1654,25 @@ placeholders on the About page team cards.
 
 Verified: tsc --noEmit clean, full production build clean, no dashes in
 any user facing text.
+
+## Stage 33: Redesign team section as an editorial layout, not stacked cards
+
+Denzel felt the two team entries looked like a repeated boxed card just
+piled one on top of the other, and asked for something with real design
+thought behind it.
+
+Changed the layout on the About page team section:
+- Dropped the bordered card box for each person. The section is now one
+  continuous piece: a large portrait photo and generous, left aligned
+  text for each person, separated by a thin rule and wide vertical space
+  instead of a card border.
+- The two entries alternate, photo on the left for the first person,
+  photo on the right for the second, so the section reads as one
+  designed spread rather than the same component stacked twice.
+- Added the same soft orange accent panel behind each photo that the
+  homepage hero photo already uses, tying this section back into the
+  rest of the site's visual language instead of feeling bolted on.
+- Bigger name and role type, more breathing room around the bio text.
+
+Verified: tsc --noEmit clean, full production build clean, no dashes in
+any user facing text.
