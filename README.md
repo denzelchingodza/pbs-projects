@@ -37,8 +37,26 @@ whether to call.
 - English and Shona language support, for a site that actually reads
   naturally for its own local customers
 
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js, TypeScript, Tailwind CSS |
+| Backend | FastAPI, Python, SQLAlchemy |
+| Database | SQLite (local) / PostgreSQL (production) |
+| Auth | Session-based admin authentication with rate limiting |
+| i18n | English and Shona language support |
+| Media | Cloudinary (production uploads) |
+| Tests | pytest (isolated per-test database) |
+
+---
+
 ## For anyone maintaining or running this site
 
 Technical setup, admin access, backups, and deployment notes live in
 `docs/SETUP.md`. The full development history, what was built, why, and
 how it was verified, lives in `docs/BUILD_LOG.md`.
+
+---
+
+Built by [Denzel Chingodza](https://denz-platform.vercel.app) for PBS Projects, Harare, Zimbabwe.
