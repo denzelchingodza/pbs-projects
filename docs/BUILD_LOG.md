@@ -1810,3 +1810,22 @@ delete-and-re-add.
 Verified: no code references broken (grep confirmed before the move that
 nothing pointed at these files by their old root level path), git status
 clean after the move.
+
+## Stage 39: Redesign the admin login page as a real branded moment
+
+Denzel felt the login page was just a generic portal, a plain white card
+on a gray background, and asked for something that actually feels like
+PBS Projects rather than a login template.
+
+Changed (frontend/src/app/admin/login/page.tsx): on larger screens it is
+now a split screen, a dark branded panel on the left using the same real
+jobsite photo as the homepage hero (dimmed so white text stays readable),
+the motto in its orange and dark two colors, and a soft orange glow in
+the corner matching the same accent treatment the homepage hero photo
+already uses, with the form itself on the right. On a phone, where there
+is no room for a second panel, the motto sits above the form card
+instead so the branding still shows before the form does. The sign in
+button is now the brand orange instead of plain dark.
+
+Verified: tsc --noEmit clean, full production build clean, no dashes in
+any user facing text.
