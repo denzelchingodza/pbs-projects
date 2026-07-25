@@ -1889,3 +1889,33 @@ the motto (footer, mobile nav drawer) already does it.
 
 Verified: tsc --noEmit clean, full production build clean, no dashes in
 any new user facing text.
+
+## Stage 42: Cloudinary support and configurable CORS (groundwork for a real deploy)
+
+Denzel was weighing a temporary deployment on Vercel and Render to let
+Panashe and Herbert try the site for a week. That combination turned out
+to need real account signups, migrating the real data across, and
+accepting some risk of losing anything new added during the trial, since
+free backend hosts don't keep a persistent disk. Denzel decided to go
+with tunneling his own already-fully-real local setup instead, no
+signups, no data risk, exact same data.
+
+Two backend changes from that investigation are worth keeping regardless
+of where this ends up hosted for real later:
+
+- image_service.py now routes uploads to Cloudinary automatically
+  whenever CLOUDINARY_URL is set, and keeps using local disk otherwise
+  (always true for local dev). Same function signatures either way, so
+  routers/admin.py did not need any changes. Verified this imports
+  cleanly and still behaves exactly as before with no CLOUDINARY_URL set.
+- The list of frontend domains allowed to call the API is now
+  configurable via an ALLOWED_ORIGINS env var (config.py, read in
+  main.py), on top of the local dev origins that are always allowed,
+  instead of requiring a direct edit to main.py for every future
+  deployment's domain.
+
+Added the `cloudinary` package to requirements.txt.
+
+Verified: backend imports cleanly in an isolated virtualenv with these
+changes, no dashes in any new user facing text (comment text only, exempt
+per the Stage 10 precedent).

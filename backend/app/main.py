@@ -31,9 +31,15 @@ if app_settings.secret_key == "dev-secret-change-me":
         file=sys.stderr,
     )
 
+# Local dev origins are always allowed, on top of that, ALLOWED_ORIGINS (a
+# comma-separated env var, see app/config.py) adds any real deployment's
+# frontend URL, e.g. a Vercel domain, without needing to edit this file for
+# every new deployment.
+_extra_origins = [o.strip() for o in app_settings.allowed_origins.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Next.js dev server
+    allow_origins=["http://localhost:3000", *_extra_origins],
     # Also allow the dev server when it's opened from another device on the
     # same network (phone testing), e.g. http://192.168.1.23:3000. Matches
     # the common private IP ranges only, never applies outside local dev.
