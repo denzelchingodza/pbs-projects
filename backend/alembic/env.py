@@ -18,8 +18,16 @@ from app.database import Base
 from app.config import settings
 from app.models import user, product, project, project_media, quote, testimonial, settings as settings_model  # noqa: F401
 
+def _fix_db_url(url: str) -> str:
+    """Rewrite postgresql:// to postgresql+psycopg:// so SQLAlchemy uses
+    psycopg v3 instead of psycopg2, which is not installed."""
+    if url.startswith("postgresql://") or url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql+psycopg://", 1)
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return url
+
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.database_url)
+config.set_main_option("sqlalchemy.url", _fix_db_url(settings.database_url))
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
