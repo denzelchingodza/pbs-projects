@@ -81,36 +81,42 @@ def upgrade() -> None:
     rows = bind.execute(sa.text('SELECT id, image_url, media_type FROM projects')).fetchall()
     media_by_id = {row.id: (row.image_url, row.media_type) for row in rows}
 
-    insert_media = sa.text(
-        'INSERT INTO project_media (project_id, image_url, media_type, position) '
-        'VALUES (:project_id, :image_url, :media_type, :position)'
-    )
+    # Only run the data migration if there are existing rows (local dev database
+    # with real photos). On a fresh Postgres install this block is skipped
+    # entirely — no data to move, just the schema changes below apply.
+    if media_by_id:
+        insert_media = sa.text(
+            'INSERT INTO project_media (project_id, image_url, media_type, position) '
+            'VALUES (:project_id, :image_url, :media_type, :position)'
+        )
 
-    grouped_ids: set[int] = set()
-    for group in SAME_SITE_GROUPS:
-        canonical = group[0]
-        for position, pid in enumerate(group):
-            grouped_ids.add(pid)
-            image_url, media_type = media_by_id[pid]
-            bind.execute(
-                insert_media,
-                {"project_id": canonical, "image_url": image_url, "media_type": media_type, "position": position},
-            )
+        grouped_ids: set[int] = set()
+        for group in SAME_SITE_GROUPS:
+            canonical = group[0]
+            for position, pid in enumerate(group):
+                grouped_ids.add(pid)
+                if pid not in media_by_id:
+                    continue
+                image_url, media_type = media_by_id[pid]
+                bind.execute(
+                    insert_media,
+                    {"project_id": canonical, "image_url": image_url, "media_type": media_type, "position": position},
+                )
 
-    # Anything not part of a group above just moves its one photo across as-is.
-    for pid, (image_url, media_type) in media_by_id.items():
-        if pid not in grouped_ids:
-            bind.execute(
-                insert_media,
-                {"project_id": pid, "image_url": image_url, "media_type": media_type, "position": 0},
-            )
+        # Anything not part of a group above just moves its one photo across as-is.
+        for pid, (image_url, media_type) in media_by_id.items():
+            if pid not in grouped_ids:
+                bind.execute(
+                    insert_media,
+                    {"project_id": pid, "image_url": image_url, "media_type": media_type, "position": 0},
+                )
 
-    # The non-canonical ids in each group are now redundant project rows,
-    # their photo lives in project_media under the canonical id instead.
-    extra_ids = [pid for group in SAME_SITE_GROUPS for pid in group[1:]]
-    if extra_ids:
-        placeholders = ','.join(str(i) for i in extra_ids)
-        bind.execute(sa.text(f'DELETE FROM projects WHERE id IN ({placeholders})'))
+        # The non-canonical ids in each group are now redundant project rows,
+        # their photo lives in project_media under the canonical id instead.
+        extra_ids = [pid for group in SAME_SITE_GROUPS for pid in group[1:]]
+        if extra_ids:
+            placeholders = ','.join(str(i) for i in extra_ids)
+            bind.execute(sa.text(f'DELETE FROM projects WHERE id IN ({placeholders})'))
 
     # image_url/media_type now live on project_media, not projects.
     with op.batch_alter_table('projects') as batch_op:
