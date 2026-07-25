@@ -20,6 +20,26 @@ import type { Testimonial } from "@/types";
 // lib/api.ts's getTestimonials() call site in app/page.tsx.
 const TESTIMONIAL_PUBLIC_PATHS = ["/"];
 
+function CheckIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 6h18" />
+      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+      <path d="M10 11v6" />
+      <path d="M14 11v6" />
+    </svg>
+  );
+}
+
 export default function TestimonialModerationList({
   testimonials,
   onChange,
@@ -78,7 +98,7 @@ export default function TestimonialModerationList({
           >
             <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
               <div>
-                <div className="font-semibold text-dark">{t.client_name}</div>
+                <div className="font-bold text-dark text-base">{t.client_name}</div>
                 {t.client_role && <div className="text-sm text-neutral-500">{t.client_role}</div>}
               </div>
               <span
@@ -90,27 +110,31 @@ export default function TestimonialModerationList({
               </span>
             </div>
 
-            <div className="text-orange text-sm mb-2 tracking-wide">
+            <div className="text-orange text-sm mb-3 tracking-wide">
               {"★".repeat(t.rating)}
               <span className="text-neutral-300">{"★".repeat(5 - t.rating)}</span>
             </div>
-            <p className="text-sm text-neutral-700 leading-relaxed mb-4">&ldquo;{t.quote}&rdquo;</p>
+            <p className="text-sm text-neutral-700 leading-relaxed mb-4 border-l-2 border-orange/30 pl-4">
+              &ldquo;{t.quote}&rdquo;
+            </p>
 
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               {t.status === "pending" && (
                 <button
                   onClick={() => handleApprove(t)}
                   disabled={busyId === t.id}
-                  className="text-xs font-semibold text-green-700 hover:text-green-800 disabled:opacity-60"
+                  className="flex items-center gap-1.5 text-xs font-semibold text-green-700 px-2.5 py-1.5 rounded-md hover:bg-green-50 disabled:opacity-60 transition-colors"
                 >
+                  <CheckIcon />
                   {busyId === t.id ? "Approving..." : "Approve"}
                 </button>
               )}
               <button
                 onClick={() => setConfirmTestimonial(t)}
                 disabled={busyId === t.id}
-                className="text-xs font-semibold text-red-600 hover:text-red-700 disabled:opacity-60"
+                className="flex items-center gap-1.5 text-xs font-semibold text-red-600 px-2.5 py-1.5 rounded-md hover:bg-red-50 disabled:opacity-60 transition-colors"
               >
+                <TrashIcon />
                 {busyId === t.id ? "Deleting..." : "Delete"}
               </button>
             </div>

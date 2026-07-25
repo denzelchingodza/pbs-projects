@@ -29,6 +29,37 @@ import { mediaUrl } from "@/lib/media";
 import { deleteProject, deleteProjectMedia, updateProject } from "@/lib/adminApi";
 import type { Project } from "@/types";
 
+function EditIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+    </svg>
+  );
+}
+
+function ImagesIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="14" height="14" rx="2" />
+      <path d="M8.5 8.5c.5 0 1-.5 1-1s-.5-1-1-1-1 .5-1 1 .5 1 1 1Z" fill="currentColor" stroke="none" />
+      <path d="m3 13 3.5-3.5a1.5 1.5 0 0 1 2 0L13 14" />
+      <path d="M17 8h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-1" />
+    </svg>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 6h18" />
+      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+      <path d="M10 11v6" />
+      <path d="M14 11v6" />
+    </svg>
+  );
+}
+
 export default function ProjectCard({
   project,
   onChanged,
@@ -122,7 +153,7 @@ export default function ProjectCard({
         </div>
       )}
 
-      <div className="p-4">
+      <div className="p-5">
         {editing ? (
           <div className="flex flex-col gap-3">
             <input
@@ -175,29 +206,34 @@ export default function ProjectCard({
           </div>
         ) : (
           <div>
-            <div className="text-sm font-semibold text-dark">{project.title}</div>
+            <div className="text-base font-bold text-dark">{project.title}</div>
             <div className="text-xs text-neutral-500 mt-1">
               {categoryLabel(project.category)} &middot; {project.media.length}{" "}
               {project.media.length === 1 ? "photo" : "photos"}
             </div>
-            <div className="flex gap-4 mt-3">
+            <div className="flex flex-wrap items-center gap-2 mt-4">
               <button
                 onClick={() => setEditing(true)}
-                className="text-xs font-semibold text-dark hover:text-orange transition-colors"
+                className="flex items-center gap-1.5 text-xs font-semibold text-neutral-600 px-2.5 py-1.5 rounded-md hover:bg-neutral-100 hover:text-dark transition-colors"
               >
+                <EditIcon />
                 Edit
               </button>
               <button
                 onClick={() => setManagingPhotos((v) => !v)}
-                className="text-xs font-semibold text-dark hover:text-orange transition-colors"
+                className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-md transition-colors ${
+                  managingPhotos ? "bg-orange/10 text-orange" : "text-neutral-600 hover:bg-neutral-100 hover:text-dark"
+                }`}
               >
+                <ImagesIcon />
                 {managingPhotos ? "Hide Photos" : "Manage Photos"}
               </button>
               <button
                 onClick={() => setConfirmDeleteProject(true)}
                 disabled={busy}
-                className="text-xs font-semibold text-red-600 hover:text-red-700 disabled:opacity-60 ml-auto"
+                className="flex items-center gap-1.5 text-xs font-semibold text-red-600 px-2.5 py-1.5 rounded-md hover:bg-red-50 disabled:opacity-60 transition-colors ml-auto"
               >
+                <TrashIcon />
                 {busy ? "Deleting..." : "Delete"}
               </button>
             </div>

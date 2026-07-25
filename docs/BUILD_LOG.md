@@ -1829,3 +1829,32 @@ button is now the brand orange instead of plain dark.
 
 Verified: tsc --noEmit clean, full production build clean, no dashes in
 any user facing text.
+
+## Stage 40: Visual polish pass on the inner admin screens, fuller Settings page
+
+Continuing the admin redesign into the actual working screens, not just
+the nav and login.
+
+Gallery (ProjectCard.tsx): bigger, bolder project titles, and the
+Edit/Manage Photos/Delete row is now real icon-labeled buttons with hover
+backgrounds instead of plain text links, more breathing room in the card.
+
+Quotes (QuoteTable.tsx): bolder customer name, the phone number now has
+a small phone icon, the product/details text now sits in its own soft
+callout block instead of floating as plain paragraphs, and Delete has a
+trash icon.
+
+Testimonials (TestimonialModerationList.tsx): bolder customer name, the
+quote itself now reads as a set-off block with a left rule, the same
+treatment the real team bios on the About page already use, and Approve
+and Delete both now carry icons.
+
+Settings page: previously just the change password form sitting alone on
+an empty page. Added a Security info card above it laying out two real
+protections that already existed but were never shown anywhere, session
+length (24 hours) and login rate limiting (10 attempts per 15 minutes),
+so the page actually explains something instead of offering one lonely
+action.
+
+Verified: tsc --noEmit clean, full production build clean, no dashes in
+any user facing text.
