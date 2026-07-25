@@ -5,4 +5,4 @@
 # a much wider range of Python versions/platforms, so it won't hit the
 # "pg_config not found, building from source" error psycopg2-binary can hit
 # on newer Python versions. Install with: pip install -r requirements-postgres.txt
-psycopg[binary]==3.2.3
+psycopg[binary]>=3.2.10
