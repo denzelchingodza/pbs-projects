@@ -1858,3 +1858,34 @@ action.
 
 Verified: tsc --noEmit clean, full production build clean, no dashes in
 any user facing text.
+
+## Stage 41: Team photo frames, nav scroll order, invisible login motto
+
+Three things Denzel flagged while looking at the About page, the top nav,
+and the admin login.
+
+Team photos (TeamSection.tsx): the photos had no real border treatment,
+just a soft blurred orange glow behind them. Added a white mat frame
+around each photo (rounded white border with padding, a subtle border
+line, and a real shadow), so each one reads as an actual framed print
+sitting in front of that orange glow, rather than a photo with no edge
+floating on the page.
+
+Nav scroll order (Navbar.tsx): clicking "Our Work" scrolled down the
+page, but clicking "Products" right next to it scrolled back up, since
+the Products section actually sits above the Featured Work section on
+the home page (see app/page.tsx: Hero, Stats, Products, then Featured
+Work), while the nav listed them in the opposite order. Reordered the nav
+links (Home, Products, Our Work, About) to match the page's real
+top-to-bottom order, so clicking through the nav left to right now always
+scrolls further down, never back up.
+
+Invisible login motto (admin/login/page.tsx): the motto on the login
+page's dark left panel had no text color class set, so "ZVEBASA" fell
+back to the site's default dark text color and was essentially invisible
+against the dark background, only the orange "NDE" showed. Added the
+missing white text color, matching how every other dark-background use of
+the motto (footer, mobile nav drawer) already does it.
+
+Verified: tsc --noEmit clean, full production build clean, no dashes in
+any new user facing text.

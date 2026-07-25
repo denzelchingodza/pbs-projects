@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           <Logo dark />
           <div>
-            <Motto className="text-3xl block mb-4" />
+            <Motto className="text-white text-3xl block mb-4" />
             <p className="text-white/70 text-sm max-w-xs leading-relaxed">
               The control room behind every quote, project photo, and
               testimonial on the PBS Projects site.

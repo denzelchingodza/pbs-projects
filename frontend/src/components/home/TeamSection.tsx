@@ -58,20 +58,27 @@ function TeamCard({ member, reversed }: { member: TeamMember; reversed: boolean 
       }`}
     >
       <div className="relative w-full max-w-[280px] md:max-w-none md:w-2/5 shrink-0">
-        <div className="absolute -inset-4 bg-orange/10 rounded-2xl -z-10" aria-hidden="true" />
+        {/* Soft orange glow behind the frame, then a white mat border around
+            the photo itself, like a real framed print rather than a photo
+            with no edge at all, floating loose on the page. */}
+        <div className="absolute -inset-4 bg-orange/10 rounded-3xl -z-10" aria-hidden="true" />
         {member.photo ? (
-          <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg">
-            <Image
-              src={member.photo}
-              alt={`${member.name}, ${member.role} at PBS Projects`}
-              fill
-              sizes="(max-width: 768px) 80vw, 340px"
-              className="object-cover object-top"
-            />
+          <div className="relative w-full aspect-[4/5] rounded-2xl bg-white p-2.5 shadow-xl border border-neutral-100">
+            <div className="relative w-full h-full rounded-xl overflow-hidden">
+              <Image
+                src={member.photo}
+                alt={`${member.name}, ${member.role} at PBS Projects`}
+                fill
+                sizes="(max-width: 768px) 80vw, 340px"
+                className="object-cover object-top"
+              />
+            </div>
           </div>
         ) : (
-          <div className="w-full aspect-[4/5] rounded-2xl bg-dark text-white flex items-center justify-center text-4xl font-bold shadow-lg">
-            {initials(member.name)}
+          <div className="w-full aspect-[4/5] rounded-2xl bg-white p-2.5 shadow-xl border border-neutral-100">
+            <div className="w-full h-full rounded-xl bg-dark text-white flex items-center justify-center text-4xl font-bold">
+              {initials(member.name)}
+            </div>
           </div>
         )}
       </div>
