@@ -9,6 +9,7 @@
 import { useEffect, useState } from "react";
 import PageHeader from "@/components/admin/PageHeader";
 import PhotoUploader from "@/components/admin/PhotoUploader";
+import BatchUploader from "@/components/admin/BatchUploader";
 import ProjectCard from "@/components/admin/ProjectCard";
 import { GALLERY_CATEGORIES } from "@/lib/categories";
 import { getAdminGallery } from "@/lib/adminApi";
@@ -45,8 +46,9 @@ export default function AdminGalleryPage() {
         }
       />
 
-      <div className="mb-10">
+      <div className="mb-10 grid md:grid-cols-2 gap-5">
         <PhotoUploader onUploaded={() => loadGallery(true)} />
+        <BatchUploader onUploaded={() => loadGallery(true)} />
       </div>
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
