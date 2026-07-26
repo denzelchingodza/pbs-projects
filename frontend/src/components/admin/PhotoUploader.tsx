@@ -16,7 +16,7 @@
  */
 import { useState } from "react";
 import { useToast } from "@/components/ui/ToastProvider";
-import { createProject } from "@/lib/adminApi";
+import { addProjectMedia, createProject } from "@/lib/adminApi";
 import { GALLERY_CATEGORIES } from "@/lib/categories";
 import { IMAGE_ACCEPT, MAX_IMAGE_BYTES, MAX_VIDEO_BYTES, VIDEO_ACCEPT, validateMediaFile } from "@/lib/media";
 
@@ -24,6 +24,7 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
   const { showToast } = useToast();
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [progress, setProgress] = useState({ current: 0, total: 0 });
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -32,27 +33,52 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
 
     const form = e.currentTarget;
     const data = new FormData(form);
-    const file = data.get("file") as File;
+    const files = (data.getAll("file") as File[]).filter((f) => f.size > 0);
 
-    if (!file?.size) {
+    if (files.length === 0) {
       setStatus("error");
-      setErrorMsg("Please choose a photo or video to upload.");
+      setErrorMsg("Please choose at least one photo or video to upload.");
       return;
     }
 
-    const validationError = validateMediaFile(file);
-    if (validationError) {
-      setStatus("error");
-      setErrorMsg(validationError);
-      return;
+    // Validate every file before starting any upload
+    for (const file of files) {
+      const validationError = validateMediaFile(file);
+      if (validationError) {
+        setStatus("error");
+        setErrorMsg(`${file.name}: ${validationError}`);
+        return;
+      }
     }
+
+    setProgress({ current: 0, total: files.length });
 
     try {
-      await createProject(data);
+      // First file creates the project
+      const firstForm = new FormData();
+      firstForm.append("category", data.get("category") as string);
+      firstForm.append("title", data.get("title") as string);
+      firstForm.append("file", files[0]);
+      if (data.get("is_featured")) firstForm.append("is_featured", "true");
+
+      const project = await createProject(firstForm);
+      setProgress({ current: 1, total: files.length });
+
+      // Remaining files are added to the same project one by one
+      for (let i = 1; i < files.length; i++) {
+        await addProjectMedia(project.id, files[i]);
+        setProgress({ current: i + 1, total: files.length });
+      }
+
       form.reset();
       setStatus("idle");
+      setProgress({ current: 0, total: 0 });
       onUploaded();
-      showToast("Project created.");
+      showToast(
+        files.length > 1
+          ? `Project created with ${files.length} photos.`
+          : "Project created."
+      );
     } catch (err) {
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : "Upload failed. Please try again.");
@@ -113,14 +139,16 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">3. Photo or video file</label>
+          <label className="block text-sm font-medium mb-1">3. Photos or video files</label>
           <input
             type="file"
             name="file"
             accept={`${IMAGE_ACCEPT},${VIDEO_ACCEPT}`}
+            multiple
             required
             className="w-full text-sm file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:bg-neutral-100 file:text-sm file:font-medium hover:file:bg-neutral-200"
           />
+          <p className="text-xs text-neutral-500 mt-1">Hold Ctrl (Windows) or ⌘ (Mac) to select multiple files at once.</p>
         </div>
 
         <label className="flex items-center gap-2 text-sm text-neutral-600">
@@ -135,7 +163,11 @@ export default function PhotoUploader({ onUploaded }: { onUploaded: () => void }
           disabled={status === "submitting"}
           className="bg-orange text-white font-semibold py-3 rounded-md hover:brightness-95 transition disabled:opacity-60"
         >
-          {status === "submitting" ? "Creating..." : "Create Project"}
+          {status === "submitting"
+            ? progress.total > 1
+              ? `Uploading ${progress.current} of ${progress.total}...`
+              : "Creating..."
+            : "Create Project"}
         </button>
       </form>
     </div>

@@ -20,26 +20,35 @@ export default function AddPhotoButton({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState({ current: 0, total: 0 });
 
   async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+    const files = Array.from(e.target.files || []);
     e.target.value = ""; // lets the same file be picked again later if needed
-    if (!file) return;
+    if (files.length === 0) return;
 
-    const validationError = validateMediaFile(file);
-    if (validationError) {
-      onError(validationError);
-      return;
+    // Validate all before starting
+    for (const file of files) {
+      const validationError = validateMediaFile(file);
+      if (validationError) {
+        onError(`${file.name}: ${validationError}`);
+        return;
+      }
     }
 
     setBusy(true);
+    setProgress({ current: 0, total: files.length });
     try {
-      await addProjectMedia(projectId, file);
+      for (let i = 0; i < files.length; i++) {
+        await addProjectMedia(projectId, files[i]);
+        setProgress({ current: i + 1, total: files.length });
+      }
       onAdded();
     } catch (err) {
       onError(err instanceof Error ? err.message : "Could not add that photo.");
     } finally {
       setBusy(false);
+      setProgress({ current: 0, total: 0 });
     }
   }
 
@@ -53,12 +62,17 @@ export default function AddPhotoButton({
     >
       <span className="text-xl leading-none">{busy ? "..." : "+"}</span>
       <span className="text-[10px] font-medium mt-1 px-1 leading-tight">
-        {busy ? "Adding" : "Add photo"}
+        {busy
+          ? progress.total > 1
+            ? `${progress.current}/${progress.total}`
+            : "Adding"
+          : "Add photos"}
       </span>
       <input
         ref={inputRef}
         type="file"
         accept={`${IMAGE_ACCEPT},${VIDEO_ACCEPT}`}
+        multiple
         disabled={busy}
         onChange={handleChange}
         className="hidden"
