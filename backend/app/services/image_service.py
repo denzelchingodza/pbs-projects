@@ -52,7 +52,7 @@ def _cloudinary_enabled() -> bool:
     if not settings.cloudinary_url:
         return False
     if not _cloudinary_configured:
-        cloudinary.config(cloudinary_url=settings.cloudinary_url)
+        cloudinary.config(cloudinary_url=settings.cloudinary_url, secure=True)
         _cloudinary_configured = True
     return True
 
