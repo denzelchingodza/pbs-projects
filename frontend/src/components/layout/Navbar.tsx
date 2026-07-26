@@ -53,7 +53,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/ui/Logo";
-import Motto from "@/components/ui/Motto";
 import T from "@/components/i18n/T";
 import LanguageToggle from "@/components/i18n/LanguageToggle";
 import type { SiteSettings } from "@/types";
@@ -163,8 +162,6 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
           <Link href="/" className="px-1">
             <Logo />
           </Link>
-          <span className="hidden sm:block w-px h-6 bg-neutral-200" aria-hidden="true" />
-          <Motto className="hidden sm:inline-block text-dark text-xs" />
         </div>
 
         <nav className="hidden md:flex items-center gap-9">
@@ -225,7 +222,6 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
         <div className="flex items-center justify-between pb-5 border-b border-white/10">
           <div>
             <Logo dark />
-            <Motto className="text-white/70 text-[10px] block mt-1" />
           </div>
           <button
             onClick={() => setOpen(false)}

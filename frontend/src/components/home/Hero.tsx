@@ -8,7 +8,6 @@
  */
 import Image from "next/image";
 import T from "@/components/i18n/T";
-import Motto from "@/components/ui/Motto";
 
 const HERO_IMAGE = "/images/hero.jpg";
 
@@ -30,8 +29,6 @@ export default function Hero() {
             <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em]">
               Harare · Zimbabwe
             </p>
-            <span className="w-px h-3.5 bg-neutral-300" aria-hidden="true" />
-            <Motto className="text-dark text-xs uppercase tracking-[0.2em]" />
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-dark">
             <T k="hero.title" />

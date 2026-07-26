@@ -1919,3 +1919,26 @@ Added the `cloudinary` package to requirements.txt.
 Verified: backend imports cleanly in an isolated virtualenv with these
 changes, no dashes in any new user facing text (comment text only, exempt
 per the Stage 10 precedent).
+
+## Stage 43: Removed the NDEZVEBASA motto from the live site
+
+The motto used to appear in six places: the desktop navbar, the mobile
+nav drawer, the homepage hero, the About page intro, the footer, and
+both the desktop and mobile views of the admin login page. All six were
+rendered through one shared `<Motto />` component
+(`components/ui/Motto.tsx`).
+
+Removed every usage and deleted the now unused component file, along
+with the small layout bits that only existed to sit next to it (the
+vertical divider line next to the logo in the navbar's desktop bar, and
+the divider between "Harare Zimbabwe" and the motto in the hero section).
+Nothing else on those pages needed to change.
+
+Along the way, found and fixed an unrelated, pre-existing TypeScript
+error in BatchUploader.tsx (the category dropdown's state was typed to
+a single literal category instead of any category string, which failed
+a clean type check). Fixed with an explicit `useState<string>(...)`.
+
+Verified: a fresh isolated copy of the frontend passes `tsc --noEmit`
+and a full `next build` with zero errors. No remaining references to
+NDEZVEBASA anywhere in the frontend source.

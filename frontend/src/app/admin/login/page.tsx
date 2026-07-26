@@ -18,7 +18,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Logo from "@/components/ui/Logo";
-import Motto from "@/components/ui/Motto";
 import { login } from "@/lib/adminApi";
 
 export default function AdminLoginPage() {
@@ -58,7 +57,6 @@ export default function AdminLoginPage() {
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           <Logo dark />
           <div>
-            <Motto className="text-white text-3xl block mb-4" />
             <p className="text-white/70 text-sm max-w-xs leading-relaxed">
               The control room behind every quote, project photo, and
               testimonial on the PBS Projects site.
@@ -72,7 +70,6 @@ export default function AdminLoginPage() {
         <div className="w-full max-w-sm">
           <div className="flex flex-col items-center lg:hidden mb-8">
             <Logo />
-            <Motto className="text-dark text-sm mt-3" />
           </div>
 
           <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-lg shadow-neutral-200/60">

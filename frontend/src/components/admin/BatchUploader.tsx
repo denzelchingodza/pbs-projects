@@ -31,7 +31,7 @@ export default function BatchUploader({ onUploaded }: { onUploaded: () => void }
   const { showToast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File[]>([]);
-  const [category, setCategory] = useState(GALLERY_CATEGORIES[0].value);
+  const [category, setCategory] = useState<string>(GALLERY_CATEGORIES[0].value);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState({ current: 0, total: 0, failed: 0 });
 

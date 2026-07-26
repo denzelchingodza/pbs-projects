@@ -11,7 +11,6 @@ import Image from "next/image";
 import TeamSection from "@/components/home/TeamSection";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LocationMap from "@/components/layout/LocationMap";
-import Motto from "@/components/ui/Motto";
 import T from "@/components/i18n/T";
 import { getProjects, getSiteSettings } from "@/lib/api";
 import { categoryLabel } from "@/lib/categories";
@@ -49,7 +48,6 @@ export default async function AboutPage() {
               <T k="about.introNoYears" values={{ business: settings.business_name }} />
             )}
           </p>
-          <Motto className="text-dark text-sm mt-5 inline-block" />
         </div>
       </section>
 
