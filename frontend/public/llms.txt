@@ -1,0 +1,33 @@
+# PBS Projects
+
+A full-stack commercial website for PBS Projects, a Zimbabwean construction and project management company.
+
+## What it does
+
+Showcases the company's services, portfolio, and team. Allows prospective clients to request quotes directly through the site. Features a curated gallery, client testimonials, and a contact form.
+
+## Pages
+
+- / — Home and hero section
+- /products — Services and offerings
+- /gallery — Project photo gallery
+- /about — Company background and team
+- /quote — Quote request form
+- /testimonial — Client testimonials
+- /contact — Contact information and form
+
+## Stack
+
+- Frontend: Next.js 15, Tailwind CSS, TypeScript
+- Backend: FastAPI, Python
+- Media: Cloudinary
+- Database: PostgreSQL
+- Deployment: Vercel (frontend), Render (API)
+
+## Live
+
+https://pbs-projects.vercel.app
+
+## Author
+
+Denzel Chingodza — denzel.chingodza@icloud.com
