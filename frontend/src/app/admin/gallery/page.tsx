@@ -17,9 +17,12 @@ import { revalidatePublicPaths } from "@/lib/revalidate";
 import type { Project } from "@/types";
 
 // Every public page that reads project/gallery data, see lib/api.ts's
-// getProjects() call sites: the homepage's featured work strip, the About
-// page's real work sample strip, and the full portfolio page itself.
-const GALLERY_PUBLIC_PATHS = ["/", "/about", "/gallery"];
+// getProjects() call sites: the homepage's featured work strip, and the
+// full portfolio page itself. The About content moved onto the homepage
+// too (see AboutIntro.tsx), its own separate "real work" photo strip was
+// dropped as part of that move since it just repeated the homepage's
+// featured work strip above it.
+const GALLERY_PUBLIC_PATHS = ["/", "/gallery"];
 
 export default function AdminGalleryPage() {
   const [projects, setProjects] = useState<Project[] | null>(null);

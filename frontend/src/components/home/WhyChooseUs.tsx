@@ -1,11 +1,13 @@
 "use client";
 
 /**
- * Three real reasons to hire PBS, used on the About page just above the
- * founder section. Plain inline SVG icons (no icon library needed for
- * three simple shapes), each paired with a short, honest line rather than
- * generic marketing language, this is meant to read like something a real
- * tradesman would say about his own work.
+ * Three real reasons to hire PBS, part of the homepage's About section
+ * (see AboutIntro.tsx directly above this and app/page.tsx for how the
+ * two fit together), sitting just above the team spread below it. Plain
+ * inline SVG icons (no icon library needed for three simple shapes), each
+ * paired with a short, honest line rather than generic marketing language,
+ * this is meant to read like something a real tradesman would say about
+ * his own work.
  *
  * Now a Client Component so the three titles and body lines follow the
  * current language, see lib/i18n.ts for the English and (once supplied)
@@ -59,7 +61,7 @@ const VALUES = [
 export default function WhyChooseUs() {
   const { lang } = useLanguage();
   return (
-    <section className="px-6 md:px-8 py-16 bg-neutral-50">
+    <section className="px-6 md:px-8 pt-8 pb-20 md:pb-24 bg-neutral-50">
       <div className="max-w-5xl mx-auto grid sm:grid-cols-3 gap-8">
         {VALUES.map((v) => (
           <div key={v.titleKey} className="text-center sm:text-left">

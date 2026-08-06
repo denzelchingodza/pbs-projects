@@ -9,6 +9,9 @@ import Stats from "@/components/home/Stats";
 import ProductsOverview from "@/components/home/ProductsOverview";
 import FeaturedWork from "@/components/home/FeaturedWork";
 import Testimonials from "@/components/home/Testimonials";
+import AboutIntro from "@/components/home/AboutIntro";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
+import TeamSection from "@/components/home/TeamSection";
 import QuoteSection from "@/components/quote/QuoteSection";
 import { getSiteSettings, getProducts, getProjects, getTestimonials } from "@/lib/api";
 
@@ -27,6 +30,9 @@ export default async function HomePage() {
       <ProductsOverview products={products} />
       <FeaturedWork projects={projects} />
       <Testimonials testimonials={testimonials} />
+      <AboutIntro settings={settings} />
+      <WhyChooseUs />
+      <TeamSection />
       <QuoteSection products={products} settings={settings} />
     </main>
   );

@@ -105,16 +105,18 @@ function PhoneIcon() {
 }
 
 // Order matches the actual top-to-bottom order of sections on the home
-// page (Hero, Stats, Products, then Featured Work, see app/page.tsx), so
-// clicking through the nav left to right always scrolls further down the
-// page, never back up. Products used to be listed after Our Work here
-// while actually sitting above it on the page, so "Our Work" scrolled
-// down and "Products", right next to it, scrolled back up, confusing.
+// page (Hero, Stats, Products, Featured Work, Testimonials, then the About
+// content, see app/page.tsx), so clicking through the nav left to right
+// always scrolls further down the page, never back up. About used to be
+// its own separate page, it's now folded into the homepage (id="about",
+// see AboutIntro.tsx) so a visitor never has to leave the homepage to
+// learn who PBS Projects is, the old /about URL still works, it just
+// redirects here now (see app/about/page.tsx).
 const NAV_LINKS = [
   { href: "/", key: "nav.home", icon: HomeIcon },
   { href: "/#products", key: "nav.products", icon: ProductsIcon },
   { href: "/#work", key: "nav.ourWork", icon: WorkIcon },
-  { href: "/about", key: "nav.about", icon: AboutIcon },
+  { href: "/#about", key: "nav.about", icon: AboutIcon },
 ];
 
 export default function Navbar({ settings }: { settings: SiteSettings }) {

@@ -27,7 +27,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
             <Link href="/#work" className="hover:text-orange transition-colors">Our Work</Link>
             <Link href="/#products" className="hover:text-orange transition-colors">Products</Link>
             <Link href="/#quote" className="hover:text-orange transition-colors">Get a Quote</Link>
-            <Link href="/about" className="hover:text-orange transition-colors">About</Link>
+            <Link href="/#about" className="hover:text-orange transition-colors">About</Link>
             <Link href="/testimonial" className="hover:text-orange transition-colors">Leave a Testimonial</Link>
           </div>
         </div>

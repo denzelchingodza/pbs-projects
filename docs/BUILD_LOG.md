@@ -1942,3 +1942,60 @@ a clean type check). Fixed with an explicit `useState<string>(...)`.
 Verified: a fresh isolated copy of the frontend passes `tsc --noEmit`
 and a full `next build` with zero errors. No remaining references to
 NDEZVEBASA anywhere in the frontend source.
+
+---
+
+## Stage 44: About folded into the homepage instead of its own page
+
+**The ask:** stop sending visitors to a separate `/about` page, work the
+same content into the homepage itself, somewhere that reads as a real,
+deliberate part of the page flow rather than dropped in wherever there
+was room.
+
+**Where it landed, and why:** right after Testimonials and just above
+the Get a Quote form, not higher up the page. The homepage already
+follows a natural order: show what we build (Products), prove it with
+real finished jobs (Our Work), back that up with what other customers
+say (Testimonials). Meeting the actual people behind PBS Projects fits
+right after that, once a visitor already has a reason to care who is
+doing the work, and right before asking them to submit their own
+details, meeting a real name and face just before that form is exactly
+the kind of thing that makes someone more comfortable filling it in.
+
+**New file, `components/home/AboutIntro.tsx`:** the eyebrow, heading,
+and intro paragraph that used to open the About page, now mounted at
+`id="about"` on the homepage so the navbar and footer's About link can
+scroll straight to it. Sits in the same light gray band as
+`WhyChooseUs.tsx` directly below it (adjusted that component's padding
+so the two flow as one continuous section, not two visibly separate
+gray boxes stacked with a seam between them), then `TeamSection.tsx`
+closes it out in white, keeping the homepage's established white and
+gray banding consistent all the way down the page (`app/page.tsx`).
+
+**What did not come along:** the About page's own small "real work"
+photo strip was dropped, it showed the same kind of content the
+homepage's Our Work section already shows higher up, keeping both would
+have meant the same real jobs appearing twice on one page. The map
+stayed exactly where it already was, on the Contact page, that's a
+"reach us" tool, not part of the company story, no reason to duplicate
+it here.
+
+**The old `/about` URL still works:** `app/about/page.tsx` is now a
+one-line redirect straight to `/#about`, so a bookmark, an old link
+shared somewhere, or a search result pointing at `/about` still lands
+somewhere correct instead of a broken page. Removed `/about` from
+`sitemap.ts` since it is not a real page to index anymore, the homepage
+entry already covers this content. Updated the About link in the navbar
+and footer to point at `/#about` directly rather than round-tripping
+through the redirect on every click.
+
+**Verified for real:** a fresh isolated copy of the frontend passes
+`tsc --noEmit` and a full `next build` with zero errors, all 20 routes
+generated. Started the actual built app and fetched the real homepage
+HTML: confirmed `id="products"`, `id="work"`, `id="about"`, and
+`id="quote"` all appear in that exact top to bottom order, "About Us"
+and "Meet the Team" both render in the real output, and there is still
+only one real `<h1>` on the page (Hero's headline, About's heading is
+correctly an `<h2>` now that it is not its own page). Fetched `/about`
+directly and confirmed it responds with a real `307` redirect rather
+than serving a page or a `404`.
