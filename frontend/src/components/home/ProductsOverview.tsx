@@ -33,7 +33,7 @@ export default function ProductsOverview({ products }: { products: Product[] }) 
           {products.map((p, i) => (
             <div
               key={p.id}
-              className="group bg-white border border-neutral-200 rounded-xl p-6 hover:border-orange/40 hover:shadow-md transition-all"
+              className="group bg-white border border-neutral-200 rounded-xl p-6 hover:border-orange/40 hover:shadow-md hover:-translate-y-0.5 transition-all"
             >
               <div className="text-orange text-xs font-bold tracking-widest mb-4">
                 {String(i + 1).padStart(2, "0")}

@@ -15,6 +15,7 @@
  */
 import ChangePasswordForm from "@/components/admin/ChangePasswordForm";
 import PageHeader from "@/components/admin/PageHeader";
+import Reveal from "@/components/ui/Reveal";
 
 function ShieldIcon() {
   return (
@@ -45,6 +46,7 @@ function GaugeIcon() {
 
 export default function AdminSettingsPage() {
   return (
+    <Reveal>
     <div>
       <PageHeader title="Account Settings" description="Manage your admin login." />
 
@@ -85,5 +87,6 @@ export default function AdminSettingsPage() {
         <ChangePasswordForm />
       </div>
     </div>
+    </Reveal>
   );
 }

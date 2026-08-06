@@ -1999,3 +1999,74 @@ only one real `<h1>` on the page (Hero's headline, About's heading is
 correctly an `<h2>` now that it is not its own page). Fetched `/about`
 directly and confirmed it responds with a real `307` redirect rather
 than serving a page or a `404`.
+
+---
+
+## Stage 45: A cohesive feel pass, public site and admin together
+
+**The ask:** nothing about what the site does should change, only how
+solid and deliberately designed it feels, on both sides, scrolling
+through the main site and moving around the admin panel.
+
+**One shared mechanism, not several one-off animations
+(`components/ui/Reveal.tsx`):** a small `IntersectionObserver` wrapper
+that fades a section up into place the moment it actually enters the
+screen, instead of every section just being fully visible the instant
+the page paints. The same component is used everywhere, every homepage
+section below the Hero, the extra sections on the Gallery, Products, and
+Contact pages, and the main content area of every admin screen
+(Dashboard, Gallery, Quotes, Testimonials, Settings). Content already on
+screen at load (an admin page's own content, for instance) still gets
+it, `IntersectionObserver` reports something as intersecting immediately
+if it already is, so this doubles as a quiet "just arrived" cue on
+mount, not only a scroll trigger. Skipped on purpose in two places: the
+Hero (the very first thing anyone sees shouldn't look like it's still
+loading in) and the single purpose Quote/Testimonial/admin login forms,
+where the point is to be usable immediately, not to fade in first.
+Respects reduced motion, the CSS rules in `globals.css` skip the
+transform and fade entirely for anyone with that preference on, content
+just appears, same as always.
+
+**Buttons feel pressed now (`globals.css`):** one small global rule, any
+`<button>` that isn't disabled scales down slightly on `:active`, the
+same brief, firm feedback everywhere, a form submit button, an admin
+delete button, a modal confirm, instead of some buttons feeling tactile
+by accident and others feeling flat depending on whether that one
+component happened to add its own hover state.
+
+**A real loading state instead of a blank tab
+(`app/loading.tsx`, new `components/ui/Spinner.tsx`):** every public
+page fetches its real data with `await` in a Server Component (see
+Stage 7 onward), Next.js can show a fallback automatically while that's
+in flight, there just wasn't one. Now there's a small centered spinner
+instead of a blank white screen for that moment. The admin panel works
+differently, its pages fetch client side after mount, so this same
+mechanism would not actually help there, `Spinner.tsx` is used directly
+instead in the three admin list pages' "Loading..." states and the
+"Checking admin session..." screen, replacing plain text with the same
+spinner used everywhere else, one visual language for "something's
+happening" instead of two.
+
+**Every card now behaves the same way on hover:** a lift plus a deeper
+shadow, `hover:-translate-y-0.5 hover:shadow-md`, added wherever a card
+had the shadow but not the lift, or the lift but not the shadow. Public
+side: the homepage's product cards, the full Products page's cards.
+Admin side: the dashboard's stat cards, gallery project cards, quote
+cards, and testimonial cards. The homepage's Featured Work photos
+(`FeaturedWork.tsx`) previously had no hover treatment at all, static
+images with a caption, now they get the same shadow lift as their
+container plus a slow image zoom on hover, matching the exact treatment
+the full gallery page's photo tiles already used, so the same kind of
+tile behaves the same way whether you're looking at 5 of them on the
+homepage or all of them on `/gallery`.
+
+**Verified for real:** a fresh isolated copy of the frontend passes
+`tsc --noEmit` and a full `next build` with zero errors, all 20 routes.
+Started the actual built app and fetched the real homepage, Products,
+Gallery, and Contact pages, confirmed the expected number of `reveal`
+wrapped sections actually appear in each page's real rendered HTML (8 on
+the homepage, 2 each on Products and Contact, 1 on Gallery, correctly
+fewer there since its optional before-and-after section only renders
+when a project has a before photo), and that the real content inside
+them (headings, the About section, the closing quote CTAs) still renders
+correctly, nothing was accidentally hidden by the new wrapper.

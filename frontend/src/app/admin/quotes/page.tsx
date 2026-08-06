@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import PageHeader from "@/components/admin/PageHeader";
 import QuoteTable from "@/components/admin/QuoteTable";
+import Reveal from "@/components/ui/Reveal";
+import Spinner from "@/components/ui/Spinner";
 import { getAdminQuotes } from "@/lib/adminApi";
 import type { AdminQuote } from "@/types";
 
@@ -17,6 +19,7 @@ export default function AdminQuotesPage() {
   }, []);
 
   return (
+    <Reveal>
     <div>
       <PageHeader title="Quote Requests" description="Every enquiry submitted through the site, newest first." />
       <p className="text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 rounded-md px-4 py-2.5 mb-8 inline-block">
@@ -31,7 +34,10 @@ export default function AdminQuotesPage() {
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
       {quotes === null ? (
-        <p className="text-sm text-neutral-500">Loading quote requests...</p>
+        <div className="flex items-center gap-2.5 text-sm text-neutral-500">
+          <Spinner />
+          Loading quote requests...
+        </div>
       ) : (
         <QuoteTable
           quotes={quotes}
@@ -42,5 +48,6 @@ export default function AdminQuotesPage() {
         />
       )}
     </div>
+    </Reveal>
   );
 }

@@ -12,6 +12,8 @@ import PhotoUploader from "@/components/admin/PhotoUploader";
 import BatchUploader from "@/components/admin/BatchUploader";
 import ProjectCard from "@/components/admin/ProjectCard";
 import { GALLERY_CATEGORIES } from "@/lib/categories";
+import Reveal from "@/components/ui/Reveal";
+import Spinner from "@/components/ui/Spinner";
 import { getAdminGallery } from "@/lib/adminApi";
 import { revalidatePublicPaths } from "@/lib/revalidate";
 import type { Project } from "@/types";
@@ -41,6 +43,7 @@ export default function AdminGalleryPage() {
   useEffect(() => loadGallery(), []);
 
   return (
+    <Reveal>
     <div>
       <PageHeader
         title="Gallery"
@@ -57,7 +60,10 @@ export default function AdminGalleryPage() {
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
       {projects === null ? (
-        <p className="text-sm text-neutral-500">Loading projects...</p>
+        <div className="flex items-center gap-2.5 text-sm text-neutral-500">
+          <Spinner />
+          Loading projects...
+        </div>
       ) : (
         <div className="flex flex-col gap-10">
           {GALLERY_CATEGORIES.map((cat) => {
@@ -88,5 +94,6 @@ export default function AdminGalleryPage() {
         </div>
       )}
     </div>
+    </Reveal>
   );
 }

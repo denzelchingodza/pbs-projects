@@ -103,7 +103,7 @@ export default function QuoteTable({
         {quotes.map((q) => (
           <div
             key={q.id}
-            className="bg-white border border-neutral-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
+            className="bg-white border border-neutral-200 rounded-xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
           >
             <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
               <div>

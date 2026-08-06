@@ -12,6 +12,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import AdminNav from "@/components/admin/AdminNav";
+import Spinner from "@/components/ui/Spinner";
 import { ToastProvider } from "@/components/ui/ToastProvider";
 import { getCurrentAdmin } from "@/lib/adminApi";
 import { getToken } from "@/lib/auth";
@@ -39,7 +40,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!checked) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50 text-neutral-500 text-sm">
+      <div className="min-h-screen flex items-center justify-center gap-2.5 bg-neutral-50 text-neutral-500 text-sm">
+        <Spinner />
         Checking admin session...
       </div>
     );

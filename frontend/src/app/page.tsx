@@ -13,6 +13,7 @@ import AboutIntro from "@/components/home/AboutIntro";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import TeamSection from "@/components/home/TeamSection";
 import QuoteSection from "@/components/quote/QuoteSection";
+import Reveal from "@/components/ui/Reveal";
 import { getSiteSettings, getProducts, getProjects, getTestimonials } from "@/lib/api";
 
 export default async function HomePage() {
@@ -25,15 +26,34 @@ export default async function HomePage() {
 
   return (
     <main>
+      {/* Hero is the first thing anyone sees, it renders in fully rather
+          than fading up like everything below it, nothing should look
+          like it's still loading in the one spot that paints first. */}
       <Hero />
-      <Stats settings={settings} />
-      <ProductsOverview products={products} />
-      <FeaturedWork projects={projects} />
-      <Testimonials testimonials={testimonials} />
-      <AboutIntro settings={settings} />
-      <WhyChooseUs />
-      <TeamSection />
-      <QuoteSection products={products} settings={settings} />
+      <Reveal>
+        <Stats settings={settings} />
+      </Reveal>
+      <Reveal>
+        <ProductsOverview products={products} />
+      </Reveal>
+      <Reveal>
+        <FeaturedWork projects={projects} />
+      </Reveal>
+      <Reveal>
+        <Testimonials testimonials={testimonials} />
+      </Reveal>
+      <Reveal>
+        <AboutIntro settings={settings} />
+      </Reveal>
+      <Reveal>
+        <WhyChooseUs />
+      </Reveal>
+      <Reveal>
+        <TeamSection />
+      </Reveal>
+      <Reveal>
+        <QuoteSection products={products} settings={settings} />
+      </Reveal>
     </main>
   );
 }

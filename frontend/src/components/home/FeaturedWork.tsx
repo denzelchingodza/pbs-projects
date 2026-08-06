@@ -45,7 +45,7 @@ function Card({
 
   return (
     <div
-      className={`relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900 aspect-[4/3] ${
+      className={`group relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900 aspect-[4/3] shadow-sm hover:shadow-lg transition-shadow ${
         big ? "md:col-span-2 md:row-span-2 md:aspect-auto" : "md:aspect-auto"
       }`}
     >
@@ -57,7 +57,7 @@ function Card({
           loop
           playsInline
           preload="metadata"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       ) : (
         <Image
@@ -65,7 +65,7 @@ function Card({
           alt={project.title}
           fill
           sizes={big ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 25vw"}
-          className="object-cover"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
       )}
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent px-4 pt-12 pb-4">

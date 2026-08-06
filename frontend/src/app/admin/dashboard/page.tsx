@@ -9,6 +9,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import PageHeader from "@/components/admin/PageHeader";
+import Reveal from "@/components/ui/Reveal";
 import { getAdminGallery, getAdminQuotes, getAdminTestimonials } from "@/lib/adminApi";
 import type { AdminQuote, Project, Testimonial } from "@/types";
 
@@ -60,7 +61,7 @@ function StatCard({
   tone: "dark" | "orange";
 }) {
   return (
-    <div className="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow flex items-start gap-4">
+    <div className="bg-white border border-neutral-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-start gap-4">
       <div
         className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 ${
           tone === "orange" ? "bg-orange/10 text-orange" : "bg-dark/5 text-dark"
@@ -98,6 +99,7 @@ export default function AdminDashboardPage() {
   const pendingTestimonials = testimonials?.filter((t) => t.status === "pending").length ?? null;
 
   return (
+    <Reveal>
     <div>
       <PageHeader title="Dashboard" description="A quick overview of activity on the site." />
 
@@ -166,5 +168,6 @@ export default function AdminDashboardPage() {
         </ol>
       </div>
     </div>
+    </Reveal>
   );
 }

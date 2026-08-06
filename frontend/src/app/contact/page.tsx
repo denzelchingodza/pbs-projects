@@ -7,6 +7,7 @@
  */
 import type { Metadata } from "next";
 import LocationMap from "@/components/layout/LocationMap";
+import Reveal from "@/components/ui/Reveal";
 import { getSiteSettings } from "@/lib/api";
 
 export const metadata: Metadata = {
@@ -57,25 +58,28 @@ export default async function ContactPage() {
         </div>
       </section>
 
-      <section className="px-6 md:px-8 pb-16 bg-white">
-        <div className="max-w-5xl mx-auto grid sm:grid-cols-3 gap-5">
-          {actions.map((action) => (
-            <a
-              key={action.label}
-              href={action.href}
-              target={action.label === "WhatsApp" ? "_blank" : undefined}
-              rel={action.label === "WhatsApp" ? "noopener noreferrer" : undefined}
-              className="bg-white border border-neutral-200 rounded-xl p-6 text-center hover:border-orange/40 hover:shadow-md transition-all"
-            >
-              <div className="text-xs font-semibold uppercase tracking-widest text-orange mb-2">
-                {action.label}
-              </div>
-              <div className="font-semibold text-dark">{action.value}</div>
-            </a>
-          ))}
-        </div>
-      </section>
+      <Reveal>
+        <section className="px-6 md:px-8 pb-16 bg-white">
+          <div className="max-w-5xl mx-auto grid sm:grid-cols-3 gap-5">
+            {actions.map((action) => (
+              <a
+                key={action.label}
+                href={action.href}
+                target={action.label === "WhatsApp" ? "_blank" : undefined}
+                rel={action.label === "WhatsApp" ? "noopener noreferrer" : undefined}
+                className="bg-white border border-neutral-200 rounded-xl p-6 text-center hover:border-orange/40 hover:shadow-md hover:-translate-y-0.5 transition-all"
+              >
+                <div className="text-xs font-semibold uppercase tracking-widest text-orange mb-2">
+                  {action.label}
+                </div>
+                <div className="font-semibold text-dark">{action.value}</div>
+              </a>
+            ))}
+          </div>
+        </section>
+      </Reveal>
 
+      <Reveal>
       <section className="px-6 md:px-8 py-16 bg-neutral-50">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-start">
           <div>
@@ -114,6 +118,7 @@ export default async function ContactPage() {
           <LocationMap settings={settings} />
         </div>
       </section>
+      </Reveal>
     </main>
   );
 }

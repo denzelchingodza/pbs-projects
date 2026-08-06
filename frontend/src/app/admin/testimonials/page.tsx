@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import PageHeader from "@/components/admin/PageHeader";
 import TestimonialModerationList from "@/components/admin/TestimonialModerationList";
+import Reveal from "@/components/ui/Reveal";
+import Spinner from "@/components/ui/Spinner";
 import { getAdminTestimonials } from "@/lib/adminApi";
 import type { Testimonial } from "@/types";
 
@@ -17,6 +19,7 @@ export default function AdminTestimonialsPage() {
   }, []);
 
   return (
+    <Reveal>
     <div>
       <PageHeader
         title="Testimonials"
@@ -30,7 +33,10 @@ export default function AdminTestimonialsPage() {
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
       {testimonials === null ? (
-        <p className="text-sm text-neutral-500">Loading testimonials...</p>
+        <div className="flex items-center gap-2.5 text-sm text-neutral-500">
+          <Spinner />
+          Loading testimonials...
+        </div>
       ) : (
         <TestimonialModerationList
           testimonials={testimonials}
@@ -40,5 +46,6 @@ export default function AdminTestimonialsPage() {
         />
       )}
     </div>
+    </Reveal>
   );
 }

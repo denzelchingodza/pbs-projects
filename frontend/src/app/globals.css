@@ -82,3 +82,49 @@ select:focus-visible {
 .animate-toast-in {
   animation: toast-in 0.2s ease-out;
 }
+
+/* Reveal.tsx's fade-in-up on scroll/mount, the one shared "this just
+   arrived" treatment used across every public page and every admin
+   screen. Starts slightly down and transparent, settles into place once
+   Reveal's IntersectionObserver flips on `.reveal-visible`. */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Every plain <button> across the site (public forms, admin actions,
+   modals) gets the same brief, firm press feedback, a small scale down
+   on active, rather than some buttons feeling tactile and others feeling
+   flat depending on which component happened to add its own hover state.
+   Skips anything disabled, a button mid-submit shouldn't visibly "press"
+   again on a stray click. */
+button:not(:disabled) {
+  transition: transform 0.15s ease;
+}
+
+button:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button:not(:disabled) {
+    transition: none;
+  }
+  button:not(:disabled):active {
+    transform: none;
+  }
+}

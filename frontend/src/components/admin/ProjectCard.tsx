@@ -126,7 +126,7 @@ export default function ProjectCard({
   }
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
       {cover && (
         <div className="relative aspect-[4/3] bg-neutral-900">
           {cover.media_type === "video" ? (
