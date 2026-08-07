@@ -32,6 +32,10 @@ export default async function ProductsPage() {
             so sizes, finishes, and materials are matched to your space, not sold
             off a shelf.
           </p>
+          <p className="mt-5 max-w-md mx-auto text-sm font-medium text-dark bg-orange/10 border-l-2 border-orange rounded-r-md px-4 py-3 text-left">
+            Have a specific color, finish, or material in mind? If it can be
+            sourced, we&apos;ll build your job with it.
+          </p>
         </div>
       </section>
 
