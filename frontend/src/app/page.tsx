@@ -12,6 +12,7 @@ import Testimonials from "@/components/home/Testimonials";
 import AboutIntro from "@/components/home/AboutIntro";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import TeamSection from "@/components/home/TeamSection";
+import HowItWorks from "@/components/home/HowItWorks";
 import QuoteSection from "@/components/quote/QuoteSection";
 import Reveal from "@/components/ui/Reveal";
 import { getSiteSettings, getProducts, getProjects, getTestimonials } from "@/lib/api";
@@ -50,6 +51,15 @@ export default async function HomePage() {
       </Reveal>
       <Reveal>
         <TeamSection />
+      </Reveal>
+      {/* Right before the Quote form on purpose, "what happens after I
+          submit this" is the last real question someone has before they
+          actually fill it in, answer it right here. Same white as
+          TeamSection above it, the two read as one "here's who we are and
+          how this works" band right before the neutral-50 Quote section
+          closes it out. */}
+      <Reveal>
+        <HowItWorks />
       </Reveal>
       <Reveal>
         <QuoteSection products={products} settings={settings} />
