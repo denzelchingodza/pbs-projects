@@ -2070,3 +2070,73 @@ fewer there since its optional before-and-after section only renders
 when a project has a before photo), and that the real content inside
 them (headings, the About section, the closing quote CTAs) still renders
 correctly, nothing was accidentally hidden by the new wrapper.
+
+---
+
+## Stage 46: How It Works, payment methods, and a note on materials
+
+**Context:** after walking through the live site, the ask was for
+whatever a real visitor would want to see that wasn't there yet. Went
+through several ideas (FAQ, a named service area list, a Google reviews
+widget, case study write-ups, a fixed grid of finish/color options),
+Denzel gave a direct answer on each: skip the FAQ entirely, service area
+is simply all of Zimbabwe (already said on the homepage's stats strip),
+no Google Business listing exists yet so no widget to embed, case
+studies are a later project, and materials are not a fixed list, it's
+whatever can actually be sourced for the job. What did move forward,
+grounded in his real answers: a How It Works section, and being upfront
+about payment methods.
+
+**`components/home/HowItWorks.tsx`, new:** four honest steps, get in
+touch, get a quote, the install itself, handover. Two things worded
+carefully rather than generically: a site visit is not presented as a
+required step, plenty of jobs get quoted straight from a description,
+reference photos, or word of mouth, a visit only happens when an
+accurate measurement actually matters. And there's no invented
+turnaround time, "how long a job takes" genuinely depends on its size
+and scope, so the copy says exactly that instead of promising a fixed
+number of days that wouldn't be true for every job.
+
+Mounted on the homepage (`app/page.tsx`) directly above the Quote
+section, right before someone actually fills the form in is the natural
+place to answer "ok, but what happens after I submit this." Also
+mounted on the dedicated `/quote` page (`app/quote/page.tsx`), which
+previously had no explanatory content at all, someone who lands there
+directly (not scrolling down from the homepage) never saw the homepage's
+version, now it repeats there too, after the form rather than before it,
+since that page's whole point is to be usable immediately.
+
+**`components/ui/PaymentMethods.tsx`, new:** a small, factual note,
+cash (USD), bank transfer, and EcoCash, the three real methods PBS
+Projects actually accepts, deliberately not claiming installments or
+layaway since that isn't something actually offered. Shown on the
+Contact page (next to the address and phone, the practical "how do I
+actually deal with you" information) and next to the Quote form on the
+homepage, the two spots someone is most likely wondering about payment
+before they commit.
+
+**Contact page also got a clearer nationwide note:** the page previously
+only showed the Waterfalls workshop address with nothing saying jobs
+happen outside Harare too, added a plain one line clarification right
+under it.
+
+**Products page got a short note on materials:** instead of a fixed
+grid of color/finish options (there isn't a fixed list, PBS sources
+whatever a job actually calls for), a short callout under the intro
+says exactly that, if a specific color, finish, or material can be
+sourced, the job gets built with it.
+
+**Deliberately not built this round, per Denzel directly:** an FAQ
+section, a named list of towns/areas served (the existing "all of
+Zimbabwe" already covers it), a Google reviews widget (no listing to
+pull from yet), and case study write-ups for individual gallery projects
+(he wants to pick those later himself).
+
+**Verified for real:** a fresh isolated copy of the frontend passes
+`tsc --noEmit` and a full `next build` with zero errors, all 20 routes.
+Started the actual built app and fetched the real homepage, the
+dedicated Quote page, the Contact page, and the Products page, confirmed
+all four real step titles from How It Works render on both the homepage
+and `/quote`, "How You Can Pay" and "EcoCash" render on Contact
+alongside the new nationwide line, and the new materials note renders on
+Products, all in the real built HTML, not just the source files.
