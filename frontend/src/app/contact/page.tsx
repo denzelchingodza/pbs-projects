@@ -7,6 +7,7 @@
  */
 import type { Metadata } from "next";
 import LocationMap from "@/components/layout/LocationMap";
+import PaymentMethods from "@/components/ui/PaymentMethods";
 import Reveal from "@/components/ui/Reveal";
 import { getSiteSettings } from "@/lib/api";
 
@@ -114,6 +115,7 @@ export default async function ContactPage() {
                 </a>
               </p>
             </div>
+            <PaymentMethods className="mt-8" />
           </div>
           <LocationMap settings={settings} />
         </div>
