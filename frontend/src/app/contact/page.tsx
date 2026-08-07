@@ -87,9 +87,12 @@ export default async function ContactPage() {
             <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
               Visit Us
             </p>
-            <h2 className="text-2xl font-bold text-dark tracking-tight mb-4">
+            <h2 className="text-2xl font-bold text-dark tracking-tight mb-2">
               {settings.address}
             </h2>
+            <p className="text-sm text-neutral-500 mb-4">
+              That&apos;s our workshop, we take on jobs across all of Zimbabwe, not just Harare.
+            </p>
             <div className="text-sm text-neutral-600 space-y-2">
               <p>
                 Primary:{" "}
