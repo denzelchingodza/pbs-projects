@@ -12,6 +12,7 @@
 import type { Product, SiteSettings } from "@/types";
 import QuoteForm from "./QuoteForm";
 import SectionHeading from "@/components/ui/SectionHeading";
+import PaymentMethods from "@/components/ui/PaymentMethods";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 
@@ -52,6 +53,7 @@ export default function QuoteSection({
               </a>
             </p>
           </div>
+          <PaymentMethods className="mt-8" />
         </div>
         <QuoteForm products={products} />
       </div>
