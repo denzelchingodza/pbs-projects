@@ -2140,3 +2140,86 @@ all four real step titles from How It Works render on both the homepage
 and `/quote`, "How You Can Pay" and "EcoCash" render on Contact
 alongside the new nationwide line, and the new materials note renders on
 Products, all in the real built HTML, not just the source files.
+
+---
+
+## Stage 47: A full front-to-back redesign pass, in the style of a reference site
+
+**Context:** the direct ask was to redesign PBS's public frontend, header
+through footer, in the style of jdwglass.co.za (a Western Cape glass
+company site shared as a reference), keeping PBS's own orange and dark
+colors and existing structure, but with a firmer, more considered flow.
+Fetched the reference site's real page content to work from (its
+contact strip above the nav, photo backed product tiles, About photo
+mosaic, and footer layout), then adapted each pattern into PBS's own
+components, colors, and real data. No functional or backend changes.
+
+**Contact strip is back, done differently this time
+(`components/layout/TopBar.tsx`):** a slim dark strip above the main nav
+showing the real address on the left and the real phone and email on
+the right, each with a small inline icon. PBS had a version of this
+once before (Stage 17) and it was removed in Stage 18 for crowding a
+single header with too much at once. This is not that same bar rebuilt,
+it is its own separate, non-sticky strip that scrolls away once you
+scroll past it, only the main nav (unchanged, still a single clean
+white bar) stays pinned. Hidden on small screens, a phone's narrow
+header has no room for a second row and the same number already lives
+in the mobile drawer.
+
+**Product cards now show real photos, not just numbered
+text (`lib/categories.ts`, `ProductsOverview.tsx`,
+`app/products/page.tsx`):** a product's own slug (set in
+`backend/seed.py`) does not exactly match its matching gallery
+category value for three of the six products, so `productSlugToCategory()`
+bridges that. `coverPhotoForCategory()` then picks a real photo for
+that category from the actual uploaded project gallery, a featured
+project's photo first, the earliest uploaded one otherwise. Both the
+homepage's product teaser and the full Products page now show that
+real photo behind each card, with the numbered badge overlaid on top
+of it rather than standing alone. A category with no uploaded photos
+yet still falls back cleanly to the plain numbered card, never a stock
+or placeholder image standing in for PBS's own work, since
+`Product.thumbnail_url` exists in the schema but is never actually
+populated by any upload flow.
+
+**Hero and section headings, bumped up a size
+(`Hero.tsx`, `SectionHeading.tsx`):** the homepage headline moved from
+a 4xl/5xl bold weight to a 5xl/6xl/7xl extrabold weight with tighter
+tracking, and every section heading site-wide (Products, Our Work,
+Testimonials, About, Get a Quote) moved from 2xl/3xl bold to 3xl/4xl
+extrabold. Same colors, same copy, just a firmer, more confident scale
+throughout, matching the large-type feel of the reference site.
+
+**A real photo mosaic added to the About section
+(`AboutIntro.tsx`):** below the About intro text, a small grid of up
+to 4 real completed job photos now sits on the homepage, whichever
+projects the admin has featured, or the earliest uploaded if nothing
+is featured yet, the same source `FeaturedWork.tsx` already draws
+from. This pairs the About text with actual proof of the work right
+where a visitor is reading who PBS is, instead of that section being
+text only.
+
+**Footer given more room to breathe
+(`Footer.tsx`):** taller top padding, wider gaps between its four
+columns, and medium weight links instead of the tighter, denser
+version it had before. No social icons added, `SiteSettings` has no
+social links stored anywhere to draw from, and a row of icons linking
+nowhere real would be worse than not having them at all.
+
+**Verified for real, not assumed:** a fresh isolated copy of the
+frontend passes `tsc --noEmit` with zero errors and a full production
+`next build` with zero errors across all 20 routes (same Google Fonts
+sandbox workaround used since Stage 9, confirmed unrelated to this
+code). Started the actual built app and fetched the real homepage,
+Products page, Gallery page, Quote page, and the `/about` redirect, all
+returned `200`, and confirmed in the real rendered HTML: "Our Products,"
+"How It Works," and "Get in touch" render on the homepage, and the
+materials callout still renders correctly on the Products page.
+
+**This round of work was done as 10 separate commits**, each one a
+single real, reviewable change (the TopBar component, wiring it into
+the layout, the category/photo helper, the two product photo card
+redesigns, the hero and section heading scale, the About photo mosaic,
+the footer spacing, and this log entry), so the history reads as a
+clear step by step record of what changed and why, not one large
+undifferentiated commit.
