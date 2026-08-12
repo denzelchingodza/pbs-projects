@@ -5,6 +5,10 @@
  * pattern is defined once — change the spacing or type size here and every
  * section updates together, instead of four near-identical blocks of JSX
  * quietly drifting out of sync over time.
+ *
+ * Sized up a step (bolder weight, larger scale) for a more confident feel
+ * site-wide, matching the large-type heading treatment used throughout the
+ * jdwglass.co.za reference site.
  */
 export default function SectionHeading({
   eyebrow,
@@ -24,7 +28,7 @@ export default function SectionHeading({
       <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
         {eyebrow}
       </p>
-      <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight">{title}</h2>
+      <h2 className="text-3xl sm:text-4xl font-extrabold text-dark tracking-tight">{title}</h2>
       {intro && <p className="text-neutral-500 mt-3 text-[15px] leading-relaxed">{intro}</p>}
     </div>
   );
