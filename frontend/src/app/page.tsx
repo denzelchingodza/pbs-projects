@@ -44,7 +44,7 @@ export default async function HomePage() {
         <Testimonials testimonials={testimonials} />
       </Reveal>
       <Reveal>
-        <AboutIntro settings={settings} />
+        <AboutIntro settings={settings} projects={projects} />
       </Reveal>
       <Reveal>
         <WhyChooseUs />
