@@ -6,8 +6,11 @@
  */
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
-import { getProducts } from "@/lib/api";
+import { getProducts, getProjects } from "@/lib/api";
+import { productSlugToCategory, coverPhotoForCategory } from "@/lib/categories";
+import { mediaUrl } from "@/lib/media";
 
 export const metadata: Metadata = {
   title: "Products & Services",
@@ -15,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ProductsPage() {
-  const products = await getProducts();
+  const [products, projects] = await Promise.all([getProducts(), getProjects()]);
 
   return (
     <main>
@@ -42,26 +45,47 @@ export default async function ProductsPage() {
       <Reveal>
         <section className="px-6 md:px-8 pb-20 bg-white">
           <div className="max-w-5xl mx-auto grid sm:grid-cols-2 gap-6">
-            {products.map((p: { id: number; name: string; description?: string }, i: number) => (
-              <div
-                key={p.id}
-                className="bg-white border border-neutral-200 rounded-xl p-7 hover:border-orange/40 hover:shadow-md hover:-translate-y-0.5 transition-all"
-              >
-                <div className="text-orange text-xs font-bold tracking-widest mb-4">
+            {products.map((p: { id: number; name: string; slug: string; description?: string }, i: number) => {
+              const cover = coverPhotoForCategory(projects, productSlugToCategory(p.slug));
+              const badge = (
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-orange text-white text-xs font-bold">
                   {String(i + 1).padStart(2, "0")}
-                </div>
-                <h2 className="text-lg font-bold text-dark">{p.name}</h2>
-                {p.description && (
-                  <p className="text-sm text-neutral-500 mt-2 leading-relaxed">{p.description}</p>
-                )}
-                <Link
-                  href="/quote"
-                  className="inline-block mt-5 text-sm font-semibold text-orange hover:text-dark transition-colors"
+                </span>
+              );
+              return (
+                <div
+                  key={p.id}
+                  className="group bg-white border border-neutral-200 rounded-xl overflow-hidden hover:border-orange/40 hover:shadow-md hover:-translate-y-0.5 transition-all"
                 >
-                  Request a quote for {p.name.toLowerCase()} &rarr;
-                </Link>
-              </div>
-            ))}
+                  {cover ? (
+                    <div className="relative aspect-[16/10] bg-neutral-900">
+                      <Image
+                        src={mediaUrl(cover)}
+                        alt={p.name}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <div className="absolute top-4 left-4">{badge}</div>
+                    </div>
+                  ) : (
+                    <div className="p-7 pb-0">{badge}</div>
+                  )}
+                  <div className="p-7">
+                    <h2 className="text-lg font-bold text-dark">{p.name}</h2>
+                    {p.description && (
+                      <p className="text-sm text-neutral-500 mt-2 leading-relaxed">{p.description}</p>
+                    )}
+                    <Link
+                      href="/quote"
+                      className="inline-block mt-5 text-sm font-semibold text-orange hover:text-dark transition-colors"
+                    >
+                      Request a quote for {p.name.toLowerCase()} &rarr;
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
       </Reveal>
