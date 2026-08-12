@@ -30,7 +30,10 @@ export default function Hero() {
               Harare · Zimbabwe
             </p>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-dark">
+          {/* Bigger, bolder type than before, real weight on the first
+              thing anyone reads, matching the confident large-type hero
+              treatment from the jdwglass.co.za reference. */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tighter text-dark">
             <T k="hero.title" />
           </h1>
           <p className="mt-6 text-neutral-500 text-[15px] leading-relaxed max-w-md">
