@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import TopBar from "@/components/layout/TopBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
@@ -73,6 +74,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <StructuredData settings={settings} />
         <LanguageProvider>
           <PublicChrome>
+            <TopBar settings={settings} />
             <Navbar settings={settings} />
           </PublicChrome>
           {children}
