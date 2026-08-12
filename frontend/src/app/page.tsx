@@ -35,7 +35,7 @@ export default async function HomePage() {
         <Stats settings={settings} />
       </Reveal>
       <Reveal>
-        <ProductsOverview products={products} />
+        <ProductsOverview products={products} projects={projects} />
       </Reveal>
       <Reveal>
         <FeaturedWork projects={projects} />
