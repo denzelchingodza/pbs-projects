@@ -30,7 +30,9 @@
  * that on an orange bar meant recoloring it to all white just to stay
  * readable, which lost the logo's real colors entirely. White keeps the
  * logo exactly as designed and clearly visible, the orange still shows up
- * throughout the bar as the "Get a Quote" button and the link hover color.
+ * throughout the bar as the "Get a Quote" button, the link hover color,
+ * and a solid orange line along the bottom edge of the bar itself, a
+ * deliberate brand accent rather than the header reading as plain white.
  *
  * Language notes: the small EN / SN switch (LanguageToggle.tsx) lives here
  * since the header is the one place present on every page, nav labels use
@@ -154,9 +156,11 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Single bar — white, so the real logo shows in its true colors */}
+      {/* Single bar — white, so the real logo shows in its true colors, with
+          a solid orange line along the bottom edge so the header still
+          reads as on brand at a glance, not just white. */}
       <div
-        className={`bg-white border-b border-neutral-100 flex items-center justify-between px-4 md:px-8 py-3 transition-shadow ${
+        className={`bg-white border-b-[3px] border-orange flex items-center justify-between px-4 md:px-8 py-3 transition-shadow ${
           scrolled ? "shadow-md" : "shadow-sm"
         }`}
       >
