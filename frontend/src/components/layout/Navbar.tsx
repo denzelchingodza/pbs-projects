@@ -156,11 +156,15 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Single bar — white, so the real logo shows in its true colors, with
-          a solid orange line along the bottom edge so the header still
-          reads as on brand at a glance, not just white. */}
+      {/* Mostly white, so the real logo shows in its true colors, with a
+          solid orange line along the bottom edge so the header still reads
+          as on brand at a glance. `backdrop-blur` on top of that translucent
+          white turns this into an actual frosted-glass bar, the `sticky`
+          positioning above means there's real page content scrolling
+          underneath it once you're past the top of the page, so the blur
+          has something real to blur, not just a flat color. */}
       <div
-        className={`bg-white border-b-[3px] border-orange flex items-center justify-between px-4 md:px-8 py-3 transition-shadow ${
+        className={`bg-white/90 backdrop-blur-md border-b-[3px] border-orange flex items-center justify-between px-4 md:px-8 py-3 transition-shadow ${
           scrolled ? "shadow-md" : "shadow-sm"
         }`}
       >
@@ -182,7 +186,7 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
           ))}
           <Link
             href="/#quote"
-            className="bg-orange text-white text-sm font-semibold px-5 py-2.5 rounded-md hover:brightness-95 transition"
+            className="shine-hover bg-orange text-white text-sm font-semibold px-5 py-2.5 rounded-md hover:brightness-95 transition"
           >
             <T k="nav.getQuote" />
           </Link>
@@ -290,7 +294,7 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
         <Link
           href="/#quote"
           onClick={() => setOpen(false)}
-          className="mt-auto bg-orange text-white text-center text-sm font-semibold py-3.5 rounded-md hover:brightness-95 transition"
+          className="shine-hover mt-auto bg-orange text-white text-center text-sm font-semibold py-3.5 rounded-md hover:brightness-95 transition"
         >
           <T k="nav.getQuote" />
         </Link>
