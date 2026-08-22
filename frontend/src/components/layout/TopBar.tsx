@@ -9,6 +9,15 @@
  * purpose, it scrolls away with the page, only the main nav bar (Navbar.tsx)
  * stays pinned once you've scrolled past this.
  *
+ * A translucent orange (`bg-orange/90`) instead of a flat solid color, and
+ * deliberately tight (small text, thin vertical padding, tighter gaps) so
+ * it reads as a compact accent strip sitting above the real header, not a
+ * second full-size nav bar. White text over it now (the plain dark/70 text
+ * used when this sat on white doesn't have enough contrast on orange), and
+ * the hover color moved from orange (would vanish on an orange background)
+ * to dark, still an on-brand touch, just from the other end of the
+ * palette instead.
+ *
  * Hidden below the sm breakpoint, a phone's already-narrow header has no
  * room for a second row of small text, and the same phone number and a
  * WhatsApp link already live in the mobile drawer (see Navbar.tsx).
@@ -34,20 +43,20 @@ function MailIcon() {
 
 export default function TopBar({ settings }: { settings: SiteSettings }) {
   return (
-    <div className="hidden sm:block bg-dark text-white/70 text-xs">
-      <div className="max-w-6xl mx-auto px-4 md:px-8 py-2 flex items-center justify-between">
+    <div className="hidden sm:block bg-orange/90 text-white text-[11px]">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-1.5 flex items-center justify-between">
         <span className="font-medium tracking-wide">{settings.address}</span>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
           <a
             href={`tel:${settings.phone_primary.replace(/\s/g, "")}`}
-            className="flex items-center gap-1.5 hover:text-orange transition-colors"
+            className="flex items-center gap-1.5 hover:text-dark transition-colors"
           >
             <PhoneIcon />
             {settings.phone_primary}
           </a>
           <a
             href={`mailto:${settings.email}`}
-            className="flex items-center gap-1.5 hover:text-orange transition-colors"
+            className="flex items-center gap-1.5 hover:text-dark transition-colors"
           >
             <MailIcon />
             {settings.email}
