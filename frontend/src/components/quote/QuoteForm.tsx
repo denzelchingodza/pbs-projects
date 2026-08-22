@@ -154,7 +154,7 @@ export default function QuoteForm({ products }: { products: Product[] }) {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="w-full bg-orange text-white font-semibold py-3 rounded-md hover:brightness-95 transition disabled:opacity-60"
+        className="shine-hover w-full bg-orange text-white font-semibold py-3 rounded-md hover:brightness-95 transition disabled:opacity-60"
       >
         {status === "submitting" ? t("quoteForm.sending", lang) : t("quoteForm.send", lang)}
       </button>

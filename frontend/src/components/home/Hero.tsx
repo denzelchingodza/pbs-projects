@@ -61,7 +61,7 @@ export default function Hero() {
             <div className="mt-9 flex flex-wrap gap-4">
               <a
                 href="#quote"
-                className="bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
+                className="shine-hover bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
               >
                 <T k="hero.ctaQuote" />
               </a>
