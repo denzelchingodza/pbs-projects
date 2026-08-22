@@ -16,6 +16,7 @@ import FindUs from "@/components/home/FindUs";
 import HowItWorks from "@/components/home/HowItWorks";
 import QuoteSection from "@/components/quote/QuoteSection";
 import Reveal from "@/components/ui/Reveal";
+import SectionSeam from "@/components/ui/SectionSeam";
 import { getSiteSettings, getProducts, getProjects, getTestimonials } from "@/lib/api";
 
 export default async function HomePage() {
@@ -35,12 +36,18 @@ export default async function HomePage() {
       <Reveal>
         <Stats settings={settings} />
       </Reveal>
+      {/* SectionSeam marks a few (not every) white/neutral-50 handoffs with a
+          small tick-mark divider, styled after a sliding window's own
+          track, instead of every section boundary just being an invisible
+          background-color change. */}
+      <SectionSeam tone="white" />
       <Reveal>
         <ProductsOverview products={products} projects={projects} />
       </Reveal>
       <Reveal>
         <FeaturedWork projects={projects} />
       </Reveal>
+      <SectionSeam tone="white" />
       <Reveal>
         <Testimonials testimonials={testimonials} />
       </Reveal>
@@ -65,6 +72,7 @@ export default async function HomePage() {
       <Reveal>
         <HowItWorks />
       </Reveal>
+      <SectionSeam tone="neutral" />
       <Reveal>
         <QuoteSection products={products} settings={settings} />
       </Reveal>
