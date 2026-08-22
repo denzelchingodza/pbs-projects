@@ -6,6 +6,7 @@ from app.core.rate_limit import rate_limit
 from app.database import get_db
 from app.models.quote import QuoteRequest
 from app.schemas.quote import QuoteCreate, QuoteOut
+from app.services.recaptcha_service import verify_recaptcha
 from app.services.whatsapp_service import notify_new_quote
 
 router = APIRouter()
@@ -30,6 +31,12 @@ def submit_quote(payload: QuoteCreate, db: Session = Depends(get_db)):
     if payload.website:
         # Honeypot field was filled in -> almost certainly a bot. Silently reject.
         raise HTTPException(status_code=400, detail="Invalid submission")
+
+    if not verify_recaptcha(payload.recaptcha_token):
+        raise HTTPException(
+            status_code=400,
+            detail="Could not verify you're not a robot, please try the checkbox again.",
+        )
 
     quote = QuoteRequest(
         full_name=payload.full_name,

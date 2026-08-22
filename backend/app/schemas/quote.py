@@ -23,6 +23,10 @@ class QuoteCreate(BaseModel):
     # Honeypot: a hidden field real users never fill in. Bots that auto-fill every
     # input on a form will populate it, so reject the submission if it's non-empty.
     website: str = Field(default="", exclude=True, max_length=200)
+    # The token Google's "I'm not a robot" widget produces once solved, sent
+    # to Google's own siteverify endpoint to confirm it's real (see
+    # services/recaptcha_service.py). Never stored, excluded from the model.
+    recaptcha_token: str = Field(default="", exclude=True, max_length=2000)
 
 
 class QuoteStatusUpdate(BaseModel):
