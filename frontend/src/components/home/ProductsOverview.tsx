@@ -16,6 +16,7 @@
 import Image from "next/image";
 import type { Product, Project } from "@/types";
 import SectionHeading from "@/components/ui/SectionHeading";
+import FrameCorners from "@/components/ui/FrameCorners";
 import { productSlugToCategory, coverPhotoForCategory } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
 import { t } from "@/lib/i18n";
@@ -51,7 +52,7 @@ export default function ProductsOverview({
                 className="group bg-white border border-neutral-200 rounded-xl overflow-hidden hover:border-orange/40 hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 {cover ? (
-                  <div className="relative aspect-[4/3] bg-neutral-900">
+                  <div className="shine-hover relative aspect-[4/3] bg-neutral-900">
                     <Image
                       src={mediaUrl(cover)}
                       alt={p.name}
@@ -59,7 +60,8 @@ export default function ProductsOverview({
                       sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute top-3 left-3">{badge}</div>
+                    <div className="absolute top-3 left-3 z-10">{badge}</div>
+                    <FrameCorners />
                   </div>
                 ) : (
                   <div className="p-6 pb-0">{badge}</div>

@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
+import FrameCorners from "@/components/ui/FrameCorners";
 import { getProducts, getProjects } from "@/lib/api";
 import { productSlugToCategory, coverPhotoForCategory } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
@@ -58,7 +59,7 @@ export default async function ProductsPage() {
                   className="group bg-white border border-neutral-200 rounded-xl overflow-hidden hover:border-orange/40 hover:shadow-md hover:-translate-y-0.5 transition-all"
                 >
                   {cover ? (
-                    <div className="relative aspect-[16/10] bg-neutral-900">
+                    <div className="shine-hover relative aspect-[16/10] bg-neutral-900">
                       <Image
                         src={mediaUrl(cover)}
                         alt={p.name}
@@ -66,7 +67,8 @@ export default async function ProductsPage() {
                         sizes="(max-width: 640px) 100vw, 50vw"
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                       />
-                      <div className="absolute top-4 left-4">{badge}</div>
+                      <div className="absolute top-4 left-4 z-10">{badge}</div>
+                      <FrameCorners />
                     </div>
                   ) : (
                     <div className="p-7 pb-0">{badge}</div>
@@ -101,7 +103,7 @@ export default async function ProductsPage() {
           </p>
           <Link
             href="/quote"
-            className="inline-block bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
+            className="shine-hover inline-block bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
           >
             Get a Free Quote
           </Link>

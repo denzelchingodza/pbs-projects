@@ -19,6 +19,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Project } from "@/types";
 import SectionHeading from "@/components/ui/SectionHeading";
+import FrameCorners from "@/components/ui/FrameCorners";
 import { categoryLabel } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
 import { t } from "@/lib/i18n";
@@ -45,7 +46,7 @@ function Card({
 
   return (
     <div
-      className={`group relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900 aspect-[4/3] shadow-sm hover:shadow-lg transition-shadow ${
+      className={`group shine-hover relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900 aspect-[4/3] shadow-sm hover:shadow-lg transition-shadow ${
         big ? "md:col-span-2 md:row-span-2 md:aspect-auto" : "md:aspect-auto"
       }`}
     >
@@ -79,6 +80,7 @@ function Card({
           <p className="text-white/70 text-sm mt-1">{CATEGORY_BLURB[project.category]}</p>
         )}
       </div>
+      <FrameCorners />
     </div>
   );
 }
