@@ -2223,3 +2223,152 @@ redesigns, the hero and section heading scale, the About photo mosaic,
 the footer spacing, and this log entry), so the history reads as a
 clear step by step record of what changed and why, not one large
 undifferentiated commit.
+
+---
+
+## Stage 48: A round of direct feedback, plus real spam protection
+
+**Context:** several separate, specific asks in one sitting after seeing
+the redesigned site live: turn the hero photo into a full background
+instead of a side panel, add some orange back into the now-plain-white
+main nav bar, bring the missing location map back (it had quietly gone
+missing from the homepage in Stage 44's About merge, only survived on
+the Contact page), make the top contact bar tighter and translucent
+orange instead of solid dark, and add a real "I'm not a robot" check to
+the quote form so it can't just be spammed.
+
+**Hero, now full-bleed (`Hero.tsx`):** the photo is the whole section
+background now, not a side panel, with a left-heavy dark gradient over
+it so the white heading stays readable while the photo itself still
+reads clearly on the right. The old "Harare · Zimbabwe" eyebrow line
+was dropped (both words already live in the heading and the footer),
+replaced with a short solid orange bar, a clearer brand mark on a photo
+background than small letter-spaced text would be.
+
+**Nav bar orange accent (`Navbar.tsx`):** a solid 3px orange line along
+the bottom edge of the white bar. The bar stays white on purpose (the
+real logo's true colors, see Stage 19), the line is what makes it read
+as on-brand at a glance instead of plain white.
+
+**Location map, back on the homepage (`FindUs.tsx`, new):** a "Find Us"
+section with the real address and the same `LocationMap` embed already
+used on Contact, placed right after the team section, closing out the
+"who we are, where we are" band before How It Works.
+
+**Top bar, tighter and translucent (`TopBar.tsx`):** `bg-orange/90`
+instead of solid dark, smaller text, thinner padding, tighter gaps. The
+hover color moved from orange to dark (orange text on an orange bar
+would vanish).
+
+**Real reCAPTCHA on the quote form (`recaptcha_service.py`, new,
+`schemas/quote.py`, `routers/quotes.py`, `QuoteForm.tsx`):** the
+honeypot field from Stage 1 catches simple bots, this adds Google's own
+"I'm not a robot" checkbox as a second, independent layer, verified
+server-side against Google's siteverify endpoint (the only place a
+token can actually be trusted, a browser-supplied token could just as
+easily be forged). Uses the widget's "implicit render" mode, a plain
+`<div class="g-recaptcha">` that Google's script fills with a hidden
+`g-recaptcha-response` field once solved, which then shows up in the
+form's own `FormData` automatically, no extra plumbing needed. Both
+sides gracefully skip verification entirely when no real key is
+configured (`RECAPTCHA_SECRET_KEY` empty on the backend,
+`NEXT_PUBLIC_RECAPTCHA_SITE_KEY` empty on the frontend), so local dev
+and the site right now both keep working exactly as before, honeypot
+only, until Denzel registers the real domain at
+google.com/recaptcha/admin and sends over the two keys.
+
+**Verified for real:** installed a fresh copy of the backend's
+dependencies in an isolated environment, ran the real migrations,
+started the actual FastAPI server, and posted real quote requests with
+`curl`, confirmed a submission with an empty reCAPTCHA token succeeds
+when no secret key is configured (today's real state), and correctly
+gets rejected once a secret key is set, the honeypot still blocks bots
+exactly as before either way. On the frontend, `tsc --noEmit` and a
+full production build both came back with zero errors across all 20
+routes, and the built app was started for real and its HTML checked to
+confirm the widget correctly does not render without a real Site Key,
+so nothing is broken while waiting on Denzel's Google registration.
+
+---
+
+## Stage 49: Making the site actually feel like glass and aluminum
+
+**Context:** direct feedback that the site talked about glass and
+aluminum without feeling like it, wanting real material-driven design
+woven through the whole public site, not just the copy. Seven concrete
+pieces, all built and applied site-wide, no functional changes.
+
+**Shared primitives first (`globals.css`, `FrameCorners.tsx`,
+`SectionSeam.tsx`):** a `.pane-grid` / `.pane-grid-light` CSS utility (a
+faint repeating-line grid, spaced like real window mullions, dark or
+white variant depending on what it sits on), a `.shine-hover` utility
+(a soft diagonal glare that sweeps across on hover, low opacity and
+skewed, the way light catches glass or polished aluminum), a
+`FrameCorners` component (four small L-shaped corner brackets overlaid
+on a photo, echoing how an aluminum extrusion actually joins at a
+corner), and a `SectionSeam` component (a thin tick-mark divider styled
+after a sliding window's track). Building these once, shared, meant
+every later piece stayed visually consistent instead of each place
+inventing its own version.
+
+**Nav bar, real frosted glass (`Navbar.tsx`):** `bg-white/90
+backdrop-blur-md` instead of solid white. The header is already
+`sticky`, so once you've scrolled, there's real page content sitting
+underneath the bar for the blur to actually blur, not just a flat
+translucent color with nothing behind it.
+
+**Every real project photo, framed (`FeaturedWork.tsx`,
+`ProductsOverview.tsx`, `app/products/page.tsx`, `AboutIntro.tsx`):**
+`FrameCorners` applied to the homepage's Our Work cards, both product
+card grids (photo teaser and full Products page), and the About photo
+mosaic, so a "frame" is a real visual detail borrowed from PBS's own
+work, not just a word.
+
+**Light-sweep shine, used selectively (`Hero.tsx`, `Navbar.tsx`,
+`QuoteForm.tsx`, `app/products/page.tsx`, `FeaturedWork.tsx`,
+`ProductsOverview.tsx`, `AboutIntro.tsx`):** the main orange CTA buttons
+site-wide and every real photo surface get `.shine-hover`, deliberately
+not applied to every element on the page, that would read as a gimmick
+rather than a material cue.
+
+**Window-pane grid, in three places (`Hero.tsx`, `Footer.tsx`,
+`QuoteSection.tsx`):** the grid sits behind the hero photo's dark
+overlay (naturally fading on the left where the text sits, showing more
+on the right where the photo's clearest), behind the whole footer, and
+behind the closing Quote section, each using the existing `-z-10`
+decorative-layer pattern already established for Hero's photo panel and
+TeamSection's portraits.
+
+**Section seam dividers, at three spots (`app/page.tsx`):** a small
+tick-mark divider at three (not every) white/neutral-50 boundaries on
+the homepage, Stats into Products, Featured Work into Testimonials, and
+How It Works into the Quote section, in place of what were previously
+just invisible background-color changes.
+
+**Icons, redrawn to mean something (`WhyChooseUs.tsx`,
+`HowItWorks.tsx`, `Stats.tsx`):** the generic tool/crate/pin icons in
+Why Choose Us became a glass pane catching light, an aluminum frame
+corner joint with ruler ticks, and a location pin with a small window
+inside it. How It Works' plain numbered circles became small square
+panes with a faint mullion cross behind each step number. Stats' three
+bare figures each picked up a small matching glyph above them, the
+same trade-tool, pane, and window-pin icons, so even the plain numbers
+strip carries the site's material language.
+
+**Hero's own glass reflection (`Hero.tsx`):** a soft, heavily blurred
+diagonal streak across the darkened photo, low opacity so it reads as
+light catching an actual glass surface rather than a visual glitch.
+
+**Verified for real:** a fresh isolated copy of the frontend passed
+`tsc --noEmit` with zero errors after every batch of changes in this
+round (checked incrementally, not just once at the end), and a full
+production build generated all 20 routes with zero errors. Started the
+real built app and fetched the actual homepage and Products page HTML,
+confirmed `pane-grid`, `shine-hover`, and `backdrop-blur-md` all
+genuinely render in the output, not just present in the source files.
+
+**This round was 8 separate commits**, the shared primitives, the
+frosted nav, the frame corners, the shine-hover pass, the hero
+reflection and grid, the footer and quote-section grid, the section
+seams, and the redrawn icons, each one buildable and reviewable on its
+own.
