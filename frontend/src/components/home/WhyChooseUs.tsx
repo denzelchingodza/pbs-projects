@@ -9,6 +9,13 @@
  * this is meant to read like something a real tradesman would say about
  * his own work.
  *
+ * Icons redrawn to actually be about glass and aluminum, not generic
+ * checkmarks: a glass pane catching light for trade experience, a frame
+ * corner joint with measurement ticks for "measured and built to fit," and
+ * a location pin with a small window inside it for being based in Harare,
+ * so even the small icon-badge details point back at what PBS actually
+ * builds instead of being interchangeable with any other trade's site.
+ *
  * Now a Client Component so the three titles and body lines follow the
  * current language, see lib/i18n.ts for the English and (once supplied)
  * Shona text.
@@ -29,10 +36,12 @@ const VALUES = [
     titleKey: "whyChooseUs.title1",
     bodyKey: "whyChooseUs.body1",
     icon: (
+      // A glass pane with light catching it diagonally, real trade
+      // experience shows in the finish, not just the frame.
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8622D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2 4.5 11.5a2.1 2.1 0 0 0 3 3L17.5 5" />
-        <path d="M17.5 5 19 3.5 21.5 6 20 7.5" />
-        <path d="M8.5 14.5 4 19l1 1 4.5-4.5" />
+        <rect x="3.5" y="3.5" width="17" height="17" rx="1.5" />
+        <path d="M7 15 15 7" strokeOpacity="0.55" />
+        <path d="M11 17 17 11" strokeOpacity="0.55" />
       </svg>
     ),
   },
@@ -40,9 +49,12 @@ const VALUES = [
     titleKey: "whyChooseUs.title2",
     bodyKey: "whyChooseUs.body2",
     icon: (
+      // An aluminum frame corner joint, the exact detail behind "measured
+      // and built to fit," with small ruler ticks along the upright.
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8622D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="7" width="18" height="10" rx="1" />
-        <path d="M7 7v3M11 7v3M15 7v3M19 7v3" />
+        <path d="M5 20V9a4 4 0 0 1 4-4h10" />
+        <path d="M5 16h2.5M5 12h2.5" strokeOpacity="0.6" />
+        <path d="M11.5 5v2.5M15.5 5v2.5" strokeOpacity="0.6" />
       </svg>
     ),
   },
@@ -50,9 +62,12 @@ const VALUES = [
     titleKey: "whyChooseUs.title3",
     bodyKey: "whyChooseUs.body3",
     icon: (
+      // A location pin with a small window pane inside it, based in
+      // Harare, in the material PBS actually works in.
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8622D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" />
-        <circle cx="12" cy="10" r="2.5" />
+        <rect x="8.75" y="7.75" width="6.5" height="5" rx="0.5" strokeOpacity="0.8" />
+        <path d="M12 7.75v5M8.75 10.25h6.5" strokeOpacity="0.5" />
       </svg>
     ),
   },

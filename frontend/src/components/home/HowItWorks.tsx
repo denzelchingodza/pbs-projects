@@ -11,11 +11,19 @@
  * And there is no invented turnaround time, how long a job takes
  * genuinely depends on its size and scope, so the copy says that
  * plainly instead of a made up "done in 3 days" promise.
+ *
+ * The step badge is a small square pane (rounded-md, not a plain circle)
+ * with a faint mullion cross behind the number, the same window-pane
+ * language used elsewhere on the site (see globals.css's .pane-grid),
+ * shrunk down to a single tile.
  */
 function StepIcon({ children }: { children: React.ReactNode }) {
   return (
-    <span className="w-11 h-11 rounded-full bg-orange/10 text-orange flex items-center justify-center shrink-0 font-bold text-sm">
-      {children}
+    <span className="relative w-11 h-11 rounded-md bg-orange/10 text-orange flex items-center justify-center shrink-0 font-bold text-sm overflow-hidden">
+      <svg aria-hidden="true" viewBox="0 0 44 44" className="absolute inset-0 w-full h-full">
+        <path d="M22 2v40M2 22h40" stroke="currentColor" strokeOpacity="0.25" strokeWidth="1.5" />
+      </svg>
+      <span className="relative">{children}</span>
     </span>
   );
 }
