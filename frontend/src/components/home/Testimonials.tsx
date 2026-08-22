@@ -52,7 +52,7 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
   }, [next, testimonials.length]);
 
   return (
-    <section className="px-6 md:px-8 py-20 bg-white">
+    <section className="px-6 md:px-8 py-20 bg-paper">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
           eyebrow={t("testimonials.eyebrow", lang)}

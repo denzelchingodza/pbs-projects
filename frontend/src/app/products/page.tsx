@@ -23,7 +23,7 @@ export default async function ProductsPage() {
 
   return (
     <main>
-      <section className="px-6 md:px-8 pt-16 pb-14 md:pt-20 bg-white">
+      <section className="px-6 md:px-8 pt-16 pb-14 md:pt-20 bg-paper">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-4">
             What We Build
@@ -44,7 +44,7 @@ export default async function ProductsPage() {
       </section>
 
       <Reveal>
-        <section className="px-6 md:px-8 pb-20 bg-white">
+        <section className="px-6 md:px-8 pb-20 bg-paper">
           <div className="max-w-5xl mx-auto grid sm:grid-cols-2 gap-6">
             {products.map((p: { id: number; name: string; slug: string; description?: string }, i: number) => {
               const cover = coverPhotoForCategory(projects, productSlugToCategory(p.slug));

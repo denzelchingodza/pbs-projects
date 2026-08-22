@@ -6,6 +6,12 @@ module.exports = {
       colors: {
         orange: "#E8622D",
         dark: "#231F20",
+        // A warm off-white instead of flat #ffffff for section backgrounds
+        // (see Stage 50 in BUILD_LOG.md), pure white was reading as blank,
+        // undifferentiated space. Cards, buttons, and other real surfaces
+        // still use plain white, so they visibly lift off this warmer base
+        // instead of disappearing flush into it.
+        paper: "#F7F2E9",
       },
       fontFamily: {
         // Set once here via CSS variables that layout.tsx defines using

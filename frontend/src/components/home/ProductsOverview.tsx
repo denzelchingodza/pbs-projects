@@ -31,7 +31,7 @@ export default function ProductsOverview({
 }) {
   const { lang } = useLanguage();
   return (
-    <section id="products" className="px-6 md:px-8 py-20 bg-white">
+    <section id="products" className="px-6 md:px-8 py-20 bg-paper">
       <div className="max-w-6xl mx-auto">
         <SectionHeading
           eyebrow={t("products.eyebrow", lang)}

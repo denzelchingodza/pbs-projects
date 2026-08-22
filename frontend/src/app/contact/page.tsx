@@ -44,7 +44,7 @@ export default async function ContactPage() {
 
   return (
     <main>
-      <section className="px-6 md:px-8 pt-16 pb-14 md:pt-20 bg-white">
+      <section className="px-6 md:px-8 pt-16 pb-14 md:pt-20 bg-paper">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-4">
             Get In Touch
@@ -60,7 +60,7 @@ export default async function ContactPage() {
       </section>
 
       <Reveal>
-        <section className="px-6 md:px-8 pb-16 bg-white">
+        <section className="px-6 md:px-8 pb-16 bg-paper">
           <div className="max-w-5xl mx-auto grid sm:grid-cols-3 gap-5">
             {actions.map((action) => (
               <a

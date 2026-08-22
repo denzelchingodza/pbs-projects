@@ -115,7 +115,7 @@ function TeamCard({ member, reversed }: { member: TeamMember; reversed: boolean 
 
 export default function TeamSection() {
   return (
-    <section className="px-6 md:px-8 py-20 bg-white">
+    <section className="px-6 md:px-8 py-20 bg-paper">
       <div className="max-w-5xl mx-auto">
         <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3 text-center">
           Leadership
