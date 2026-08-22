@@ -2372,3 +2372,52 @@ frosted nav, the frame corners, the shine-hover pass, the hero
 reflection and grid, the footer and quote-section grid, the section
 seams, and the redrawn icons, each one buildable and reviewable on its
 own.
+
+---
+
+## Stage 50: Real typography, and an end to flat white
+
+**Context:** direct feedback that the font looked generic, "something
+you'd expect on any website that wasn't given too much thought," and
+that the site's white sections felt boring and empty. Asked directly
+which typographic direction fit PBS best (a technical/architectural
+pairing, a single bold industrial family, or a display serif for
+warmth), the answer was Space Grotesk for headings paired with the
+existing Inter for body copy, a distinctive geometric face associated
+with technical and architectural work, a real match for a precision
+glass and aluminum fabricator.
+
+**Second typeface added (`app/layout.tsx`, `tailwind.config.js`,
+`globals.css`):** `next/font/google` now loads Space Grotesk alongside
+Inter, exposed as its own CSS variable and Tailwind `font-display`
+family. Rather than hunting down and editing every heading in every
+component individually, one rule in `globals.css` (`h1, h2, h3, h4 {
+font-family: ... }`) applies it to every heading site-wide, public
+pages and the admin panel both, in one place, so nothing can drift out
+of sync later the way the old three-separate-category-lists bug did
+back in Stage 10. Also applied directly to the two non-heading elements
+that should visually match, the logo wordmark (`Logo.tsx`) and Stats'
+big numbers (`Stats.tsx`).
+
+**Flat white replaced with a warm paper tone (`tailwind.config.js`, a
+new `paper` color, `#F7F2E9`):** every major section background across
+the public site that was plain `bg-white` (Products, Our Team, Find Us,
+How It Works, Testimonials, and both sections on the Products and
+Contact pages) now uses this instead. Real cards, buttons, and other
+actual surfaces inside those sections stay true white on purpose, so
+they now visibly lift off the warmer page background instead of
+disappearing flush into it, real depth instead of one undifferentiated
+white field. Chosen specifically to still read as clearly different
+from the existing `neutral-50` gray bands (a near-identical warm white
+would have collapsed the site's whole white/gray alternation rhythm
+back into one flat tone), so the established section-banding pattern
+from Stage 9 onward still holds.
+
+**Verified for real:** a fresh isolated copy of the frontend needed a
+second font mock added (Space Grotesk's real Google Fonts URL,
+discovered the same way Inter's was back in Stage 9, by reading the
+actual build error) before a full production build would complete, then
+passed `tsc --noEmit` and generated all 20 routes with zero errors.
+Started the real built app and confirmed `bg-paper` genuinely renders
+in the homepage's actual output HTML (8 separate uses), not just
+present in the source files.
