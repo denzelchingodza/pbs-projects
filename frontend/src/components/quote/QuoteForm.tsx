@@ -6,12 +6,36 @@
  * input named "website" that real visitors never see or fill in, but that
  * simple bots which auto-fill every field on a form will populate. If it's
  * non-empty, the backend silently rejects the submission as spam.
+ *
+ * The real "I'm not a robot" checkbox (Google reCAPTCHA v2) sits alongside
+ * it as a second, independent layer, catching the more sophisticated bots
+ * the honeypot alone doesn't stop. Only renders once a real Site Key is set
+ * (NEXT_PUBLIC_RECAPTCHA_SITE_KEY, see .env.local.example), it's not
+ * something I can generate, it comes from registering the real domain at
+ * google.com/recaptcha/admin. Until that's set, the form works exactly as
+ * it did before, honeypot only, the backend does the same graceful
+ * skip on its side (see recaptcha_service.py).
+ *
+ * Using the "implicit render" version of the widget on purpose: a plain
+ * `<div class="g-recaptcha">` inside the form, Google's script finds it and
+ * injects a hidden `g-recaptcha-response` field once solved, which then
+ * shows up in this form's own FormData automatically, the same read pattern
+ * every other field here already uses, no extra plumbing needed.
  */
 import { useState } from "react";
+import Script from "next/script";
 import { apiPost } from "@/lib/api";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import type { Product } from "@/types";
+
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
+declare global {
+  interface Window {
+    grecaptcha?: { reset: () => void };
+  }
+}
 
 export default function QuoteForm({ products }: { products: Product[] }) {
   const { lang } = useLanguage();
@@ -39,12 +63,17 @@ export default function QuoteForm({ products }: { products: Product[] }) {
         phone: data.get("phone"),
         product: data.get("product"),
         details: data.get("details"),
+        recaptcha_token: data.get("g-recaptcha-response") || "",
       });
       setStatus("success");
       form.reset();
     } catch {
       setStatus("error");
       setErrorMsg(t("quoteForm.errorMsg", lang));
+      // A reCAPTCHA token is single-use, without this the checkbox would
+      // stay "solved" on screen while silently no longer being valid,
+      // leaving no way to actually retry.
+      window.grecaptcha?.reset();
     }
   }
 
@@ -112,6 +141,13 @@ export default function QuoteForm({ products }: { products: Product[] }) {
         placeholder={t("quoteForm.detailsPlaceholder", lang)}
         className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
       />
+
+      {RECAPTCHA_SITE_KEY && (
+        <>
+          <Script src="https://www.google.com/recaptcha/api.js" strategy="afterInteractive" />
+          <div className="g-recaptcha mb-5" data-sitekey={RECAPTCHA_SITE_KEY} />
+        </>
+      )}
 
       {status === "error" && <p className="text-sm text-red-600 mb-4">{errorMsg}</p>}
 
