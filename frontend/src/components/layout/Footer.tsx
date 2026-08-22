@@ -10,6 +10,10 @@
  * jdwglass.co.za reference site. No social icons added, SiteSettings has no
  * social links to draw from, and a row of dead icon links would be worse
  * than none at all.
+ *
+ * A faint window-pane grid sits behind the whole footer (`-z-10`, same
+ * pattern already used for the decorative panel behind Hero's photo and
+ * TeamSection's portraits), the last material cue before the page ends.
  */
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
@@ -19,7 +23,8 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-dark text-neutral-300 px-6 pt-20 pb-10">
+    <footer className="relative bg-dark text-neutral-300 px-6 pt-20 pb-10">
+      <div className="absolute inset-0 pane-grid-light -z-10" aria-hidden="true" />
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 pb-10 border-b border-neutral-700">
         <div>
           <Logo className="mb-4" dark />

@@ -8,6 +8,10 @@
  * Now a Client Component so its heading follows the current language, the
  * actual QuoteForm below it (and its own field labels) is translated
  * separately, see QuoteForm.tsx.
+ *
+ * A faint window-pane grid sits behind the whole section (`-z-10`, same
+ * pattern as the decorative panel behind Hero's photo), the page's closing
+ * section carries the same material cue everything above it does.
  */
 import type { Product, SiteSettings } from "@/types";
 import QuoteForm from "./QuoteForm";
@@ -25,7 +29,8 @@ export default function QuoteSection({
 }) {
   const { lang } = useLanguage();
   return (
-    <section id="quote" className="px-6 md:px-8 py-20 bg-neutral-50">
+    <section id="quote" className="relative px-6 md:px-8 py-20 bg-neutral-50">
+      <div className="absolute inset-0 pane-grid -z-10" aria-hidden="true" />
       <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-14 items-start">
         <div>
           <SectionHeading
