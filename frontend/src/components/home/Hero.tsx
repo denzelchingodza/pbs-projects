@@ -14,6 +14,15 @@
  * neutral-50 page underneath for a thin text label to sit clearly against,
  * and the brand orange still needs to read immediately, a small solid block
  * of it does that more clearly than small letter-spaced text would here.
+ *
+ * Two more layers sit between the photo and the text now: a faint
+ * window-pane grid (`.pane-grid-light`, see globals.css) placed under the
+ * darkening gradient so it naturally fades out on the left where the text
+ * sits and shows a little more on the right where the photo itself is
+ * clearest, and a soft diagonal light streak above everything, the kind of
+ * glare that shows up in real photos of actual glass and polished aluminum,
+ * so the hero itself looks like it's being seen through the material PBS
+ * works with, not just described in the copy next to it.
  */
 import Image from "next/image";
 import T from "@/components/i18n/T";
@@ -41,11 +50,18 @@ export default function Hero() {
           sizes="100vw"
           className="object-cover animate-hero-zoom motion-reduce:animate-none"
         />
+        <div className="absolute inset-0 pane-grid-light" aria-hidden="true" />
         {/* Darkens the photo just enough for white text to stay readable
             everywhere on it, heavier on the left where the text sits,
             lighter toward the right so the photo itself still reads clearly,
             not just a flat dark tint over the whole thing. */}
         <div className="absolute inset-0 bg-gradient-to-r from-dark/85 via-dark/60 to-dark/30" />
+        {/* A soft, static diagonal glare, low opacity and heavily blurred so
+            it reads as light catching glass rather than a design glitch. */}
+        <div
+          aria-hidden="true"
+          className="absolute -inset-y-16 left-[55%] w-1/5 bg-white/10 -rotate-12 blur-2xl pointer-events-none"
+        />
       </div>
 
       <div className="relative px-6 md:px-8 pt-24 pb-24 md:pt-36 md:pb-36">
