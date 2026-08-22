@@ -13,6 +13,19 @@ html {
   color: #ffffff;
 }
 
+/* Every heading site-wide, public pages and the admin panel both, renders
+   in the display face (Space Grotesk) instead of the body face (Inter),
+   real typographic contrast between "this is a heading" and "this is body
+   copy" instead of one typeface doing both jobs everywhere, which is what
+   actually read as generic. One rule here instead of editing every heading
+   in every component individually, and nothing drifts out of sync later. */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+}
+
 /* Every button and link across the whole site relied on the browser's own
    default focus outline, present but never actually styled, so it looked
    different (or in some cases barely visible, especially on the dark

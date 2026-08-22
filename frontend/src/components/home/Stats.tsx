@@ -60,7 +60,7 @@ export default function Stats({ settings }: { settings: SiteSettings }) {
         {items.map((item) => (
           <div key={item.key} className="py-10 text-center">
             <div className="flex justify-center mb-2">{item.icon}</div>
-            <div className="text-3xl sm:text-4xl font-bold text-dark tracking-tight">
+            <div className="font-display text-3xl sm:text-4xl font-bold text-dark tracking-tight">
               {item.value}
             </div>
             <div className="text-neutral-500 text-xs sm:text-sm mt-1.5">

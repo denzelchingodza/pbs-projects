@@ -12,6 +12,10 @@
  *   backgrounds (footer, mobile menu, admin sidebar).
  * - onOrange: white "PBS", white/80 "PROJECTS", white icon, for the orange
  *   navbar, where an orange icon or dark gray text would lose contrast.
+ *
+ * The wordmark itself uses the display face (Space Grotesk, see
+ * globals.css and tailwind.config.js), not the body face, the one place
+ * on the page that's purely a brand mark rather than a heading or copy.
  */
 export default function Logo({
   className = "",
@@ -37,10 +41,10 @@ export default function Logo({
           strokeLinejoin="round"
         />
       </svg>
-      <span className={`font-extrabold tracking-tight text-lg whitespace-nowrap ${pbsColorClass}`}>
+      <span className={`font-display font-extrabold tracking-tight text-lg whitespace-nowrap ${pbsColorClass}`}>
         PBS
       </span>
-      <span className={`font-semibold text-[9px] tracking-[0.3em] whitespace-nowrap ${projectsColorClass}`}>
+      <span className={`font-display font-semibold text-[9px] tracking-[0.3em] whitespace-nowrap ${projectsColorClass}`}>
         PROJECTS
       </span>
     </span>

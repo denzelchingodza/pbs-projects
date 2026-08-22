@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import TopBar from "@/components/layout/TopBar";
 import Navbar from "@/components/layout/Navbar";
@@ -11,12 +11,16 @@ import { LanguageProvider } from "@/components/i18n/LanguageProvider";
 import { getSiteSettings } from "@/lib/api";
 import { SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION } from "@/lib/seo";
 
-// next/font downloads Inter once at build time and self-hosts it (no request
-// to Google's servers at page-load, unlike a plain <link> import), then
-// exposes it as a CSS variable we wire into Tailwind in tailwind.config.js.
-// This replaces the old generic system-font look with a real, consistent
-// typeface across every page.
+// next/font downloads both fonts once at build time and self-hosts them (no
+// request to Google's servers at page-load, unlike a plain <link> import),
+// then exposes each as its own CSS variable, wired into Tailwind in
+// tailwind.config.js as `font-sans` (Inter, body copy) and `font-display`
+// (Space Grotesk, every heading, see globals.css's `h1-h4` rule). Inter
+// alone, used for absolutely everything, was the exact "looks like any
+// other website" problem this was meant to fix, headings now carry real,
+// distinct character instead of just being bigger/bolder Inter.
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
 
 // metadataBase turns every relative URL used below (the Open Graph image,
 // individual pages' canonical links) into a full address automatically,
@@ -69,7 +73,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const settings = await getSiteSettings();
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans text-dark antialiased">
         <StructuredData settings={settings} />
         <LanguageProvider>
