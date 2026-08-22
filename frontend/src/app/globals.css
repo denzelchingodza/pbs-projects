@@ -128,3 +128,86 @@ button:not(:disabled):active {
     transform: none;
   }
 }
+
+/* --- Glass & window motifs, used across the whole site to actually feel
+   like a glass and aluminum company's site, not just say it. See
+   FrameCorners.tsx and SectionSeam.tsx for the two matching components. --- */
+
+/* A quiet window-pane grid, thin lines spaced like real mullions, used as a
+   background texture on specific accent areas (Hero, Footer, QuoteSection),
+   never the whole page, always at low opacity so it reads as a material
+   detail, not a busy pattern fighting the actual content. */
+.pane-grid {
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(35, 31, 32, 0.07) 0,
+      rgba(35, 31, 32, 0.07) 1px,
+      transparent 1px,
+      transparent 56px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(35, 31, 32, 0.07) 0,
+      rgba(35, 31, 32, 0.07) 1px,
+      transparent 1px,
+      transparent 56px
+    );
+}
+
+/* Same grid, in white, for use over a dark or photo background (the Hero's
+   dark overlay, mainly) instead of the dark-on-light version above. */
+.pane-grid-light {
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.09) 0,
+      rgba(255, 255, 255, 0.09) 1px,
+      transparent 1px,
+      transparent 56px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.09) 0,
+      rgba(255, 255, 255, 0.09) 1px,
+      transparent 1px,
+      transparent 56px
+    );
+}
+
+/* A soft diagonal glare that sweeps across on hover, the way light catches
+   an actual glass or polished aluminum surface. Applied selectively (the
+   main CTA button, product/photo cards, see FrameCorners.tsx usages),
+   never on every element, that would read as a gimmick rather than a
+   material cue. Needs `relative overflow-hidden` on the element itself,
+   both included here so nothing using this class has to remember them. */
+.shine-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 80%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+
+.shine-hover:hover::after {
+  left: 130%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shine-hover::after {
+    display: none;
+  }
+}
