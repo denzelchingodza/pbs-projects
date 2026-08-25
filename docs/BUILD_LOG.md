@@ -2497,3 +2497,78 @@ again from a fresh copy of the finished code, `tsc` clean, all 20
 routes built with zero errors, and `/`, `/about`, `/gallery`,
 `/products`, `/contact`, and `/quote` all confirmed returning 200 from
 the real running server.
+
+---
+
+## Stage 52: The gallery page, more orange, real typeface, and honest copy
+
+**Context:** direct feedback after Stage 51 that the changes weren't
+visible on the real site (the answer: everything up to that point was
+only committed locally, never pushed, see the standing reminder at the
+end of every round), plus four real requests: redesign the gallery
+page, spread the orange brand color further, make the distinctive
+typeface actually register instead of only showing up in headings,
+and make the site's copy sound like this specific business rather
+than a template.
+
+**The gallery page had missed Stage 49 entirely.** Every other page
+went through that stage's glass/material design pass (aluminum corner
+brackets, shine-hover sweeps, orange accents), `/gallery` didn't,
+which is exactly the flat, generic feeling being pointed out.
+`FilterBar.tsx`'s active category chip is now brand orange instead of
+plain dark. `GalleryGrid.tsx`'s tiles now carry the same corner
+brackets and shine sweep as every other photo card on the site, plus a
+small orange category badge on hover, and each category section
+heading now sits next to a short orange accent bar.
+`BeforeAfterSlider.tsx`'s divider line and "After" badge are orange
+now too, before is neutral, after is the brand color, so the color
+itself carries the "this is the finished side" meaning. The page's own
+intro band picked up an accent bar and a small photo/category count
+row, and the closing quote CTA picked up the same pane-grid backdrop
+used on Footer.tsx and QuoteSection.tsx.
+
+**The distinctive typeface (Space Grotesk, from Stage 50) now shows up
+well past just headings.** It only applied to `h1`-`h4` before, so on
+any page where the biggest heading was already past the fold, or
+scrolled past quickly, most visitors never actually saw it. It's now
+also on `SectionHeading.tsx`'s eyebrow label (used at the top of every
+single section on the site, the biggest single-file reach of this
+change), the header's nav links and both "Get a Quote" buttons (the
+one element present on literally every page), and the site's six
+primary call-to-action buttons (Hero, gallery, products, testimonials,
+featured work, and the quote form's submit button).
+
+**Copy pass, About text and product descriptions, grounded in real
+facts instead of template language.** The About intro
+(`lib/i18n.ts`) now names the real workshop location (Sherwood Road,
+Waterfalls) and is honest about what the photos actually show: of the
+88 real completed jobs currently in the gallery, 54 are windows and 32
+are doors, with only a handful of shower cubicles and zero shop
+fronts, ceilings, or cabinets yet, so the intro now says plainly that
+most of the gallery is windows and doors rather than implying even
+coverage across all six product lines. The six Product descriptions
+picked up the same honesty (windows named as "the most photographed
+work in the gallery," doors described as "usually fitted on the same
+job as the windows," both true of the real data) using a new one-off
+script, `backend/update_product_descriptions.py`, since there's no
+admin screen for editing products yet (only Projects, in Admin >
+Gallery, can be renamed there directly by Denzel himself, no code
+needed). Confirmed the updated text is live by running the script
+against a real copy of the database and hitting the real
+`GET /api/products` endpoint.
+
+**Project titles and a draft testimonial, handed off rather than
+built,** since these live in the database and are things only Denzel
+can act on: five sharper, more specific title suggestions for the
+currently featured projects (looked at the real photos to write them,
+not guessed), and a draft testimonial paired with the double storey
+home glazing job's photo, meant to be reviewed, edited, and attributed
+to the real client (or replaced entirely) before it goes anywhere
+near the live site, not published as-is.
+
+**Verified for real:** the same isolated build cycle as every other
+stage, `tsc --noEmit` clean, a full production build generating all 20
+routes with zero errors, a real `next start` server confirming every
+public route still returns 200, and the actual rendered homepage HTML
+checked directly for the new copy, the highlight mark, and 47 separate
+uses of the typeface class, not just present in the source files.
