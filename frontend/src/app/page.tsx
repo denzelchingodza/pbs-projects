@@ -17,6 +17,7 @@ import HowItWorks from "@/components/home/HowItWorks";
 import QuoteSection from "@/components/quote/QuoteSection";
 import Reveal from "@/components/ui/Reveal";
 import SectionSeam from "@/components/ui/SectionSeam";
+import ScrollProgressRail from "@/components/ui/ScrollProgressRail";
 import { getSiteSettings, getProducts, getProjects, getTestimonials } from "@/lib/api";
 
 export default async function HomePage() {
@@ -29,6 +30,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <ScrollProgressRail />
       {/* Hero is the first thing anyone sees, it renders in fully rather
           than fading up like everything below it, nothing should look
           like it's still loading in the one spot that paints first. */}
