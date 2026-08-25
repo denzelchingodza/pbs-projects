@@ -24,12 +24,16 @@
  * so the hero itself looks like it's being seen through the material PBS
  * works with, not just described in the copy next to it.
  *
- * One more layer now, a warm orange glow rising from the bottom, blended
- * with `multiply` so it adds color without washing out the darkening
- * gradient's contrast. The hero is the one place on the page meant to feel
- * unmistakably orange at a glance, the way a single dominant color can own
- * a whole section, rather than orange being spread thin as a same-size
- * accent in a dozen smaller spots across the page.
+ * The photo itself is duotoned now, not shown in full color: grayscaled,
+ * then recolored with a dark-to-orange gradient using `mix-blend-mode:
+ * color` (the gradient's hue paints onto the photo's own light/dark values,
+ * so the actual texture of the aluminum and brick still reads, just tinted
+ * rather than washed over). Dark and desaturated up near the text for
+ * contrast, warming into real orange lower down, this is what ties this
+ * real project photo directly into the brand instead of it just being a
+ * photo with an orange button next to it. A separate plain darkening
+ * scrim still sits on top of that, purely for the heading's contrast, kept
+ * as its own normal-blend layer so it doesn't fight the duotone's colors.
  */
 import Image from "next/image";
 import T from "@/components/i18n/T";
@@ -55,18 +59,19 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover animate-hero-zoom motion-reduce:animate-none"
+          className="object-cover grayscale animate-hero-zoom motion-reduce:animate-none"
         />
         <div className="absolute inset-0 pane-grid-light" aria-hidden="true" />
-        {/* Darkens the photo just enough for white text to stay readable
-            everywhere on it, heavier on the left where the text sits,
-            lighter toward the right so the photo itself still reads clearly,
-            not just a flat dark tint over the whole thing. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-dark/85 via-dark/60 to-dark/30" />
-        {/* The dominant orange wash, rising warm from the bottom edge,
-            multiplied so it colors the scene without flattening the
-            darkening gradient above it into a lighter, lower-contrast one. */}
-        <div className="absolute inset-0 bg-gradient-to-t from-orange/55 via-orange/15 to-transparent mix-blend-multiply" />
+        {/* The duotone recolor, dark up top (near-neutral, barely tints the
+            grayscale photo) warming into full orange toward the bottom,
+            painted onto the photo's own light and dark values via
+            mix-blend-mode: color rather than sitting as a flat tint over it. */}
+        <div className="absolute inset-0 bg-gradient-to-t from-orange via-orange/70 to-dark mix-blend-color" />
+        {/* Plain darkening scrim, left-heavy where the heading sits, right
+            side left clear so the duotone's own color still reads there.
+            Normal blend on purpose, this is only about text contrast, the
+            color work above already did the actual recoloring. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-dark/70 via-dark/35 to-transparent" />
         {/* A soft, static diagonal glare, low opacity and heavily blurred so
             it reads as light catching glass rather than a design glitch. */}
         <div
