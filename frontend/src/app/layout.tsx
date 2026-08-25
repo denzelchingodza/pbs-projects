@@ -5,6 +5,7 @@ import TopBar from "@/components/layout/TopBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
+import BackToTop from "@/components/layout/BackToTop";
 import PublicChrome from "@/components/layout/PublicChrome";
 import StructuredData from "@/components/seo/StructuredData";
 import { LanguageProvider } from "@/components/i18n/LanguageProvider";
@@ -85,6 +86,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <PublicChrome>
             <Footer settings={settings} />
             <WhatsAppFloat settings={settings} />
+            <BackToTop />
           </PublicChrome>
         </LanguageProvider>
       </body>
