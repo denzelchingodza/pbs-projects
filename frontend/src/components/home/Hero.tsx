@@ -23,6 +23,13 @@
  * glare that shows up in real photos of actual glass and polished aluminum,
  * so the hero itself looks like it's being seen through the material PBS
  * works with, not just described in the copy next to it.
+ *
+ * One more layer now, a warm orange glow rising from the bottom, blended
+ * with `multiply` so it adds color without washing out the darkening
+ * gradient's contrast. The hero is the one place on the page meant to feel
+ * unmistakably orange at a glance, the way a single dominant color can own
+ * a whole section, rather than orange being spread thin as a same-size
+ * accent in a dozen smaller spots across the page.
  */
 import Image from "next/image";
 import T from "@/components/i18n/T";
@@ -56,6 +63,10 @@ export default function Hero() {
             lighter toward the right so the photo itself still reads clearly,
             not just a flat dark tint over the whole thing. */}
         <div className="absolute inset-0 bg-gradient-to-r from-dark/85 via-dark/60 to-dark/30" />
+        {/* The dominant orange wash, rising warm from the bottom edge,
+            multiplied so it colors the scene without flattening the
+            darkening gradient above it into a lighter, lower-contrast one. */}
+        <div className="absolute inset-0 bg-gradient-to-t from-orange/55 via-orange/15 to-transparent mix-blend-multiply" />
         {/* A soft, static diagonal glare, low opacity and heavily blurred so
             it reads as light catching glass rather than a design glitch. */}
         <div
