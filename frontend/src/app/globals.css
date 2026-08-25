@@ -224,3 +224,14 @@ button:not(:disabled):active {
     display: none;
   }
 }
+
+/* An editorial highlighter stroke behind one key phrase (see T.tsx's
+   ==marker== parsing and about.title's translation string), a soft
+   brand-orange band sitting behind the text rather than a full solid
+   background, so it reads like a highlighter pen over the phrase, not a
+   button or a tag. Used exactly once on the site, on purpose, a mark used
+   everywhere stops meaning anything. */
+.highlight-mark {
+  background: linear-gradient(transparent 55%, rgba(232, 98, 45, 0.32) 55%);
+  padding: 0 0.1em;
+}

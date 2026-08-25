@@ -104,7 +104,7 @@ export const translations: Record<string, Entry> = {
 
   // About page
   "about.eyebrow": { en: "About Us" },
-  "about.title": { en: "Built on real trade experience, not just a business plan" },
+  "about.title": { en: "Built on real trade experience, not just ==a business plan==" },
   "about.introWithYears": {
     en: "{business} is a Harare based glass and aluminum specialist, running for {years}+ years, covering windows, doors, shower cubicles, shop fronts, suspended ceilings and cabinets for homes, shops, and offices across Zimbabwe.",
   },
