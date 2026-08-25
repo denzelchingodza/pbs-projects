@@ -2421,3 +2421,79 @@ passed `tsc --noEmit` and generated all 20 routes with zero errors.
 Started the real built app and confirmed `bg-paper` genuinely renders
 in the homepage's actual output HTML (8 separate uses), not just
 present in the source files.
+
+---
+
+## Stage 51: A "smooth to scroll" pass, inspired by funema.co
+
+**Context:** asked directly what makes a reference site (funema.co)
+feel so polished, then to bring that same "flow," in orange and built
+around PBS specifically, not a copy of funema's own content. Laid out
+as seven pieces before writing any code, approved all at once, then
+built and verified one piece at a time rather than as one big change.
+
+**Piece 1 and 2, the hero photo (`Hero.tsx`):** the hero photo is no
+longer shown in full color. It's grayscaled, then recolored with a
+dark-to-orange gradient using `mix-blend-mode: color`, so the
+gradient's hue paints onto the photo's own light and dark values, the
+real texture of the aluminum and brick still reads, just tinted rather
+than washed over, dark near the heading for contrast, warming into
+real orange lower down. An early, simpler version just laid a flat
+orange tint over the photo (multiply blend), that was replaced by this
+proper duotone once it became clear stacking both would look muddy
+rather than intentional. Scoped to the hero photo only, not every photo
+on the page, one dominant colored moment reads as a deliberate choice,
+the same treatment everywhere would have diluted it into decoration.
+
+**Piece 3, a scroll-progress rail (`ScrollProgressRail.tsx`):** a thin
+vertical line on the right edge of the screen, hidden on phones, that
+fills in orange as you scroll down the homepage. Purely a "how far
+through the page am I" cue, `aria-hidden` since it carries no real
+navigation function.
+
+**Piece 4, a floating back-to-top button (`BackToTop.tsx`):** appears
+once you've scrolled 500px down, sits to the left of the WhatsApp
+button rather than stacked above it, so it never collides with
+WhatsApp's own chat bubble popup, which already grows upward from that
+same corner.
+
+**Piece 5, the hero photo stays pinned (`Hero.tsx`, `Stats.tsx`):** the
+hero now sits inside a taller wrapper with the photo itself
+`sticky top-0`, so it holds still a beat longer as you start
+scrolling, rather than immediately scrolling away like every other
+section. The Stats strip right below it now rises up and covers the
+pinned photo from underneath, pulled up with a negative top margin and
+a rounded top edge, with a soft upward shadow to sell the "lifting into
+place" look, the same pinned-then-covered opening moment funema.co
+uses.
+
+**Piece 6, one highlighted phrase (`T.tsx`, `lib/i18n.ts`,
+`globals.css`):** the About headline's key phrase, "not just a business
+plan," now sits behind a soft orange highlighter stroke. Rather than
+hand-building a one-off `<mark>` in that single component, the
+translation renderer (`T.tsx`) itself now understands a
+`==double equals==` marker in any translated string and wraps that
+part in the highlight automatically, so the technique exists once,
+shared, the same way every other cross-cutting piece of this site
+does. Used in exactly one place on purpose, a highlighter mark used
+everywhere stops meaning anything.
+
+**Piece 7, a real case-study card (`FeaturedWork.tsx`):** the single
+biggest, lead project card in Our Work is no longer just a bigger
+version of the same photo-and-caption tile the other four cards use.
+It's now a proper case-study card: photo on top, then its own panel
+below with a vertical orange accent bar, a category label, the job's
+real title and a one-line description, and two real links out, "See
+the job" into the full gallery and "Get a quote like this" straight to
+the quote form. The four supporting cards keep the original simple
+tile on purpose, that contrast is what makes the lead card read as one
+dominant story instead of five equal thumbnails.
+
+**Verified for real:** every piece went through the same isolated
+build cycle individually (`tsc --noEmit`, a full production build with
+the font mocks, a real `next start` server, real `curl` checks) before
+being committed, then one final combined pass ran that same full cycle
+again from a fresh copy of the finished code, `tsc` clean, all 20
+routes built with zero errors, and `/`, `/about`, `/gallery`,
+`/products`, `/contact`, and `/quote` all confirmed returning 200 from
+the real running server.
