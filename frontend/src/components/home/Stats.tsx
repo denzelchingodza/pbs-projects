@@ -12,6 +12,14 @@
  * window inside it (the same pin used in WhyChooseUs.tsx), so even this
  * plain numbers strip carries a piece of the site's material language
  * instead of being three bare figures.
+ *
+ * Pulled up over the pinned hero photo with a negative top margin and a
+ * rounded top edge (`-mt-8 md:-mt-12 rounded-t-3xl`), this is the section
+ * that visibly rises and covers the hero while it's held in place by its
+ * own `sticky` (see Hero.tsx's doc comment), a `relative z-10` keeps it
+ * painting above the hero rather than tucking underneath it, and the
+ * upward shadow sells the "lifting into place" edge instead of the
+ * rounded corner just looking like a flat cutout.
  */
 import type { SiteSettings } from "@/types";
 import T from "@/components/i18n/T";
@@ -55,7 +63,7 @@ export default function Stats({ settings }: { settings: SiteSettings }) {
   ];
 
   return (
-    <section className="border-y border-neutral-100 bg-neutral-50">
+    <section className="relative z-10 -mt-8 md:-mt-12 rounded-t-3xl border-y border-neutral-100 bg-neutral-50 shadow-[0_-20px_40px_-24px_rgba(35,31,32,0.25)]">
       <div className="max-w-6xl mx-auto grid grid-cols-3 divide-x divide-neutral-200 px-6 md:px-8">
         {items.map((item) => (
           <div key={item.key} className="py-10 text-center">
