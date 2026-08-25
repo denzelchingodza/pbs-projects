@@ -14,6 +14,17 @@
  * lines and project titles themselves stay English for now, same as
  * product descriptions, those live as plain data rather than in the
  * translation dictionary.
+ *
+ * The lead project (the first, biggest card) now renders as a real
+ * case-study card rather than just a bigger version of the same photo
+ * tile: photo up top, then its own panel below with a vertical orange
+ * accent bar, an eyebrow label, the job's title and blurb, and two real
+ * chevron links out ("See the job" into the gallery, "Get a quote like
+ * this" straight to the quote form), the same lead-story treatment
+ * funema.co gives its top case study instead of a caption floating over a
+ * darkened photo. The four supporting cards keep the original simple
+ * photo-and-caption tile, that contrast is what makes the lead card read
+ * as the one dominant story instead of five equal thumbnails.
  */
 import Link from "next/link";
 import Image from "next/image";
@@ -34,22 +45,89 @@ const CATEGORY_BLURB: Record<string, string> = {
   cabinets: "Custom built in aluminum and glass.",
 };
 
-function Card({
-  project,
-  big = false,
-}: {
-  project: Project;
-  big?: boolean;
-}) {
+function ChevronIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="transition-transform group-hover/link:translate-x-0.5"
+    >
+      <path d="M9 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+function LeadCard({ project }: { project: Project }) {
+  const cover = project.media[0];
+  if (!cover) return null;
+  const blurb = CATEGORY_BLURB[project.category];
+
+  return (
+    <div className="md:col-span-2 md:row-span-2 flex flex-col rounded-xl overflow-hidden border border-neutral-200 bg-white shadow-sm hover:shadow-lg transition-shadow">
+      <div className="shine-hover relative flex-1 min-h-[220px] overflow-hidden bg-neutral-900">
+        {cover.media_type === "video" ? (
+          <video
+            src={mediaUrl(cover.image_url)}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <Image
+            src={mediaUrl(cover.image_url)}
+            alt={project.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
+          />
+        )}
+        <FrameCorners />
+      </div>
+
+      <div className="relative pl-6 pr-5 py-5 border-t border-neutral-100">
+        <span className="absolute left-0 top-0 bottom-0 w-1 bg-orange" aria-hidden="true" />
+        <span className="inline-block bg-orange/10 text-orange text-[11px] font-semibold uppercase tracking-wide px-2.5 py-1 rounded-full mb-2">
+          {categoryLabel(project.category)}
+        </span>
+        <p className="text-dark font-bold text-lg leading-snug">{project.title}</p>
+        {blurb && <p className="text-neutral-500 text-sm mt-1.5">{blurb}</p>}
+        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+          <Link
+            href="/gallery"
+            className="group/link inline-flex items-center gap-1 text-sm font-semibold text-dark hover:text-orange transition"
+          >
+            See the job
+            <ChevronIcon />
+          </Link>
+          <Link
+            href="/#quote"
+            className="group/link inline-flex items-center gap-1 text-sm font-semibold text-orange hover:text-dark transition"
+          >
+            Get a quote like this
+            <ChevronIcon />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Card({ project }: { project: Project }) {
   const cover = project.media[0];
   if (!cover) return null;
 
   return (
-    <div
-      className={`group shine-hover relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900 aspect-[4/3] shadow-sm hover:shadow-lg transition-shadow ${
-        big ? "md:col-span-2 md:row-span-2 md:aspect-auto" : "md:aspect-auto"
-      }`}
-    >
+    <div className="group shine-hover relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900 aspect-[4/3] md:aspect-auto shadow-sm hover:shadow-lg transition-shadow">
       {cover.media_type === "video" ? (
         <video
           src={mediaUrl(cover.image_url)}
@@ -65,7 +143,7 @@ function Card({
           src={mediaUrl(cover.image_url)}
           alt={project.title}
           fill
-          sizes={big ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 25vw"}
+          sizes="(max-width: 768px) 100vw, 25vw"
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
       )}
@@ -73,12 +151,7 @@ function Card({
         <span className="inline-block bg-white/90 text-dark text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2">
           {categoryLabel(project.category)}
         </span>
-        <p className={`text-white font-semibold leading-snug ${big ? "text-lg" : "text-sm"}`}>
-          {project.title}
-        </p>
-        {big && CATEGORY_BLURB[project.category] && (
-          <p className="text-white/70 text-sm mt-1">{CATEGORY_BLURB[project.category]}</p>
-        )}
+        <p className="text-white font-semibold leading-snug text-sm">{project.title}</p>
       </div>
       <FrameCorners />
     </div>
@@ -109,9 +182,9 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 md:h-[560px]">
-            {highlights.map((p, i) => (
-              <Card key={p.id} project={p} big={i === 0} />
-            ))}
+            {highlights.map((p, i) =>
+              i === 0 ? <LeadCard key={p.id} project={p} /> : <Card key={p.id} project={p} />
+            )}
           </div>
         )}
 
