@@ -14,15 +14,19 @@ from app.core.security import hash_password
 PRODUCTS = [
     ("Windows", "windows",
      "Aluminum awning and casement windows, built to size and fitted into brick or "
-     "plastered walls, from a single opening to a full wall of glass."),
+     "plastered walls, from a single opening to a full wall of glass. This is where "
+     "most of PBS's real installs are, the most photographed work in the gallery."),
     ("Doors", "doors",
      "Sliding patio doors, security screen doors, and hinged entrances in aluminum, "
-     "built for daily use and finished to match the rest of the home or shop."),
+     "usually fitted on the same job as the windows, finished to match the rest of "
+     "the home or shop."),
     ("Shower Cubicles", "shower-cubicles",
-     "Frameless sliding glass shower cubicles, sealed clean to the tile, no leaks, no rust."),
+     "Frameless sliding glass shower cubicles, sealed clean to the tile, no leaks, "
+     "no rust, the same glasswork precision as everything else PBS builds."),
     ("Shop Fronts", "shop-fronts",
      "Full storefront glazing and aluminum framing, built to secure a shop overnight "
-     "and welcome customers by day."),
+     "and welcome customers by day, the same joinery used on every window and door "
+     "PBS fits, scaled up to a full frontage."),
     ("Suspended Ceilings", "suspended-ceilings",
      "Aluminum grid suspended ceilings for homes, shops, and offices, a clean finish "
      "with easy access above it for wiring and maintenance."),

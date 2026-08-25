@@ -106,10 +106,10 @@ export const translations: Record<string, Entry> = {
   "about.eyebrow": { en: "About Us" },
   "about.title": { en: "Built on real trade experience, not just ==a business plan==" },
   "about.introWithYears": {
-    en: "{business} is a Harare based glass and aluminum specialist, running for {years}+ years, covering windows, doors, shower cubicles, shop fronts, suspended ceilings and cabinets for homes, shops, and offices across Zimbabwe.",
+    en: "{business} runs out of a workshop on Sherwood Road in Waterfalls, Harare, {years}+ years in, cutting, fitting, and sealing aluminum and glass for homes, shops, and offices across Zimbabwe. Most of what's in the gallery below is windows and doors, real installs, not renders, the same team also builds shower cubicles, shop fronts, suspended ceilings, and cabinets to that same standard.",
   },
   "about.introNoYears": {
-    en: "{business} is a Harare based glass and aluminum specialist, covering windows, doors, shower cubicles, shop fronts, suspended ceilings and cabinets for homes, shops, and offices across Zimbabwe.",
+    en: "{business} runs out of a workshop on Sherwood Road in Waterfalls, Harare, cutting, fitting, and sealing aluminum and glass for homes, shops, and offices across Zimbabwe. Most of what's in the gallery below is windows and doors, real installs, not renders, the same team also builds shower cubicles, shop fronts, suspended ceilings, and cabinets to that same standard.",
   },
   "about.realWorkEyebrow": { en: "Real Work" },
   "about.realWorkTitle": { en: "A few completed jobs" },
