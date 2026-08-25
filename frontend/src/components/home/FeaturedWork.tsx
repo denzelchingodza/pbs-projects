@@ -191,7 +191,7 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
         <div className="text-center mt-10">
           <Link
             href="/gallery"
-            className="inline-block bg-dark text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:bg-orange transition"
+            className="font-display inline-block bg-dark text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:bg-orange transition"
           >
             {t("work.viewGallery", lang)}
           </Link>

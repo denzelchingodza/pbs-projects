@@ -10,7 +10,8 @@ export const metadata: Metadata = {
 export default function TestimonialPage() {
   return (
     <main>
-      <section className="px-6 md:px-8 py-20 bg-neutral-50">
+      <section className="relative px-6 md:px-8 py-20 bg-neutral-50 overflow-hidden">
+        <div className="absolute inset-0 pane-grid -z-10" aria-hidden="true" />
         <div className="max-w-2xl mx-auto">
           <SectionHeading
             eyebrow="Share Your Experience"

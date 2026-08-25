@@ -19,7 +19,7 @@ export default function FindUs({ settings }: { settings: SiteSettings }) {
     <section className="px-6 md:px-8 py-20 bg-paper">
       <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-center">
         <div>
-          <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+          <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
             Find Us
           </p>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-dark tracking-tight mb-4">

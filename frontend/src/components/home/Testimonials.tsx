@@ -150,7 +150,7 @@ export default function Testimonials({ testimonials }: { testimonials: Testimoni
         <div className="text-center mt-10">
           <Link
             href="/testimonial"
-            className="inline-block border border-neutral-300 text-dark px-7 py-3.5 rounded-md font-semibold text-sm hover:border-orange hover:text-orange transition"
+            className="font-display inline-block border border-neutral-300 text-dark px-7 py-3.5 rounded-md font-semibold text-sm hover:border-orange hover:text-orange transition"
           >
             {t("testimonials.shareLink", lang)}
           </Link>

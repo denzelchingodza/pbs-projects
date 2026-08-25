@@ -39,6 +39,12 @@
  * <T> (see components/i18n/T.tsx) so they follow whichever language is
  * currently selected, same as the translated text further down the page.
  *
+ * Nav links and both "Get a Quote" buttons (desktop and the mobile drawer)
+ * now carry `font-display` too, not just headings, the header is the one
+ * element present on literally every page, if the distinctive typeface
+ * only ever shows up in section headings further down the page, most
+ * visitors scroll past it without the font ever actually registering.
+ *
  * Second mobile drawer pass: the first version read as a plain list of
  * links dropped into a dark box, a lot of empty space and no real visual
  * design, like the desktop nav just narrowed down rather than a menu built
@@ -179,14 +185,14 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-dark/80 hover:text-orange transition-colors"
+              className="font-display text-sm font-semibold text-dark/80 hover:text-orange transition-colors"
             >
               <T k={link.key} />
             </Link>
           ))}
           <Link
             href="/#quote"
-            className="shine-hover bg-orange text-white text-sm font-semibold px-5 py-2.5 rounded-md hover:brightness-95 transition"
+            className="shine-hover font-display bg-orange text-white text-sm font-semibold px-5 py-2.5 rounded-md hover:brightness-95 transition"
           >
             <T k="nav.getQuote" />
           </Link>
@@ -251,7 +257,7 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className={`flex items-center gap-3 text-base font-semibold px-3 py-3 rounded-md transition-colors border-l-[3px] ${
+                className={`font-display flex items-center gap-3 text-base font-semibold px-3 py-3 rounded-md transition-colors border-l-[3px] ${
                   active
                     ? "bg-white/10 text-white border-orange"
                     : "text-white/90 hover:bg-white/5 border-transparent"
@@ -294,7 +300,7 @@ export default function Navbar({ settings }: { settings: SiteSettings }) {
         <Link
           href="/#quote"
           onClick={() => setOpen(false)}
-          className="shine-hover mt-auto bg-orange text-white text-center text-sm font-semibold py-3.5 rounded-md hover:brightness-95 transition"
+          className="shine-hover font-display mt-auto bg-orange text-white text-center text-sm font-semibold py-3.5 rounded-md hover:brightness-95 transition"
         >
           <T k="nav.getQuote" />
         </Link>

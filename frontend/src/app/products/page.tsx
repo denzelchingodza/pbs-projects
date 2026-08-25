@@ -25,7 +25,7 @@ export default async function ProductsPage() {
     <main>
       <section className="px-6 md:px-8 pt-16 pb-14 md:pt-20 bg-paper">
         <div className="max-w-2xl mx-auto text-center">
-          <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-4">
+          <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-4">
             What We Build
           </p>
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-dark">
@@ -103,7 +103,7 @@ export default async function ProductsPage() {
           </p>
           <Link
             href="/quote"
-            className="shine-hover inline-block bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
+            className="shine-hover font-display inline-block bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
           >
             Get a Free Quote
           </Link>

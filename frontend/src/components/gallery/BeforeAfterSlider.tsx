@@ -5,9 +5,16 @@
  * accessibility and mobile touch support (dragging a range slider works out
  * of the box on touchscreens — a custom-drawn drag handle would need extra
  * work to feel right on phones, which is our main audience).
+ *
+ * The divider line and "After" badge are orange rather than plain white and
+ * dark, before is neutral, after is brand orange, the color itself carries
+ * the "this is the finished, improved side" meaning instead of just the
+ * label text doing that work. FrameCorners matches every other photo
+ * surface on the site.
  */
 import { useState } from "react";
 import Image from "next/image";
+import FrameCorners from "@/components/ui/FrameCorners";
 
 export default function BeforeAfterSlider({
   beforeSrc,
@@ -30,13 +37,13 @@ export default function BeforeAfterSlider({
         style={{ clipPath: `inset(0 0 0 ${position}%)` }}
       />
       <div
-        className="absolute top-0 bottom-0 w-0.5 bg-white pointer-events-none"
+        className="absolute top-0 bottom-0 w-1 bg-orange shadow-[0_0_0_1px_rgba(255,255,255,0.5)] pointer-events-none"
         style={{ left: `${position}%` }}
       />
       <span className="absolute top-3 left-3 bg-dark/80 text-white text-xs font-semibold uppercase px-3 py-1 rounded-full">
         Before
       </span>
-      <span className="absolute top-3 right-3 bg-dark/80 text-white text-xs font-semibold uppercase px-3 py-1 rounded-full">
+      <span className="absolute top-3 right-3 bg-orange/90 text-white text-xs font-semibold uppercase px-3 py-1 rounded-full">
         After
       </span>
       <input
@@ -48,6 +55,7 @@ export default function BeforeAfterSlider({
         className="absolute inset-x-0 bottom-3 w-[90%] mx-[5%]"
         aria-label="Drag to compare before and after"
       />
+      <FrameCorners />
     </div>
   );
 }

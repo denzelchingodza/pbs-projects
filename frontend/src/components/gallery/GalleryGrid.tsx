@@ -9,11 +9,19 @@
  * at. Clicking a tile opens the Lightbox at that photo's position in the
  * full (filtered) list, tracked with a running index across every section
  * so previous/next in the Lightbox moves through the whole list correctly.
+ *
+ * Tiles now carry the same aluminum corner brackets and shine sweep as
+ * every other photo card on the site (FrameCorners, shine-hover, see
+ * Stage 49), this page had been skipped over in that pass. Each category
+ * section heading now sits next to a short orange accent bar instead of
+ * standing alone, the same small touch used on the case-study card in
+ * FeaturedWork.tsx.
  */
 import Image from "next/image";
 import type { PhotoItem } from "./types";
 import { mediaUrl } from "@/lib/media";
 import { GALLERY_CATEGORIES, categoryLabel } from "@/lib/categories";
+import FrameCorners from "@/components/ui/FrameCorners";
 
 function PlayBadge() {
   return (
@@ -31,7 +39,7 @@ function Tile({ item, onOpen }: { item: PhotoItem; onOpen: () => void }) {
   return (
     <button
       onClick={onOpen}
-      className="group relative aspect-[4/3] overflow-hidden rounded-lg bg-neutral-900 shadow-sm hover:shadow-lg transition-shadow"
+      className="shine-hover group relative aspect-[4/3] overflow-hidden rounded-xl bg-neutral-900 shadow-sm hover:shadow-lg transition-shadow"
     >
       {item.media_type === "video" ? (
         <video
@@ -53,8 +61,12 @@ function Tile({ item, onOpen }: { item: PhotoItem; onOpen: () => void }) {
       {item.media_type === "video" && <PlayBadge />}
 
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 pt-8 pb-2.5 opacity-0 group-hover:opacity-100 transition-opacity">
+        <span className="inline-block bg-orange text-white text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full mb-1.5">
+          {categoryLabel(item.category)}
+        </span>
         <p className="text-white text-xs font-semibold truncate text-left">{item.title}</p>
       </div>
+      <FrameCorners size="w-4 h-4" />
     </button>
   );
 }
@@ -105,7 +117,8 @@ export default function GalleryGrid({
     <div className="flex flex-col gap-14">
       {sections.map((section) => (
         <div key={section.category}>
-          <div className="flex items-baseline gap-2.5 mb-5">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="w-1 h-5 bg-orange rounded-full" aria-hidden="true" />
             <h3 className="text-lg font-bold text-dark tracking-tight">
               {categoryLabel(section.category)}
             </h3>

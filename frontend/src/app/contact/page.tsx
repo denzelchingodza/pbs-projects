@@ -46,7 +46,7 @@ export default async function ContactPage() {
     <main>
       <section className="px-6 md:px-8 pt-16 pb-14 md:pt-20 bg-paper">
         <div className="max-w-2xl mx-auto text-center">
-          <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-4">
+          <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-4">
             Get In Touch
           </p>
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-dark">
@@ -84,7 +84,7 @@ export default async function ContactPage() {
       <section className="px-6 md:px-8 py-16 bg-neutral-50">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-start">
           <div>
-            <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+            <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
               Visit Us
             </p>
             <h2 className="text-2xl font-bold text-dark tracking-tight mb-2">

@@ -107,13 +107,13 @@ export default function Hero() {
               <div className="mt-9 flex flex-wrap gap-4">
                 <a
                   href="#quote"
-                  className="shine-hover bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
+                  className="shine-hover font-display bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
                 >
                   <T k="hero.ctaQuote" />
                 </a>
                 <a
                   href="#work"
-                  className="border border-white/40 text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:border-white transition"
+                  className="font-display border border-white/40 text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:border-white transition"
                 >
                   <T k="hero.ctaWork" />
                 </a>

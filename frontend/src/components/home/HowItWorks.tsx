@@ -52,7 +52,7 @@ export default function HowItWorks() {
     <section className="px-6 md:px-8 py-20 bg-paper">
       <div className="max-w-5xl mx-auto">
         <div className="max-w-xl mx-auto text-center mb-14">
-          <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
+          <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
             How It Works
           </p>
           <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight">

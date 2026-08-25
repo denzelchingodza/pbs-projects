@@ -3,6 +3,11 @@
  * click handler both live in GalleryExplorer.tsx (the parent), so this stays
  * simple and reusable. Category list comes from lib/categories.ts so the
  * labels can never drift from the admin upload form's list.
+ *
+ * The active chip is now brand orange rather than plain dark, and inactive
+ * chips pick up an orange border on hover, this whole page went through
+ * Stage 49's glass/material redesign pass without picking up any of its
+ * own orange, this is that catch-up.
  */
 import { GALLERY_CATEGORIES } from "@/lib/categories";
 
@@ -23,8 +28,8 @@ export default function FilterBar({
           onClick={() => onSelect(cat.value)}
           className={`px-5 py-2 rounded-full text-sm font-medium border transition-colors ${
             active === cat.value
-              ? "bg-dark text-white border-dark"
-              : "bg-white text-dark border-neutral-300 hover:border-dark"
+              ? "bg-orange text-white border-orange"
+              : "bg-white text-dark border-neutral-300 hover:border-orange hover:text-orange"
           }`}
         >
           {cat.label}

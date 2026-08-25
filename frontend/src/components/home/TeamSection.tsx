@@ -99,7 +99,7 @@ function TeamCard({ member, reversed }: { member: TeamMember; reversed: boolean 
           {initials(member.name)}
         </span>
 
-        <span className="inline-block bg-orange/10 text-orange text-[11px] font-semibold uppercase tracking-[0.2em] px-3 py-1 rounded-full">
+        <span className="font-display inline-block bg-orange/10 text-orange text-[11px] font-semibold uppercase tracking-[0.2em] px-3 py-1 rounded-full">
           {member.role}
         </span>
         <h3 className="mt-4 font-extrabold text-dark text-3xl sm:text-4xl tracking-tight">
@@ -117,7 +117,7 @@ export default function TeamSection() {
   return (
     <section className="px-6 md:px-8 py-20 bg-paper">
       <div className="max-w-5xl mx-auto">
-        <p className="text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3 text-center">
+        <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3 text-center">
           Leadership
         </p>
         <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight text-center mb-16">
