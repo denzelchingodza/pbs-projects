@@ -1,39 +1,29 @@
 /**
  * Homepage hero. The real PBS project photo (frontend/public/images/hero.jpg)
- * is now the full section background instead of sitting in its own side
- * panel, a darker overlay keeps the white text readable over it without the
- * photo itself looking washed out or overexposed. Using next/image instead
- * of a plain <img> here since this is a real local file (not an external
- * URL), so Next.js can serve a properly sized/optimized version
- * automatically, and `priority` skips lazy-loading since this is the first
- * thing visible on the page.
+ * is the full section background, a dark gradient scrim keeps the white text
+ * readable over it. Using next/image instead of a plain <img> here since
+ * this is a real local file (not an external URL), so Next.js can serve a
+ * properly sized/optimized version automatically, and `priority` skips
+ * lazy-loading since this is the first thing visible on the page.
+ *
+ * Second pass on the color treatment: the first version ran a full-strength
+ * orange gradient across the entire photo (`mix-blend-mode: color`) plus a
+ * faint grid pattern over the top of that, direct feedback was that it
+ * looked heavy and "not clean," a muddy orange wash rather than a real
+ * photo. Both are gone. The photo is shown in its true, real color now, no
+ * tint, no filter, that's what actually reads as premium and credible for a
+ * trade business, a real finished job speaks for itself. The only overlay
+ * left is one plain dark gradient for text contrast, strongest on the left
+ * where the heading sits, fading to nothing on the right so the photo's own
+ * color is fully visible there. Orange still shows up immediately, just
+ * from real UI elements instead of a filter over the photo: the accent bar
+ * above the heading, the solid orange CTA button, and a solid orange line
+ * along the bottom edge of the whole hero, the same "orange edge" treatment
+ * already used on the header (see Navbar.tsx).
  *
  * The old "Harare · Zimbabwe" eyebrow line is gone (Zimbabwe/Harare are
- * already in the heading's own copy and in the footer), replaced with a
- * short solid orange bar, on a photo background there's no longer a
- * neutral-50 page underneath for a thin text label to sit clearly against,
- * and the brand orange still needs to read immediately, a small solid block
- * of it does that more clearly than small letter-spaced text would here.
- *
- * Two more layers sit between the photo and the text now: a faint
- * window-pane grid (`.pane-grid-light`, see globals.css) placed under the
- * darkening gradient so it naturally fades out on the left where the text
- * sits and shows a little more on the right where the photo itself is
- * clearest, and a soft diagonal light streak above everything, the kind of
- * glare that shows up in real photos of actual glass and polished aluminum,
- * so the hero itself looks like it's being seen through the material PBS
- * works with, not just described in the copy next to it.
- *
- * The photo itself is duotoned now, not shown in full color: grayscaled,
- * then recolored with a dark-to-orange gradient using `mix-blend-mode:
- * color` (the gradient's hue paints onto the photo's own light/dark values,
- * so the actual texture of the aluminum and brick still reads, just tinted
- * rather than washed over). Dark and desaturated up near the text for
- * contrast, warming into real orange lower down, this is what ties this
- * real project photo directly into the brand instead of it just being a
- * photo with an orange button next to it. A separate plain darkening
- * scrim still sits on top of that, purely for the heading's contrast, kept
- * as its own normal-blend layer so it doesn't fight the duotone's colors.
+ * already in the heading's own copy and in the footer), replaced with the
+ * short solid orange bar mentioned above.
  *
  * Outer wrapper is taller than one screen (`h-[125vh]`), and the actual
  * hero `<section>` inside it is `sticky top-0`, so the photo holds still
@@ -65,7 +55,7 @@ const CATEGORIES = [
 export default function Hero() {
   return (
     <div className="relative h-[112vh] md:h-[125vh]">
-      <section className="sticky top-0 h-screen overflow-hidden">
+      <section className="sticky top-0 h-screen overflow-hidden border-b-4 border-orange">
         <div className="absolute inset-0">
           <Image
             src={HERO_IMAGE}
@@ -73,25 +63,18 @@ export default function Hero() {
             fill
             priority
             sizes="100vw"
-            className="object-cover grayscale animate-hero-zoom motion-reduce:animate-none"
+            className="object-cover animate-hero-zoom motion-reduce:animate-none"
           />
-          <div className="absolute inset-0 pane-grid-light" aria-hidden="true" />
-          {/* The duotone recolor, dark up top (near-neutral, barely tints the
-              grayscale photo) warming into full orange toward the bottom,
-              painted onto the photo's own light and dark values via
-              mix-blend-mode: color rather than sitting as a flat tint over it. */}
-          <div className="absolute inset-0 bg-gradient-to-t from-orange via-orange/70 to-dark mix-blend-color" />
-          {/* Plain darkening scrim, left-heavy where the heading sits, right
-              side left clear so the duotone's own color still reads there.
-              Normal blend on purpose, this is only about text contrast, the
-              color work above already did the actual recoloring. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-dark/70 via-dark/35 to-transparent" />
-          {/* A soft, static diagonal glare, low opacity and heavily blurred so
-              it reads as light catching glass rather than a design glitch. */}
-          <div
-            aria-hidden="true"
-            className="absolute -inset-y-16 left-[55%] w-1/5 bg-white/10 -rotate-12 blur-2xl pointer-events-none"
-          />
+          {/* One plain dark gradient, left to right, for the heading's
+              contrast, that's the only overlay on the photo now. Strong
+              enough to read white text over on the left, fully clear by
+              the right third so the photo's own real color shows through
+              there without anything tinting it. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-dark/85 via-dark/45 to-transparent" />
+          {/* A second, gentler gradient along the bottom, grounds the photo
+              against the section below it and keeps the category chips
+              readable without needing their own heavy background. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent" />
         </div>
 
         <div className="relative h-full flex items-center px-6 md:px-8">
