@@ -11,7 +11,7 @@
  * falls back to a plain localhost address, which is correct there since the
  * backend runs on the same machine as the Next.js server doing the render.
  */
-import type { SiteSettings } from "@/types";
+import type { SiteSettings, Testimonial } from "@/types";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
@@ -65,7 +65,7 @@ export async function getProducts() {
   }
 }
 
-export async function getTestimonials() {
+export async function getTestimonials(): Promise<Testimonial[]> {
   try {
     return await apiGet("/testimonials/");
   } catch {

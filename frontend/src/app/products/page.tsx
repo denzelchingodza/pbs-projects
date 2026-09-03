@@ -9,8 +9,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 import FrameCorners from "@/components/ui/FrameCorners";
-import { getProducts, getProjects } from "@/lib/api";
-import { productSlugToCategory, coverPhotoForCategory } from "@/lib/categories";
+import { getProducts, getProjects, getTestimonials } from "@/lib/api";
+import { productSlugToCategory, coverPhotoForCategory, testimonialForCategory } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
 
 export const metadata: Metadata = {
@@ -19,7 +19,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ProductsPage() {
-  const [products, projects] = await Promise.all([getProducts(), getProjects()]);
+  const [products, projects, testimonials] = await Promise.all([
+    getProducts(),
+    getProjects(),
+    getTestimonials(),
+  ]);
 
   return (
     <main>
@@ -47,9 +51,11 @@ export default async function ProductsPage() {
         <section className="px-6 md:px-8 pb-20 bg-paper">
           <div className="max-w-5xl mx-auto grid sm:grid-cols-2 gap-6">
             {products.map((p: { id: number; name: string; slug: string; description?: string }, i: number) => {
-              const cover = coverPhotoForCategory(projects, productSlugToCategory(p.slug));
+              const category = productSlugToCategory(p.slug);
+              const cover = coverPhotoForCategory(projects, category);
+              const testimonial = testimonialForCategory(testimonials, category);
               const badge = (
-                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-orange text-white text-xs font-bold">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-orange text-white text-xs font-bold shadow-sm">
                   {String(i + 1).padStart(2, "0")}
                 </span>
               );
@@ -69,6 +75,29 @@ export default async function ProductsPage() {
                       />
                       <div className="absolute top-4 left-4 z-10">{badge}</div>
                       <FrameCorners />
+                      {/* A small real testimonial, when one genuinely mentions this
+                          product (see testimonialForCategory in lib/categories.ts),
+                          sat right on the photo instead of buried further down the
+                          page, so the proof and the product are seen together. */}
+                      {testimonial && (
+                        <div className="absolute inset-x-3 bottom-3 z-10">
+                          <div className="bg-white/95 backdrop-blur-sm rounded-lg px-3.5 py-3 shadow-md">
+                            <div className="text-orange text-[10px] leading-none mb-1.5" aria-hidden="true">
+                              {"★".repeat(testimonial.rating)}
+                              <span className="text-neutral-300">
+                                {"★".repeat(5 - testimonial.rating)}
+                              </span>
+                            </div>
+                            <p className="text-dark text-xs leading-snug font-medium line-clamp-2">
+                              &ldquo;{testimonial.quote}&rdquo;
+                            </p>
+                            <p className="text-neutral-500 text-[11px] mt-1">
+                              {testimonial.client_name}
+                              {testimonial.client_role ? `, ${testimonial.client_role}` : ""}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="p-7 pb-0">{badge}</div>

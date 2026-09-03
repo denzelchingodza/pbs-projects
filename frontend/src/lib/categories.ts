@@ -58,3 +58,31 @@ export function coverPhotoForCategory(
   const featured = inCategory.find((p) => p.is_featured);
   return (featured ?? inCategory[0])?.media[0]?.image_url;
 }
+
+/**
+ * Picks a real testimonial to pair with a product's photo (see the small
+ * quote card on each product image in app/products/page.tsx). There's no
+ * "which product is this testimonial about" field on a Testimonial (it's
+ * just a name, role, quote, and rating), so this matches on whether the
+ * quote text itself actually mentions the product, plain keyword matching
+ * rather than a schema change for something this small. Only shows up
+ * where a real testimonial genuinely mentions that product, most
+ * categories won't have a match yet, and that's the honest state: PBS has
+ * three real testimonials submitted so far, not one for every product.
+ */
+const CATEGORY_TESTIMONIAL_KEYWORDS: Record<string, string[]> = {
+  windows: ["window"],
+  doors: ["door"],
+  showercubicles: ["shower", "cubicle"],
+  shopfronts: ["shop front", "shopfront", "storefront"],
+  ceilings: ["ceiling"],
+  cabinets: ["cabinet"],
+};
+
+export function testimonialForCategory<T extends { quote: string }>(
+  testimonials: T[],
+  category: string
+): T | undefined {
+  const keywords = CATEGORY_TESTIMONIAL_KEYWORDS[category] ?? [];
+  return testimonials.find((t) => keywords.some((k) => t.quote.toLowerCase().includes(k)));
+}
