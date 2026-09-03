@@ -71,7 +71,7 @@ function LeadCard({ project }: { project: Project }) {
 
   return (
     <div className="md:col-span-2 md:row-span-2 flex flex-col rounded-xl overflow-hidden border border-neutral-200 bg-white shadow-sm hover:shadow-lg transition-shadow">
-      <div className="shine-hover relative flex-1 min-h-[220px] overflow-hidden bg-neutral-900">
+      <div className="photo-frame shine-hover relative flex-1 min-h-[220px] overflow-hidden bg-neutral-900">
         {cover.media_type === "video" ? (
           <video
             src={mediaUrl(cover.image_url)}
@@ -127,7 +127,7 @@ function Card({ project }: { project: Project }) {
   if (!cover) return null;
 
   return (
-    <div className="group shine-hover relative rounded-xl overflow-hidden border border-neutral-200 bg-neutral-900 aspect-[4/3] md:aspect-auto shadow-sm hover:shadow-lg transition-shadow">
+    <div className="photo-frame group shine-hover relative rounded-xl overflow-hidden bg-neutral-900 aspect-[4/3] md:aspect-auto hover:shadow-lg transition-shadow">
       {cover.media_type === "video" ? (
         <video
           src={mediaUrl(cover.image_url)}

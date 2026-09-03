@@ -52,7 +52,7 @@ export default function ProductsOverview({
                 className="group bg-white border border-neutral-200 rounded-xl overflow-hidden hover:border-orange/40 hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 {cover ? (
-                  <div className="shine-hover relative aspect-[4/3] bg-neutral-900">
+                  <div className="photo-frame shine-hover relative aspect-[4/3] bg-neutral-900">
                     <Image
                       src={mediaUrl(cover)}
                       alt={p.name}

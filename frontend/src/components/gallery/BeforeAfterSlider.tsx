@@ -26,7 +26,7 @@ export default function BeforeAfterSlider({
   const [position, setPosition] = useState(50);
 
   return (
-    <div className="relative max-w-2xl mx-auto aspect-video rounded-xl overflow-hidden select-none shadow-lg">
+    <div className="photo-frame relative max-w-2xl mx-auto aspect-video rounded-xl overflow-hidden select-none">
       <Image src={beforeSrc} alt="Before" fill sizes="(max-width: 768px) 100vw, 672px" className="object-cover" />
       <Image
         src={afterSrc}

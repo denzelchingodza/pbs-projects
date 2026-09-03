@@ -235,3 +235,18 @@ button:not(:disabled):active {
   background: linear-gradient(transparent 55%, rgba(232, 98, 45, 0.32) 55%);
   padding: 0 0.1em;
 }
+
+/* A crisp, defined edge around every real project photo (pairs with the
+   corner brackets in ui/FrameCorners.tsx, both mark the same "this is a
+   real photo" surfaces) plus a small, tight shadow, so each photo reads
+   as its own object sitting slightly above the page instead of a flat
+   image dropped into a rounded box. The shadow is deliberately small and
+   close (short blur, low spread) rather than the soft, diffuse look of
+   Tailwind's `shadow-lg`, that's what makes it read as "sharp" rather
+   than hazy. The white border does the same job as a mat around a
+   printed photo, a clean line between the photo's own colors and the
+   page, visible even set against a dark or busy photo. */
+.photo-frame {
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 3px 10px rgba(35, 31, 32, 0.18), 0 1px 3px rgba(35, 31, 32, 0.12);
+}

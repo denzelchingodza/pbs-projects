@@ -55,7 +55,7 @@ export default function AboutIntro({
       {mosaic.length > 0 && (
         <div className="max-w-4xl mx-auto mt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
           {mosaic.map((p) => (
-            <div key={p.id} className="shine-hover relative aspect-square rounded-xl overflow-hidden">
+            <div key={p.id} className="photo-frame shine-hover relative aspect-square rounded-xl overflow-hidden">
               <Image
                 src={mediaUrl(p.media[0].image_url)}
                 alt={p.title}

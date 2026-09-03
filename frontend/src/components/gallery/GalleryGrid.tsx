@@ -39,7 +39,7 @@ function Tile({ item, onOpen }: { item: PhotoItem; onOpen: () => void }) {
   return (
     <button
       onClick={onOpen}
-      className="shine-hover group relative aspect-[4/3] overflow-hidden rounded-xl bg-neutral-900 shadow-sm hover:shadow-lg transition-shadow"
+      className="photo-frame shine-hover group relative aspect-[4/3] overflow-hidden rounded-xl bg-neutral-900 hover:shadow-lg transition-shadow"
     >
       {item.media_type === "video" ? (
         <video
