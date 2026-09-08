@@ -26,7 +26,7 @@ export default function Watermark({
       aria-hidden="true"
       className={`pointer-events-none select-none absolute top-2 md:-top-2 ${
         align === "center" ? "inset-x-0 text-center" : "left-0 text-left px-6 md:px-8"
-      } text-[16vw] md:text-[9vw] leading-none font-display font-bold text-dark/[0.035] whitespace-nowrap`}
+      } text-[16vw] md:text-[9vw] leading-none font-display font-medium text-dark/[0.035] whitespace-nowrap`}
     >
       {text}
     </span>

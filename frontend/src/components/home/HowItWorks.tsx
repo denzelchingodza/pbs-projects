@@ -23,6 +23,7 @@
  * the page rather than a plain 4-column list.
  */
 import Watermark from "@/components/ui/Watermark";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 function StepIcon({ children }: { children: React.ReactNode }) {
   return (
@@ -59,14 +60,7 @@ export default function HowItWorks() {
     <section className="relative overflow-hidden px-6 md:px-8 py-20 bg-paper">
       <Watermark text="How It Works" />
       <div className="max-w-5xl mx-auto relative">
-        <div className="max-w-xl mx-auto text-center mb-14">
-          <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
-            How It Works
-          </p>
-          <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight">
-            From first message to finished job
-          </h2>
-        </div>
+        <SectionHeading eyebrow="How It Works" title="From first message to finished job" />
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {STEPS.map((step, i) => (

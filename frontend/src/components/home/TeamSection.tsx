@@ -18,6 +18,7 @@
  * the page never shows a broken image.
  */
 import Image from "next/image";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 interface TeamMember {
   name: string;
@@ -63,7 +64,7 @@ function TeamCard({ member, reversed }: { member: TeamMember; reversed: boolean 
             with no edge at all, floating loose on the page. */}
         <div className="absolute -inset-4 bg-orange/10 rounded-3xl -z-10" aria-hidden="true" />
         {member.photo ? (
-          <div className="relative w-full aspect-[4/5] rounded-2xl bg-white p-2.5 shadow-xl border border-neutral-100">
+          <div className="relative w-full aspect-[4/5] rounded-2xl bg-white p-2.5 shadow-md border border-neutral-100">
             <div className="relative w-full h-full rounded-xl overflow-hidden">
               <Image
                 src={member.photo}
@@ -75,7 +76,7 @@ function TeamCard({ member, reversed }: { member: TeamMember; reversed: boolean 
             </div>
           </div>
         ) : (
-          <div className="w-full aspect-[4/5] rounded-2xl bg-white p-2.5 shadow-xl border border-neutral-100">
+          <div className="w-full aspect-[4/5] rounded-2xl bg-white p-2.5 shadow-md border border-neutral-100">
             <div className="w-full h-full rounded-xl bg-dark text-white flex items-center justify-center text-4xl font-bold">
               {initials(member.name)}
             </div>
@@ -102,7 +103,7 @@ function TeamCard({ member, reversed }: { member: TeamMember; reversed: boolean 
         <span className="font-display inline-block bg-orange/10 text-orange text-[11px] font-semibold uppercase tracking-[0.2em] px-3 py-1 rounded-full">
           {member.role}
         </span>
-        <h3 className="mt-4 font-extrabold text-dark text-3xl sm:text-4xl tracking-tight">
+        <h3 className="mt-4 font-semibold text-dark text-3xl sm:text-4xl tracking-tight">
           {member.name}
         </h3>
         <p className="mt-5 text-neutral-600 text-[15px] leading-relaxed max-w-md mx-auto md:mx-0 md:border-l-2 md:border-orange/30 md:pl-4">
@@ -117,12 +118,7 @@ export default function TeamSection() {
   return (
     <section className="px-6 md:px-8 py-20 bg-paper">
       <div className="max-w-5xl mx-auto">
-        <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3 text-center">
-          Leadership
-        </p>
-        <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight text-center mb-16">
-          Meet the Team
-        </h2>
+        <SectionHeading eyebrow="Leadership" title="Meet the Team" />
         <div className="divide-y divide-neutral-200">
           {TEAM.map((member, i) => (
             <div key={member.name} className={i === 0 ? "pb-16 md:pb-20" : "pt-16 md:pt-20"}>

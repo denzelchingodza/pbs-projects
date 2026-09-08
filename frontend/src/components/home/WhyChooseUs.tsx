@@ -55,12 +55,12 @@ export default function WhyChooseUs({ projects = [] }: { projects?: Project[] })
         )}
 
         <div
-          className={`bg-white rounded-2xl shadow-xl p-8 md:p-10 mx-2 md:mx-0 md:w-[420px] ${
+          className={`bg-white rounded-2xl shadow-lg p-8 md:p-10 mx-2 md:mx-0 md:w-[420px] ${
             photo ? "-mt-10 md:absolute md:right-6 md:-bottom-10 md:mt-0" : ""
           }`}
         >
           <LineLabel>{t("whyChooseUs.eyebrow", lang)}</LineLabel>
-          <h3 className="text-2xl font-extrabold tracking-tight text-dark">
+          <h3 className="text-2xl font-semibold tracking-tight text-dark">
             {t("whyChooseUs.cardTitle", lang)}
           </h3>
           <ul className="mt-5 space-y-3">

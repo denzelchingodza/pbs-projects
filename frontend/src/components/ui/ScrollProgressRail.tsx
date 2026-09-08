@@ -8,6 +8,11 @@
  * skipped entirely below the `lg` breakpoint, a thin rail has no real room
  * to matter on a phone-width screen, and the homepage is already fairly
  * short there.
+ *
+ * Fills in a quiet dark tone rather than orange, this is on screen for the
+ * entire time anyone scrolls the homepage, a constant sliver of brand
+ * orange the whole way down is a lot of orange for one small detail to
+ * carry, a dark fill still reads clearly as "progress" without that.
  */
 import { useEffect, useState } from "react";
 
@@ -31,7 +36,7 @@ export default function ScrollProgressRail() {
       aria-hidden="true"
       className="hidden lg:block fixed top-0 right-0 z-40 h-screen w-[3px] bg-neutral-200/60"
     >
-      <div className="w-full bg-orange" style={{ height: `${progress}%` }} />
+      <div className="w-full bg-dark/70" style={{ height: `${progress}%` }} />
     </div>
   );
 }

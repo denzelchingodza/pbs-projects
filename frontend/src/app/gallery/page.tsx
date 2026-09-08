@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import GalleryExplorer from "@/components/gallery/GalleryExplorer";
 import BeforeAfterSlider from "@/components/gallery/BeforeAfterSlider";
 import SectionHeading from "@/components/ui/SectionHeading";
+import PillButton from "@/components/ui/PillButton";
 import Reveal from "@/components/ui/Reveal";
 import { getProjects } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
@@ -31,7 +31,7 @@ export default async function GalleryPage() {
     <main>
       <div className="px-6 md:px-8 py-16">
         <div className="max-w-7xl mx-auto">
-          <span className="block w-14 h-1.5 bg-orange rounded-full mb-6" aria-hidden="true" />
+          <span className="block w-14 h-1 bg-orange rounded-full mb-6" aria-hidden="true" />
           <SectionHeading
             align="left"
             eyebrow="Portfolio"
@@ -44,14 +44,14 @@ export default async function GalleryPage() {
 
           <div className="flex flex-wrap gap-x-6 gap-y-2 mb-12 -mt-6">
             <span className="text-sm text-neutral-500">
-              <span className="font-display font-bold text-dark">{photoCount}</span> photos
+              <span className="font-display font-semibold text-dark">{photoCount}</span> photos
             </span>
             <span className="text-sm text-neutral-500">
-              <span className="font-display font-bold text-dark">{categoryCount}</span> categories
+              <span className="font-display font-semibold text-dark">{categoryCount}</span> categories
             </span>
             {hasVideo && (
               <span className="text-sm text-neutral-500">
-                Includes <span className="font-display font-bold text-dark">video</span> walkthroughs
+                Includes <span className="font-display font-semibold text-dark">video</span> walkthroughs
               </span>
             )}
           </div>
@@ -73,19 +73,16 @@ export default async function GalleryPage() {
       <Reveal>
         <section className="relative px-6 md:px-8 py-16 bg-neutral-50 text-center overflow-hidden">
           <div className="absolute inset-0 pane-grid -z-10" aria-hidden="true" />
-          <h2 className="text-2xl font-bold text-dark tracking-tight mb-3">
+          <h2 className="text-2xl font-semibold text-dark tracking-tight mb-3">
             See something close to what you need?
           </h2>
           <p className="text-neutral-500 text-sm mb-7 max-w-md mx-auto">
             Send us a few details about your space and we&apos;ll put together a
             straight quote, no pressure.
           </p>
-          <Link
-            href="/quote"
-            className="shine-hover font-display inline-block bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
-          >
+          <PillButton href="/quote" variant="solid">
             Get a Free Quote
-          </Link>
+          </PillButton>
         </section>
       </Reveal>
     </main>

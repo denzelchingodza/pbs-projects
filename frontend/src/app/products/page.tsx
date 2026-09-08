@@ -9,6 +9,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 import FrameCorners from "@/components/ui/FrameCorners";
+import SectionHeading from "@/components/ui/SectionHeading";
+import PillButton from "@/components/ui/PillButton";
 import { getProducts, getProjects, getTestimonials } from "@/lib/api";
 import { productSlugToCategory, coverPhotoForCategory, testimonialForCategory } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
@@ -28,19 +30,13 @@ export default async function ProductsPage() {
   return (
     <main>
       <section className="px-6 md:px-8 pt-16 pb-14 md:pt-20 bg-paper">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-4">
-            What We Build
-          </p>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-dark">
-            Our Products
-          </h1>
-          <p className="mt-5 text-neutral-500 text-[15px] leading-relaxed">
-            Six product lines, made to measure. Every job is quoted individually,
-            so sizes, finishes, and materials are matched to your space, not sold
-            off a shelf.
-          </p>
-          <p className="mt-5 max-w-md mx-auto text-sm font-medium text-dark bg-orange/10 border-l-2 border-orange rounded-r-md px-4 py-3 text-left">
+        <div className="max-w-2xl mx-auto">
+          <SectionHeading
+            eyebrow="What We Build"
+            title="Our Products"
+            intro="Six product lines, made to measure. Every job is quoted individually, so sizes, finishes, and materials are matched to your space, not sold off a shelf."
+          />
+          <p className="max-w-md mx-auto text-sm font-medium text-dark bg-orange/10 border-l-2 border-orange rounded-r-md px-4 py-3 text-left -mt-6">
             Have a specific color, finish, or material in mind? If it can be
             sourced, we&apos;ll build your job with it.
           </p>
@@ -55,7 +51,7 @@ export default async function ProductsPage() {
               const cover = coverPhotoForCategory(projects, category);
               const testimonial = testimonialForCategory(testimonials, category);
               const badge = (
-                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-orange text-white text-xs font-bold shadow-sm">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/95 border border-orange/40 text-orange text-xs font-semibold shadow-sm">
                   {String(i + 1).padStart(2, "0")}
                 </span>
               );
@@ -103,7 +99,7 @@ export default async function ProductsPage() {
                     <div className="p-7 pb-0">{badge}</div>
                   )}
                   <div className="p-7">
-                    <h2 className="text-lg font-bold text-dark">{p.name}</h2>
+                    <h2 className="text-lg font-semibold text-dark">{p.name}</h2>
                     {p.description && (
                       <p className="text-sm text-neutral-500 mt-2 leading-relaxed">{p.description}</p>
                     )}
@@ -123,19 +119,16 @@ export default async function ProductsPage() {
 
       <Reveal>
         <section className="px-6 md:px-8 py-16 bg-neutral-50 text-center">
-          <h2 className="text-2xl font-bold text-dark tracking-tight mb-3">
+          <h2 className="text-2xl font-semibold text-dark tracking-tight mb-3">
             Not sure which product fits your space?
           </h2>
           <p className="text-neutral-500 text-sm mb-7 max-w-md mx-auto">
             Send us a few details and photos of the space, we&apos;ll recommend the
             right option and give you a straight quote.
           </p>
-          <Link
-            href="/quote"
-            className="shine-hover font-display inline-block bg-orange text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:brightness-95 transition"
-          >
+          <PillButton href="/quote" variant="solid">
             Get a Free Quote
-          </Link>
+          </PillButton>
         </section>
       </Reveal>
     </main>

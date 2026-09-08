@@ -34,7 +34,7 @@ export default function PillButton({
   return (
     <Link
       href={href}
-      className={`shine-hover font-display inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-semibold text-sm transition ${VARIANTS[variant]} ${className}`}
+      className={`shine-hover font-display inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-medium text-sm transition ${VARIANTS[variant]} ${className}`}
     >
       {children}
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

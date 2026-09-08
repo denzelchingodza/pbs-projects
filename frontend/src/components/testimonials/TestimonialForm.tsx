@@ -118,7 +118,7 @@ export default function TestimonialForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="w-full bg-orange text-white font-semibold py-3 rounded-md hover:brightness-95 transition disabled:opacity-60"
+        className="w-full bg-orange text-white font-medium py-3 rounded-full hover:brightness-95 transition disabled:opacity-60"
       >
         {status === "submitting" ? t("testimonialForm.sending", lang) : t("testimonialForm.submit", lang)}
       </button>

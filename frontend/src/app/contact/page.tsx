@@ -9,6 +9,8 @@ import type { Metadata } from "next";
 import LocationMap from "@/components/layout/LocationMap";
 import PaymentMethods from "@/components/ui/PaymentMethods";
 import Reveal from "@/components/ui/Reveal";
+import SectionHeading from "@/components/ui/SectionHeading";
+import LineLabel from "@/components/ui/LineLabel";
 import { getSiteSettings } from "@/lib/api";
 
 export const metadata: Metadata = {
@@ -45,17 +47,12 @@ export default async function ContactPage() {
   return (
     <main>
       <section className="px-6 md:px-8 pt-16 pb-14 md:pt-20 bg-paper">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-4">
-            Get In Touch
-          </p>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-dark">
-            We&apos;d Love to Hear From You
-          </h1>
-          <p className="mt-5 text-neutral-500 text-[15px] leading-relaxed">
-            Whatever you need windows, doors, or a full shop front fit out, reach us
-            directly using whichever option works best for you.
-          </p>
+        <div className="max-w-2xl mx-auto">
+          <SectionHeading
+            eyebrow="Get In Touch"
+            title="We'd Love to Hear From You"
+            intro="Whatever you need windows, doors, or a full shop front fit out, reach us directly using whichever option works best for you."
+          />
         </div>
       </section>
 
@@ -84,10 +81,8 @@ export default async function ContactPage() {
       <section className="px-6 md:px-8 py-16 bg-neutral-50">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-10 items-start">
           <div>
-            <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
-              Visit Us
-            </p>
-            <h2 className="text-2xl font-bold text-dark tracking-tight mb-2">
+            <LineLabel>Visit Us</LineLabel>
+            <h2 className="text-2xl font-semibold text-dark tracking-tight mb-2">
               {settings.address}
             </h2>
             <p className="text-sm text-neutral-500 mb-4">

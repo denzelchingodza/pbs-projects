@@ -6,6 +6,11 @@
  * Sits to the left of the WhatsApp float (bottom-6 right-24, not stacked
  * above it) so it never competes with WhatsApp's own popup chat bubble,
  * which already grows upward from that corner (see WhatsAppFloat.tsx).
+ *
+ * White with a thin border instead of solid orange, a floating button
+ * that's visible on every page from partway down is exactly the kind of
+ * small, constant surface where solid orange stacks up fastest, orange
+ * shows up here only as the arrow's hover color.
  */
 import { useEffect, useState } from "react";
 
@@ -27,11 +32,11 @@ export default function BackToTop() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       aria-label="Back to top"
-      className={`fixed bottom-6 right-24 z-50 w-12 h-12 rounded-full bg-orange text-white shadow-lg flex items-center justify-center hover:brightness-95 transition-all ${
+      className={`fixed bottom-6 right-24 z-50 w-12 h-12 rounded-full bg-white border border-neutral-200 text-dark shadow-md flex items-center justify-center hover:text-orange hover:border-orange transition-all ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3 pointer-events-none"
       }`}
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M12 19V5" />
         <path d="M5 12l7-7 7 7" />
       </svg>

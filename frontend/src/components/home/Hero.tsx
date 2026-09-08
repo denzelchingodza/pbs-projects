@@ -49,7 +49,7 @@ export default function Hero({ projects = [] }: { projects?: Project[] }) {
   const cardAlt = featured?.title ?? "A completed PBS Projects installation";
 
   return (
-    <section className="relative bg-dark overflow-visible border-b-4 border-orange">
+    <section className="relative bg-dark overflow-visible border-b-2 border-orange">
       <div className="absolute inset-0 overflow-hidden">
         <Image
           src={HERO_IMAGE}
@@ -66,7 +66,7 @@ export default function Hero({ projects = [] }: { projects?: Project[] }) {
         <div className="max-w-6xl mx-auto w-full grid lg:grid-cols-5 gap-10 items-center">
           <div className="lg:col-span-3 max-w-xl">
             <span className="inline-block w-14 h-1.5 bg-orange rounded-full mb-6" aria-hidden="true" />
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tighter text-white">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold leading-[1.05] tracking-tight text-white">
               <T k="hero.title" />
             </h1>
             <p className="mt-6 text-white/75 text-[15px] leading-relaxed max-w-md">

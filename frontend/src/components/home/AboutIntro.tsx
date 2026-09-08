@@ -63,7 +63,7 @@ export default function AboutIntro({
               <T k="about.eyebrow" />
             )}
           </LineLabel>
-          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-dark">
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-dark">
             <T k="about.title" />
           </h2>
           <p className="mt-5 text-neutral-500 text-[15px] leading-relaxed">

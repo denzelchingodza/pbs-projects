@@ -44,7 +44,7 @@ export default function ProductsOverview({
           {products.map((p, i) => {
             const cover = coverPhotoForCategory(projects, productSlugToCategory(p.slug));
             const badge = (
-              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-orange text-white text-xs font-bold">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/95 border border-orange/40 text-orange text-xs font-semibold shadow-sm">
                 {String(i + 1).padStart(2, "0")}
               </span>
             );
