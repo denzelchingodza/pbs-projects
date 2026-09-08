@@ -9,11 +9,12 @@
  * the one move a plain template never bothers with, a flat 3-column icon
  * strip (what this section used to be) reads as generic by comparison.
  *
- * Picks the second-featured real project as the backdrop (index 1 after
- * sorting featured-first), not the same photo already used in Hero's
- * floating card or About's intro photo just above this section, so
- * scrolling down the page keeps surfacing different real work instead of
- * repeating one photo.
+ * Backdrop is specifically the double storey home window installation,
+ * Denzel picked this one directly, not the generic "second featured
+ * project" heuristic this used before. Falls back to that same heuristic
+ * (the second-featured real project with a photo) if that job's photo
+ * isn't in the loaded project list for some reason, so this section never
+ * silently renders with no photo at all.
  */
 import Image from "next/image";
 import type { Project } from "@/types";
@@ -29,7 +30,8 @@ export default function WhyChooseUs({ projects = [] }: { projects?: Project[] })
   const withPhoto = [...projects]
     .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
     .filter((p) => p.media[0]?.media_type === "image");
-  const photo = withPhoto[1] ?? withPhoto[0];
+  const doubleStorey = withPhoto.find((p) => p.title.toLowerCase().includes("double storey"));
+  const photo = doubleStorey ?? withPhoto[1] ?? withPhoto[0];
 
   const items = [
     { title: t("whyChooseUs.title1", lang) },
