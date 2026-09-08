@@ -15,10 +15,12 @@
  *
  * Backdrop is specifically the double storey home window installation,
  * Denzel picked this one directly, not the generic "second featured
- * project" heuristic this used before. Falls back to that same heuristic
- * (the second-featured real project with a photo) if that job's photo
- * isn't in the loaded project list for some reason, so this section never
- * silently renders with no photo at all.
+ * project" heuristic this used before. That job was bulk-uploaded as
+ * "Photo 45" (see upload_photos.py) and may or may not have been renamed
+ * since, so it's matched by either title. Falls back to that old
+ * "second-featured project" heuristic if neither title is in the loaded
+ * project list for some reason, so this section never silently renders
+ * with no photo at all.
  */
 import Image from "next/image";
 import type { Project } from "@/types";
@@ -26,6 +28,7 @@ import FrameCorners from "@/components/ui/FrameCorners";
 import LineLabel from "@/components/ui/LineLabel";
 import PillButton from "@/components/ui/PillButton";
 import { mediaUrl } from "@/lib/media";
+import { projectByTitle } from "@/lib/categories";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 
@@ -34,7 +37,7 @@ export default function WhyChooseUs({ projects = [] }: { projects?: Project[] })
   const withPhoto = [...projects]
     .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
     .filter((p) => p.media[0]?.media_type === "image");
-  const doubleStorey = withPhoto.find((p) => p.title.toLowerCase().includes("double storey"));
+  const doubleStorey = projectByTitle(withPhoto, ["Photo 45", "Window installation, double storey home"]);
   const photo = doubleStorey ?? withPhoto[1] ?? withPhoto[0];
 
   const items = [

@@ -86,3 +86,22 @@ export function testimonialForCategory<T extends { quote: string }>(
   const keywords = CATEGORY_TESTIMONIAL_KEYWORDS[category] ?? [];
   return testimonials.find((t) => keywords.some((k) => t.quote.toLowerCase().includes(k)));
 }
+
+/**
+ * Finds one specific real project by title, for the handful of spots on
+ * the homepage that are meant to show one particular real photo Denzel
+ * picked out directly (Hero's floating card, WhyChooseUs's backdrop), not
+ * whichever project the admin happens to have marked "featured". Takes a
+ * list of candidate titles (case-insensitive, exact match after trimming)
+ * rather than one, since bulk-uploaded photos start out titled "Photo NN"
+ * (see upload_photos.py) and often get renamed to something real later in
+ * the admin panel, both the original number and a later real title should
+ * still find the same project.
+ */
+export function projectByTitle<T extends { title: string }>(
+  projects: T[],
+  candidates: string[]
+): T | undefined {
+  const wanted = candidates.map((c) => c.trim().toLowerCase());
+  return projects.find((p) => wanted.includes(p.title.trim().toLowerCase()));
+}

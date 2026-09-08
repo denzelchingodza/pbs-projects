@@ -23,9 +23,11 @@
  * door installation with the gabled glass entrance, a fully finished
  * exterior shot rather than whatever happened to be marked featured, that
  * "finished, not mid-build" quality is exactly what a hero photo needs to
- * carry. Falls back to whichever real project is currently featured, then
- * to the same hero photo, if that specific job's photo isn't in the
- * loaded project list for some reason, never a blank box.
+ * carry. That job was bulk-uploaded as "Photo 30" (see upload_photos.py)
+ * and may or may not have been renamed since, so it's matched by either
+ * title. Falls back to whichever real project is currently featured, then
+ * to the same hero photo, if neither title is in the loaded project list
+ * for some reason, never a blank box.
  */
 import Image from "next/image";
 import T from "@/components/i18n/T";
@@ -33,6 +35,7 @@ import FrameCorners from "@/components/ui/FrameCorners";
 import PillButton from "@/components/ui/PillButton";
 import type { Project } from "@/types";
 import { mediaUrl } from "@/lib/media";
+import { projectByTitle } from "@/lib/categories";
 
 const HERO_IMAGE = "/images/hero.jpg";
 
@@ -49,7 +52,7 @@ export default function Hero({ projects = [] }: { projects?: Project[] }) {
   const withPhoto = [...projects]
     .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
     .filter((p) => p.media[0]?.media_type === "image");
-  const frontDoor = withPhoto.find((p) => p.title.toLowerCase().includes("front door"));
+  const frontDoor = projectByTitle(withPhoto, ["Photo 30", "Front door installation"]);
   const card = frontDoor ?? withPhoto[0];
   const cardImage = card?.media[0] ? mediaUrl(card.media[0].image_url) : HERO_IMAGE;
   const cardAlt = card?.title ?? "A completed PBS Projects installation";
