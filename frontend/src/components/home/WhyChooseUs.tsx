@@ -1,92 +1,82 @@
 "use client";
 
 /**
- * Three real reasons to hire PBS, part of the homepage's About section
- * (see AboutIntro.tsx directly above this and app/page.tsx for how the
- * two fit together), sitting just above the team spread below it. Plain
- * inline SVG icons (no icon library needed for three simple shapes), each
- * paired with a short, honest line rather than generic marketing language,
- * this is meant to read like something a real tradesman would say about
- * his own work.
+ * Rebuilt around the "Our Recent / Aluminium Projects" card from the
+ * reference site Denzel sent: a real project photo filling most of the
+ * width, with a white card overlapping its edge holding a short, honest
+ * bullet-dot checklist (the same three reasons this section already had,
+ * just restyled) and a straight way into the full gallery. That overlap is
+ * the one move a plain template never bothers with, a flat 3-column icon
+ * strip (what this section used to be) reads as generic by comparison.
  *
- * Icons redrawn to actually be about glass and aluminum, not generic
- * checkmarks: a glass pane catching light for trade experience, a frame
- * corner joint with measurement ticks for "measured and built to fit," and
- * a location pin with a small window inside it for being based in Harare,
- * so even the small icon-badge details point back at what PBS actually
- * builds instead of being interchangeable with any other trade's site.
- *
- * Now a Client Component so the three titles and body lines follow the
- * current language, see lib/i18n.ts for the English and (once supplied)
- * Shona text.
+ * Picks the second-featured real project as the backdrop (index 1 after
+ * sorting featured-first), not the same photo already used in Hero's
+ * floating card or About's intro photo just above this section, so
+ * scrolling down the page keeps surfacing different real work instead of
+ * repeating one photo.
  */
+import Image from "next/image";
+import type { Project } from "@/types";
+import FrameCorners from "@/components/ui/FrameCorners";
+import LineLabel from "@/components/ui/LineLabel";
+import PillButton from "@/components/ui/PillButton";
+import { mediaUrl } from "@/lib/media";
 import { t } from "@/lib/i18n";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 
-function IconBadge({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="w-12 h-12 rounded-full bg-orange/10 flex items-center justify-center shrink-0">
-      {children}
-    </span>
-  );
-}
-
-const VALUES = [
-  {
-    titleKey: "whyChooseUs.title1",
-    bodyKey: "whyChooseUs.body1",
-    icon: (
-      // A glass pane with light catching it diagonally, real trade
-      // experience shows in the finish, not just the frame.
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8622D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3.5" y="3.5" width="17" height="17" rx="1.5" />
-        <path d="M7 15 15 7" strokeOpacity="0.55" />
-        <path d="M11 17 17 11" strokeOpacity="0.55" />
-      </svg>
-    ),
-  },
-  {
-    titleKey: "whyChooseUs.title2",
-    bodyKey: "whyChooseUs.body2",
-    icon: (
-      // An aluminum frame corner joint, the exact detail behind "measured
-      // and built to fit," with small ruler ticks along the upright.
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8622D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M5 20V9a4 4 0 0 1 4-4h10" />
-        <path d="M5 16h2.5M5 12h2.5" strokeOpacity="0.6" />
-        <path d="M11.5 5v2.5M15.5 5v2.5" strokeOpacity="0.6" />
-      </svg>
-    ),
-  },
-  {
-    titleKey: "whyChooseUs.title3",
-    bodyKey: "whyChooseUs.body3",
-    icon: (
-      // A location pin with a small window pane inside it, based in
-      // Harare, in the material PBS actually works in.
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8622D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" />
-        <rect x="8.75" y="7.75" width="6.5" height="5" rx="0.5" strokeOpacity="0.8" />
-        <path d="M12 7.75v5M8.75 10.25h6.5" strokeOpacity="0.5" />
-      </svg>
-    ),
-  },
-];
-
-export default function WhyChooseUs() {
+export default function WhyChooseUs({ projects = [] }: { projects?: Project[] }) {
   const { lang } = useLanguage();
+  const withPhoto = [...projects]
+    .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
+    .filter((p) => p.media[0]?.media_type === "image");
+  const photo = withPhoto[1] ?? withPhoto[0];
+
+  const items = [
+    { title: t("whyChooseUs.title1", lang) },
+    { title: t("whyChooseUs.title2", lang) },
+    { title: t("whyChooseUs.title3", lang) },
+  ];
+
   return (
     <section className="px-6 md:px-8 pt-8 pb-20 md:pb-24 bg-neutral-50">
-      <div className="max-w-5xl mx-auto grid sm:grid-cols-3 gap-8">
-        {VALUES.map((v) => (
-          <div key={v.titleKey} className="text-center sm:text-left">
-            <div className="flex justify-center sm:justify-start mb-4">
-              <IconBadge>{v.icon}</IconBadge>
-            </div>
-            <h3 className="font-semibold text-dark mb-1.5">{t(v.titleKey, lang)}</h3>
-            <p className="text-sm text-neutral-500 leading-relaxed">{t(v.bodyKey, lang)}</p>
+      <div className="max-w-6xl mx-auto relative">
+        {photo && (
+          <div className="photo-frame relative aspect-[16/10] md:aspect-[21/9] rounded-2xl overflow-hidden bg-neutral-900">
+            <Image
+              src={mediaUrl(photo.media[0].image_url)}
+              alt={photo.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 80vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-dark/40 via-transparent to-transparent" />
+            <FrameCorners />
           </div>
-        ))}
+        )}
+
+        <div
+          className={`bg-white rounded-2xl shadow-xl p-8 md:p-10 mx-2 md:mx-0 md:w-[420px] ${
+            photo ? "-mt-10 md:absolute md:right-6 md:-bottom-10 md:mt-0" : ""
+          }`}
+        >
+          <LineLabel>{t("whyChooseUs.eyebrow", lang)}</LineLabel>
+          <h3 className="text-2xl font-extrabold tracking-tight text-dark">
+            {t("whyChooseUs.cardTitle", lang)}
+          </h3>
+          <ul className="mt-5 space-y-3">
+            {items.map((item) => (
+              <li key={item.title} className="flex items-center gap-3 text-sm text-dark font-medium">
+                <span className="w-1.5 h-1.5 rounded-full bg-orange shrink-0" aria-hidden="true" />
+                {item.title}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-7">
+            <PillButton href="/gallery" variant="outlineDark">
+              {t("whyChooseUs.viewGallery", lang)}
+            </PillButton>
+          </div>
+        </div>
       </div>
     </section>
   );

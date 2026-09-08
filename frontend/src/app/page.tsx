@@ -34,7 +34,7 @@ export default async function HomePage() {
       {/* Hero is the first thing anyone sees, it renders in fully rather
           than fading up like everything below it, nothing should look
           like it's still loading in the one spot that paints first. */}
-      <Hero />
+      <Hero projects={projects} />
       <Reveal>
         <Stats settings={settings} />
       </Reveal>
@@ -57,7 +57,7 @@ export default async function HomePage() {
         <AboutIntro settings={settings} projects={projects} />
       </Reveal>
       <Reveal>
-        <WhyChooseUs />
+        <WhyChooseUs projects={projects} />
       </Reveal>
       <Reveal>
         <TeamSection />

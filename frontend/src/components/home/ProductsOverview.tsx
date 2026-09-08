@@ -17,6 +17,7 @@ import Image from "next/image";
 import type { Product, Project } from "@/types";
 import SectionHeading from "@/components/ui/SectionHeading";
 import FrameCorners from "@/components/ui/FrameCorners";
+import Watermark from "@/components/ui/Watermark";
 import { productSlugToCategory, coverPhotoForCategory } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
 import { t } from "@/lib/i18n";
@@ -31,8 +32,9 @@ export default function ProductsOverview({
 }) {
   const { lang } = useLanguage();
   return (
-    <section id="products" className="px-6 md:px-8 py-20 bg-paper">
-      <div className="max-w-6xl mx-auto">
+    <section id="products" className="relative overflow-hidden px-6 md:px-8 py-20 bg-paper">
+      <Watermark text="What We Build" />
+      <div className="max-w-6xl mx-auto relative">
         <SectionHeading
           eyebrow={t("products.eyebrow", lang)}
           title={t("products.title", lang)}

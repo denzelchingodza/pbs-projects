@@ -114,6 +114,8 @@ export const translations: Record<string, Entry> = {
   "about.realWorkEyebrow": { en: "Real Work" },
   "about.realWorkTitle": { en: "A few completed jobs" },
   "about.findUs": { en: "Find Us" },
+  "about.established": { en: "Established {year}" },
+  "about.callUsNow": { en: "Call Us Now" },
 
   // Why Choose Us (About page)
   "whyChooseUs.title1": { en: "Real trade experience" },
@@ -128,6 +130,9 @@ export const translations: Record<string, Entry> = {
   "whyChooseUs.body3": {
     en: "On the ground in Zimbabwe, available for a site visit, a straight quote, and support after the job is done.",
   },
+  "whyChooseUs.eyebrow": { en: "Why PBS" },
+  "whyChooseUs.cardTitle": { en: "Built to last, priced straight" },
+  "whyChooseUs.viewGallery": { en: "View Full Gallery" },
 
   // Meet the Founder (About page)
   "aboutFounder.eyebrow": { en: "Meet the Founder" },

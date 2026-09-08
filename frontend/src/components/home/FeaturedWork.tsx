@@ -31,6 +31,8 @@ import Image from "next/image";
 import type { Project } from "@/types";
 import SectionHeading from "@/components/ui/SectionHeading";
 import FrameCorners from "@/components/ui/FrameCorners";
+import PillButton from "@/components/ui/PillButton";
+import Watermark from "@/components/ui/Watermark";
 import { categoryLabel } from "@/lib/categories";
 import { mediaUrl } from "@/lib/media";
 import { t } from "@/lib/i18n";
@@ -165,8 +167,9 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
     .slice(0, 5);
 
   return (
-    <section id="work" className="px-6 md:px-8 py-20 bg-neutral-50">
-      <div className="max-w-6xl mx-auto">
+    <section id="work" className="relative overflow-hidden px-6 md:px-8 py-20 bg-neutral-50">
+      <Watermark text="Our Work" />
+      <div className="max-w-6xl mx-auto relative">
         <SectionHeading
           eyebrow={t("work.eyebrow", lang)}
           title={t("work.title", lang)}
@@ -189,12 +192,9 @@ export default function FeaturedWork({ projects }: { projects: Project[] }) {
         )}
 
         <div className="text-center mt-10">
-          <Link
-            href="/gallery"
-            className="font-display inline-block bg-dark text-white px-7 py-3.5 rounded-md font-semibold text-sm hover:bg-orange transition"
-          >
+          <PillButton href="/gallery" variant="solid">
             {t("work.viewGallery", lang)}
-          </Link>
+          </PillButton>
         </div>
       </div>
     </section>

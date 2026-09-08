@@ -16,7 +16,14 @@
  * with a faint mullion cross behind the number, the same window-pane
  * language used elsewhere on the site (see globals.css's .pane-grid),
  * shrunk down to a single tile.
+ *
+ * A giant, barely-there watermark word now sits behind the heading
+ * (Watermark.tsx), the same device used behind Our Work and What We
+ * Build's headings, so this section reads as one more considered part of
+ * the page rather than a plain 4-column list.
  */
+import Watermark from "@/components/ui/Watermark";
+
 function StepIcon({ children }: { children: React.ReactNode }) {
   return (
     <span className="relative w-11 h-11 rounded-md bg-orange/10 text-orange flex items-center justify-center shrink-0 font-bold text-sm overflow-hidden">
@@ -49,8 +56,9 @@ const STEPS = [
 
 export default function HowItWorks() {
   return (
-    <section className="px-6 md:px-8 py-20 bg-paper">
-      <div className="max-w-5xl mx-auto">
+    <section className="relative overflow-hidden px-6 md:px-8 py-20 bg-paper">
+      <Watermark text="How It Works" />
+      <div className="max-w-5xl mx-auto relative">
         <div className="max-w-xl mx-auto text-center mb-14">
           <p className="font-display text-orange text-xs font-semibold uppercase tracking-[0.2em] mb-3">
             How It Works

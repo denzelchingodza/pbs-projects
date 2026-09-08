@@ -13,13 +13,14 @@
  * plain numbers strip carries a piece of the site's material language
  * instead of being three bare figures.
  *
- * Pulled up over the pinned hero photo with a negative top margin and a
- * rounded top edge (`-mt-8 md:-mt-12 rounded-t-3xl`), this is the section
- * that visibly rises and covers the hero while it's held in place by its
- * own `sticky` (see Hero.tsx's doc comment), a `relative z-10` keeps it
- * painting above the hero rather than tucking underneath it, and the
- * upward shadow sells the "lifting into place" edge instead of the
- * rounded corner just looking like a flat cutout.
+ * Pulled up slightly over the hero's bottom edge with a negative top
+ * margin and a rounded top edge (`-mt-8 md:-mt-12 rounded-t-3xl`), a
+ * `relative z-10` keeps it painting above the hero photo, and the upward
+ * shadow sells a "lifting into place" edge instead of the rounded corner
+ * just looking like a flat cutout. On large screens this also sits
+ * underneath the hero's floating photo card (z-20, see Hero.tsx), which
+ * is exactly the point, that card is meant to visibly overlap down onto
+ * this section.
  */
 import type { SiteSettings } from "@/types";
 import T from "@/components/i18n/T";
