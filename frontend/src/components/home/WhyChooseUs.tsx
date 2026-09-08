@@ -4,10 +4,14 @@
  * Rebuilt around the "Our Recent / Aluminium Projects" card from the
  * reference site Denzel sent: a real project photo filling most of the
  * width, with a white card overlapping its edge holding a short, honest
- * bullet-dot checklist (the same three reasons this section already had,
- * just restyled) and a straight way into the full gallery. That overlap is
+ * checklist (the same three reasons this section already had, just
+ * restyled) and a straight way into the full gallery. That overlap is
  * the one move a plain template never bothers with, a flat 3-column icon
  * strip (what this section used to be) reads as generic by comparison.
+ *
+ * Checklist markers are a plain thin dark checkmark now, not a small
+ * orange dot, a repeated colored dot in front of every line read as a
+ * decorative flourish rather than a real list marker.
  *
  * Backdrop is specifically the double storey home window installation,
  * Denzel picked this one directly, not the generic "second featured
@@ -67,8 +71,21 @@ export default function WhyChooseUs({ projects = [] }: { projects?: Project[] })
           </h3>
           <ul className="mt-5 space-y-3">
             {items.map((item) => (
-              <li key={item.title} className="flex items-center gap-3 text-sm text-dark font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-orange shrink-0" aria-hidden="true" />
+              <li key={item.title} className="flex items-center gap-2.5 text-sm text-dark font-medium">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  className="text-dark/40 shrink-0"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
                 {item.title}
               </li>
             ))}

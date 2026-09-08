@@ -87,8 +87,7 @@ function Tile({ item, onOpen }: { item: PhotoItem; onOpen: () => void }) {
       {item.media_type === "video" && <PlayBadge />}
 
       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 pt-8 pb-2.5 opacity-0 group-hover:opacity-100 transition-opacity">
-        <span className="inline-flex items-center gap-1.5 bg-white/95 text-dark text-[10px] font-medium uppercase tracking-wide px-2 py-0.5 rounded-full mb-1.5">
-          <span className="w-1 h-1 rounded-full bg-orange" aria-hidden="true" />
+        <span className="inline-block bg-white/95 text-dark text-[10px] font-medium uppercase tracking-wide px-2 py-0.5 rounded-full mb-1.5">
           {categoryLabel(item.category)}
         </span>
         <p className="text-white text-xs font-semibold truncate text-left">{item.title}</p>

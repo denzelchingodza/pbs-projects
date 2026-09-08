@@ -19,11 +19,13 @@
  * The background photo is shown in its true real color (no tint/filter,
  * same reasoning as before, a real finished job speaks for itself), only a
  * dark gradient sits over it for text contrast. The floating card on the
- * right shows a second, different real project (whatever's currently
- * featured in the gallery), not a repeat of the backdrop photo, so the two
- * photos together read as "here's real, varied work," not one image used
- * twice. Falls back to the same hero photo if no projects are loaded yet
- * (a brand-new/empty database), never a blank box.
+ * right shows a second, different real project, specifically the front
+ * door installation with the gabled glass entrance, a fully finished
+ * exterior shot rather than whatever happened to be marked featured, that
+ * "finished, not mid-build" quality is exactly what a hero photo needs to
+ * carry. Falls back to whichever real project is currently featured, then
+ * to the same hero photo, if that specific job's photo isn't in the
+ * loaded project list for some reason, never a blank box.
  */
 import Image from "next/image";
 import T from "@/components/i18n/T";
@@ -44,9 +46,13 @@ const CATEGORIES = [
 ];
 
 export default function Hero({ projects = [] }: { projects?: Project[] }) {
-  const featured = [...projects].sort((a, b) => Number(b.is_featured) - Number(a.is_featured))[0];
-  const cardImage = featured?.media[0] ? mediaUrl(featured.media[0].image_url) : HERO_IMAGE;
-  const cardAlt = featured?.title ?? "A completed PBS Projects installation";
+  const withPhoto = [...projects]
+    .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
+    .filter((p) => p.media[0]?.media_type === "image");
+  const frontDoor = withPhoto.find((p) => p.title.toLowerCase().includes("front door"));
+  const card = frontDoor ?? withPhoto[0];
+  const cardImage = card?.media[0] ? mediaUrl(card.media[0].image_url) : HERO_IMAGE;
+  const cardAlt = card?.title ?? "A completed PBS Projects installation";
 
   return (
     <section className="relative bg-dark overflow-visible border-b-2 border-orange">

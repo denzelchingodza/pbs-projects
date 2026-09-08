@@ -12,15 +12,15 @@
  * typeface register while scrolling, rather than it only showing up in
  * the occasional big headline.
  *
- * Eyebrow is dark text with a small orange dot in front of it now, not a
- * full line of orange caps text. Every section on the site opens with one
- * of these, a solid block of orange repeated at the top of every single
- * section down the page is what actually added up to "so orange it's
- * exhausting", a small dot still marks it as the same accent without
- * repeating a full orange text block eight times down one page. The big
- * heading itself dropped from `font-extrabold` to `font-semibold`, a
- * lighter, thinner weight reads calmer at this size, still clearly a
- * heading, not shouting.
+ * Eyebrow is plain muted dark caps text now, no orange dot or marker in
+ * front of it. A small dot was tried here as a lighter-touch stand-in for
+ * the old full line of orange caps text, but repeated at the top of every
+ * single section down the page it still read as an obvious decorative
+ * flourish, exactly the small-repeated-shape look that reads as generated
+ * rather than designed. Plain text carries the same "section label" job
+ * without needing a shape at all. The big heading itself stays at
+ * `font-semibold`, a lighter, thinner weight reads calmer at this size,
+ * still clearly a heading, not shouting.
  */
 export default function SectionHeading({
   eyebrow,
@@ -34,14 +34,10 @@ export default function SectionHeading({
   intro?: string;
 }) {
   const alignClass = align === "center" ? "text-center mx-auto" : "text-left";
-  const dotAlignClass = align === "center" ? "justify-center" : "justify-start";
 
   return (
     <div className={`max-w-xl mb-12 ${alignClass}`}>
-      <p
-        className={`font-display flex items-center gap-2 text-dark/70 text-xs font-medium uppercase tracking-[0.2em] mb-3 ${dotAlignClass}`}
-      >
-        <span className="w-1.5 h-1.5 rounded-full bg-orange shrink-0" aria-hidden="true" />
+      <p className="font-display text-dark/60 text-xs font-medium uppercase tracking-[0.2em] mb-3">
         {eyebrow}
       </p>
       <h2 className="text-3xl sm:text-4xl font-semibold text-dark tracking-tight">{title}</h2>
