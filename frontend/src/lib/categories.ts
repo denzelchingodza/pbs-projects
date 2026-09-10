@@ -105,3 +105,19 @@ export function projectByTitle<T extends { title: string }>(
   const wanted = candidates.map((c) => c.trim().toLowerCase());
   return projects.find((p) => wanted.includes(p.title.trim().toLowerCase()));
 }
+
+/**
+ * The inverse of projectByTitle: filters a specific real project OUT of a
+ * list, for the couple of spots where Denzel flagged the same photo
+ * (bulk-uploaded as "Photo 03") showing up in more than one place on the
+ * site and asked for it not to. Same case-insensitive, trimmed matching
+ * against a list of candidate titles, so both the numbered bulk-upload
+ * title and any later admin-panel rename are caught.
+ */
+export function excludeByTitle<T extends { title: string }>(
+  projects: T[],
+  candidates: string[]
+): T[] {
+  const unwanted = candidates.map((c) => c.trim().toLowerCase());
+  return projects.filter((p) => !unwanted.includes(p.title.trim().toLowerCase()));
+}

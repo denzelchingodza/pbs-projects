@@ -6,6 +6,12 @@
  * now sit alongside the form, same two-column, photo-plus-content pattern
  * used across the homepage, so a visitor lands somewhere that already
  * looks like PBS's site instead of a generic contact form.
+ *
+ * The photo here deliberately skips "Photo 03" (see upload_photos.py):
+ * that same project was showing up here AND on the Quote page, direct
+ * feedback was to stop reusing the same photo across both, so this page
+ * just falls back to the next real featured photo instead, the Quote page
+ * gets its own two specific photos (see QuoteSection.tsx).
  */
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -15,6 +21,7 @@ import FrameCorners from "@/components/ui/FrameCorners";
 import TestimonialForm from "@/components/testimonials/TestimonialForm";
 import { getProjects, getTestimonials } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { excludeByTitle } from "@/lib/categories";
 
 export const metadata: Metadata = {
   title: "Leave a Testimonial",
@@ -24,7 +31,8 @@ export const metadata: Metadata = {
 export default async function TestimonialPage() {
   const [projects, testimonials] = await Promise.all([getProjects(), getTestimonials()]);
 
-  const photo = [...projects]
+  const eligible = excludeByTitle(projects, ["Photo 3", "Photo 03"]);
+  const photo = [...eligible]
     .sort((a, b) => Number(b.is_featured) - Number(a.is_featured))
     .find((p) => p.media[0]?.media_type === "image");
   const sample = testimonials[0];

@@ -26,6 +26,10 @@ module.exports = {
         // `font-display` for non-heading elements that should match (the
         // logo wordmark, Stats' big numbers).
         display: ["var(--font-space-grotesk)", "ui-sans-serif", "system-ui", "sans-serif"],
+        // The one script/cursive face on the site, see layout.tsx's Playball
+        // setup and T.tsx's `~~...~~` accent marker, used for a single short
+        // phrase, never for running text.
+        cursive: ["var(--font-cursive)", "cursive"],
       },
     },
   },

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, Playball } from "next/font/google";
 import "./globals.css";
 import TopBar from "@/components/layout/TopBar";
 import Navbar from "@/components/layout/Navbar";
@@ -22,6 +22,13 @@ import { SITE_URL, SITE_NAME, DEFAULT_DESCRIPTION } from "@/lib/seo";
 // distinct character instead of just being bigger/bolder Inter.
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
+// A single script/cursive face, used sparingly and on purpose: one short
+// accent phrase inside the hero headline (see T.tsx's `~~...~~` marker and
+// hero.title's translation string), a warm, handwritten-feeling flourish
+// against the bold sans heading around it, not a typeface used for running
+// text anywhere. Playball reads clearly at large hero sizes, unlike a
+// thinner script face that gets hard to read once blown up that big.
+const playball = Playball({ subsets: ["latin"], weight: "400", variable: "--font-cursive" });
 
 // metadataBase turns every relative URL used below (the Open Graph image,
 // individual pages' canonical links) into a full address automatically,
@@ -74,7 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const settings = await getSiteSettings();
 
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${playball.variable}`}>
       <body className="font-sans text-dark antialiased">
         <StructuredData settings={settings} />
         <LanguageProvider>

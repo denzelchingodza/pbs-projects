@@ -25,7 +25,7 @@ export const translations: Record<string, Entry> = {
   "nav.getQuote": { en: "Get a Quote" },
 
   // Homepage hero
-  "hero.title": { en: "Glass & aluminum work you can trust" },
+  "hero.title": { en: "Glass & aluminum work ~~you can trust~~" },
   "hero.subtitle": {
     en: "Windows, doors, shower cubicles, shop fronts, suspended ceilings and cabinets, installed by a team that's been in the trade for years, not just in business for three.",
   },

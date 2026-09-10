@@ -28,6 +28,15 @@
  * title. Falls back to whichever real project is currently featured, then
  * to the same hero photo, if neither title is in the loaded project list
  * for some reason, never a blank box.
+ *
+ * The headline itself now carries one small flourish: "you can trust" runs
+ * in the site's one cursive accent face with an orange tint (see the
+ * `~~...~~` marker in hero.title's translation string and T.tsx), a warm,
+ * handwritten-feeling touch against the otherwise bold sans headline,
+ * meant to read as confident and welcoming rather than another flat
+ * templated statement. Leading was loosened slightly (1.05 to 1.2) so the
+ * cursive face's descenders have room and don't clip against the line
+ * above or below it.
  */
 import Image from "next/image";
 import T from "@/components/i18n/T";
@@ -75,7 +84,7 @@ export default function Hero({ projects = [] }: { projects?: Project[] }) {
         <div className="max-w-6xl mx-auto w-full grid lg:grid-cols-5 gap-10 items-center">
           <div className="lg:col-span-3 max-w-xl">
             <span className="inline-block w-14 h-1.5 bg-orange rounded-full mb-6" aria-hidden="true" />
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold leading-[1.05] tracking-tight text-white">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold leading-[1.2] tracking-tight text-white">
               <T k="hero.title" />
             </h1>
             <p className="mt-6 text-white/75 text-[15px] leading-relaxed max-w-md">
