@@ -1,17 +1,14 @@
 /**
- * Real leadership team, shown on the About page. Replaces the generic
- * "Meet the Founder" placeholder (AboutFounder.tsx, kept around unused for
- * now rather than deleted, in case it's wanted again later) now that there
- * are two real, named people to show instead of an unfilled single bio.
- *
- * Editorial layout, not a pair of identical boxed cards: each member gets a
- * large portrait photo and generous, left aligned type, and the two
- * entries alternate photo left/right so the section reads as one designed
- * spread rather than a repeated component stacked twice. A thin rule and
- * wide vertical gap separate the two instead of a card border, and a soft
- * orange panel sits behind each photo, the same accent treatment the
- * homepage hero uses, so this ties back into the rest of the site rather
- * than looking like a bolted on block.
+ * Real leadership team. Rebuilt as two matching cards side by side instead
+ * of stacked, alternating rows, direct feedback was that the old layout
+ * (one giant portrait per row, a huge faint initials monogram floating
+ * behind the name, the role shown as a small colored pill) read as an
+ * AI-generated template rather than two real people who run this
+ * business. Both people now sit in the same row, in the same card shape,
+ * the photo uses the same `photo-frame` + `FrameCorners` treatment as
+ * every other real photo on the site (was its own one-off "framed print"
+ * style before), and the role is just plain text under the name, not a
+ * badge.
  *
  * Photos live in public/images/team/. Until a given member's photo file is
  * actually supplied, their spot falls back to a plain initials panel, so
@@ -19,6 +16,7 @@
  */
 import Image from "next/image";
 import SectionHeading from "@/components/ui/SectionHeading";
+import FrameCorners from "@/components/ui/FrameCorners";
 
 interface TeamMember {
   name: string;
@@ -51,65 +49,29 @@ function initials(name: string) {
     .toUpperCase();
 }
 
-function TeamCard({ member, reversed }: { member: TeamMember; reversed: boolean }) {
+function TeamCard({ member }: { member: TeamMember }) {
   return (
-    <div
-      className={`flex flex-col items-center gap-10 md:gap-16 md:items-center ${
-        reversed ? "md:flex-row-reverse" : "md:flex-row"
-      }`}
-    >
-      <div className="relative w-full max-w-[280px] md:max-w-none md:w-2/5 shrink-0">
-        {/* Soft orange glow behind the frame, then a white mat border around
-            the photo itself, like a real framed print rather than a photo
-            with no edge at all, floating loose on the page. */}
-        <div className="absolute -inset-4 bg-orange/10 rounded-3xl -z-10" aria-hidden="true" />
+    <div className="bg-white border border-neutral-200/70 rounded-2xl p-6 sm:p-7">
+      <div className="photo-frame shine-hover relative aspect-[4/5] rounded-xl overflow-hidden bg-neutral-100">
         {member.photo ? (
-          <div className="relative w-full aspect-[4/5] rounded-2xl bg-white p-2.5 shadow-md border border-neutral-100">
-            <div className="relative w-full h-full rounded-xl overflow-hidden">
-              <Image
-                src={member.photo}
-                alt={`${member.name}, ${member.role} at PBS Projects`}
-                fill
-                sizes="(max-width: 768px) 80vw, 340px"
-                className="object-cover object-top"
-              />
-            </div>
-          </div>
+          <Image
+            src={member.photo}
+            alt={`${member.name}, ${member.role} at PBS Projects`}
+            fill
+            sizes="(max-width: 640px) 100vw, 340px"
+            className="object-cover object-top"
+          />
         ) : (
-          <div className="w-full aspect-[4/5] rounded-2xl bg-white p-2.5 shadow-md border border-neutral-100">
-            <div className="w-full h-full rounded-xl bg-dark text-white flex items-center justify-center text-4xl font-bold">
-              {initials(member.name)}
-            </div>
+          <div className="w-full h-full flex items-center justify-center text-3xl font-semibold text-dark/30">
+            {initials(member.name)}
           </div>
         )}
+        <FrameCorners />
       </div>
 
-      {/* Text side: a large, faint initials monogram sits behind the name as
-          a purely decorative flourish (hidden on mobile, where there's no
-          room for it to breathe), the role is a small pill instead of plain
-          label text, and the bio reads as a set-off quote with a left rule
-          rather than a plain paragraph, so the block has real typographic
-          hierarchy instead of three same-weight lines stacked on each other. */}
-      <div className="relative flex-1 text-center md:text-left">
-        <span
-          aria-hidden="true"
-          className={`hidden md:block absolute -top-14 text-[130px] font-black text-neutral-100 leading-none select-none -z-10 ${
-            reversed ? "-right-2" : "-left-2"
-          }`}
-        >
-          {initials(member.name)}
-        </span>
-
-        <span className="font-display inline-block bg-orange/10 text-orange text-[11px] font-semibold uppercase tracking-[0.2em] px-3 py-1 rounded-full">
-          {member.role}
-        </span>
-        <h3 className="mt-4 font-semibold text-dark text-3xl sm:text-4xl tracking-tight">
-          {member.name}
-        </h3>
-        <p className="mt-5 text-neutral-600 text-[15px] leading-relaxed max-w-md mx-auto md:mx-0 md:border-l-2 md:border-orange/30 md:pl-4">
-          {member.bio}
-        </p>
-      </div>
+      <h3 className="mt-5 font-semibold text-dark text-xl tracking-tight">{member.name}</h3>
+      <p className="text-neutral-500 text-sm mt-0.5">{member.role}</p>
+      <p className="mt-3 text-neutral-600 text-sm leading-relaxed">{member.bio}</p>
     </div>
   );
 }
@@ -117,13 +79,11 @@ function TeamCard({ member, reversed }: { member: TeamMember; reversed: boolean 
 export default function TeamSection() {
   return (
     <section className="px-6 md:px-8 py-20 bg-paper">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <SectionHeading eyebrow="Leadership" title="Meet the Team" />
-        <div className="divide-y divide-neutral-200">
-          {TEAM.map((member, i) => (
-            <div key={member.name} className={i === 0 ? "pb-16 md:pb-20" : "pt-16 md:pt-20"}>
-              <TeamCard member={member} reversed={i % 2 === 1} />
-            </div>
+        <div className="grid sm:grid-cols-2 gap-6">
+          {TEAM.map((member) => (
+            <TeamCard key={member.name} member={member} />
           ))}
         </div>
       </div>

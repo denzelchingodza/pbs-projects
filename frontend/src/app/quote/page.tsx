@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import QuoteSection from "@/components/quote/QuoteSection";
 import HowItWorks from "@/components/home/HowItWorks";
 import Reveal from "@/components/ui/Reveal";
-import { getSiteSettings, getProducts } from "@/lib/api";
+import { getSiteSettings, getProducts, getProjects } from "@/lib/api";
 
 export const metadata: Metadata = {
   title: "Get a Free Quote",
@@ -10,10 +10,14 @@ export const metadata: Metadata = {
 };
 
 export default async function QuotePage() {
-  const [settings, products] = await Promise.all([getSiteSettings(), getProducts()]);
+  const [settings, products, projects] = await Promise.all([
+    getSiteSettings(),
+    getProducts(),
+    getProjects(),
+  ]);
   return (
     <main>
-      <QuoteSection products={products} settings={settings} />
+      <QuoteSection products={products} settings={settings} projects={projects} />
       {/* Someone landing straight on this page (not scrolling down from the
           homepage) never sees the homepage's own HowItWorks section, so it
           repeats here too, right after the form instead of before it, this

@@ -10,6 +10,12 @@
  * Submissions land as "pending" and don't show on the homepage until the
  * admin approves them (see routers/admin.py), the success message here says
  * so plainly rather than implying it's live right away.
+ *
+ * Card styling matches the rest of the site's light, thin-border language
+ * (border-neutral-200/70, rounded-2xl) instead of the heavier rounded-xl
+ * box this used to be, this is the one card on the page, so it needed to
+ * carry that "considered" feel on its own rather than borrowing it from
+ * having several matching cards nearby.
  */
 import { useState } from "react";
 import { submitTestimonial } from "@/lib/api";
@@ -53,8 +59,8 @@ export default function TestimonialForm() {
 
   if (status === "success") {
     return (
-      <div className="bg-white border border-neutral-200 rounded-xl p-8 text-center shadow-sm">
-        <div className="w-14 h-14 rounded-full bg-orange text-white flex items-center justify-center text-2xl mx-auto mb-4">
+      <div className="bg-white border border-neutral-200/70 rounded-2xl p-8 text-center shadow-sm">
+        <div className="w-14 h-14 rounded-full bg-orange/10 text-orange flex items-center justify-center text-2xl mx-auto mb-4">
           ✓
         </div>
         <h3 className="font-semibold text-lg text-dark">{t("testimonialForm.successTitle", lang)}</h3>
@@ -64,7 +70,7 @@ export default function TestimonialForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white border border-neutral-200 rounded-xl p-8 shadow-sm">
+    <form onSubmit={handleSubmit} className="bg-white border border-neutral-200/70 rounded-2xl p-8 shadow-sm">
       {/* Honeypot, visually hidden, but present in the DOM for bots to find */}
       <input
         type="text"
@@ -75,26 +81,26 @@ export default function TestimonialForm() {
         aria-hidden="true"
       />
 
-      <label className="block text-sm font-medium mb-1">{t("testimonialForm.yourName", lang)}</label>
+      <label className="block text-sm font-medium text-dark/80 mb-1.5">{t("testimonialForm.yourName", lang)}</label>
       <input
         name="client_name"
         required
         placeholder="e.g. Tendai Moyo"
-        className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
+        className="w-full border border-neutral-200 rounded-lg px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/20 focus:border-orange transition-shadow"
       />
 
-      <label className="block text-sm font-medium mb-1">{t("testimonialForm.role", lang)}</label>
+      <label className="block text-sm font-medium text-dark/80 mb-1.5">{t("testimonialForm.role", lang)}</label>
       <input
         name="client_role"
         placeholder={t("testimonialForm.rolePlaceholder", lang)}
-        className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
+        className="w-full border border-neutral-200 rounded-lg px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/20 focus:border-orange transition-shadow"
       />
 
-      <label className="block text-sm font-medium mb-1">{t("testimonialForm.rating", lang)}</label>
+      <label className="block text-sm font-medium text-dark/80 mb-1.5">{t("testimonialForm.rating", lang)}</label>
       <select
         name="rating"
         defaultValue={5}
-        className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
+        className="w-full border border-neutral-200 rounded-lg px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/20 focus:border-orange transition-shadow"
       >
         {RATINGS.map((r) => (
           <option key={r} value={r}>
@@ -104,13 +110,13 @@ export default function TestimonialForm() {
         ))}
       </select>
 
-      <label className="block text-sm font-medium mb-1">{t("testimonialForm.experience", lang)}</label>
+      <label className="block text-sm font-medium text-dark/80 mb-1.5">{t("testimonialForm.experience", lang)}</label>
       <textarea
         name="quote"
         required
         rows={4}
         placeholder={t("testimonialForm.experiencePlaceholder", lang)}
-        className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
+        className="w-full border border-neutral-200 rounded-lg px-4 py-2.5 mb-5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/20 focus:border-orange transition-shadow"
       />
 
       {status === "error" && <p className="text-sm text-red-600 mb-4">{errorMsg}</p>}

@@ -76,7 +76,7 @@ export default async function HomePage() {
       </Reveal>
       <SectionSeam tone="neutral" />
       <Reveal>
-        <QuoteSection products={products} settings={settings} />
+        <QuoteSection products={products} settings={settings} projects={projects} />
       </Reveal>
     </main>
   );

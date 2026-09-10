@@ -79,8 +79,8 @@ export default function QuoteForm({ products }: { products: Product[] }) {
 
   if (status === "success") {
     return (
-      <div className="bg-white border border-neutral-200 rounded-xl p-8 text-center shadow-sm">
-        <div className="w-14 h-14 rounded-full bg-orange text-white flex items-center justify-center text-2xl mx-auto mb-4">
+      <div className="bg-white border border-neutral-200/70 rounded-2xl p-8 text-center shadow-sm">
+        <div className="w-14 h-14 rounded-full bg-orange/10 text-orange flex items-center justify-center text-2xl mx-auto mb-4">
           ✓
         </div>
         <h3 className="font-semibold text-lg text-dark">{t("quoteForm.successTitle", lang)}</h3>
@@ -90,7 +90,7 @@ export default function QuoteForm({ products }: { products: Product[] }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white border border-neutral-200 rounded-xl p-8 shadow-sm">
+    <form onSubmit={handleSubmit} className="bg-white border border-neutral-200/70 rounded-2xl p-8 shadow-sm">
       {/* Honeypot — visually hidden, but present in the DOM for bots to find */}
       <input
         type="text"
@@ -101,29 +101,29 @@ export default function QuoteForm({ products }: { products: Product[] }) {
         aria-hidden="true"
       />
 
-      <label className="block text-sm font-medium mb-1">{t("quoteForm.fullName", lang)}</label>
+      <label className="block text-sm font-medium text-dark/80 mb-1.5">{t("quoteForm.fullName", lang)}</label>
       <input
         name="full_name"
         required
         placeholder="e.g. Tendai Moyo"
-        className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
+        className="w-full border border-neutral-200 rounded-lg px-4 py-2.5 mb-4 text-sm focus:outline-none focus:ring-2 focus:ring-orange/20 focus:border-orange transition-shadow"
       />
 
       <div className="grid sm:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block text-sm font-medium mb-1">{t("quoteForm.phone", lang)}</label>
+          <label className="block text-sm font-medium text-dark/80 mb-1.5">{t("quoteForm.phone", lang)}</label>
           <input
             name="phone"
             required
             placeholder="+263 ..."
-            className="w-full border border-neutral-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
+            className="w-full border border-neutral-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/20 focus:border-orange transition-shadow"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">{t("quoteForm.product", lang)}</label>
+          <label className="block text-sm font-medium text-dark/80 mb-1.5">{t("quoteForm.product", lang)}</label>
           <select
             name="product"
-            className="w-full border border-neutral-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
+            className="w-full border border-neutral-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/20 focus:border-orange transition-shadow"
           >
             {products.map((p) => (
               <option key={p.id} value={p.name}>
@@ -134,12 +134,12 @@ export default function QuoteForm({ products }: { products: Product[] }) {
         </div>
       </div>
 
-      <label className="block text-sm font-medium mb-1">{t("quoteForm.details", lang)}</label>
+      <label className="block text-sm font-medium text-dark/80 mb-1.5">{t("quoteForm.details", lang)}</label>
       <textarea
         name="details"
         rows={4}
         placeholder={t("quoteForm.detailsPlaceholder", lang)}
-        className="w-full border border-neutral-300 rounded-md px-4 py-2.5 mb-5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-shadow"
+        className="w-full border border-neutral-200 rounded-lg px-4 py-2.5 mb-5 text-sm focus:outline-none focus:ring-2 focus:ring-orange/20 focus:border-orange transition-shadow"
       />
 
       {RECAPTCHA_SITE_KEY && (
