@@ -18,61 +18,18 @@
  * (`animate-whatsapp-float-in`) instead of just being there from first
  * paint.
  *
- * The chat bubble that pops open a couple of seconds in now carries a
- * small branded avatar (the business's own initials, in the same
- * orange-tinted-circle language used for people elsewhere on the site,
- * e.g. Testimonials.tsx's Author) plus a live "Online" status line, so it
- * reads as a real person on the other end rather than a generic tooltip.
- * Only pops up once per visit, with a close button so it does not linger.
+ * Dropped the auto-popping chat bubble that used to appear a couple of
+ * seconds after page load, direct feedback was not to have it. Just the
+ * button now, no unprompted message.
  */
-import { useEffect, useState } from "react";
 import type { SiteSettings } from "@/types";
 
-const POPUP_DELAY_MS = 2500;
-
-function brandInitials(businessName: string) {
-  return (businessName.split(" ")[0] || businessName).slice(0, 3).toUpperCase();
-}
-
 export default function WhatsAppFloat({ settings }: { settings: SiteSettings }) {
-  const [bubbleOpen, setBubbleOpen] = useState(false);
   const digits = settings.whatsapp_number.replace(/[^\d]/g, "");
   const message = encodeURIComponent("Hi PBS Projects, I'd like to ask about a quote.");
 
-  useEffect(() => {
-    const timer = setTimeout(() => setBubbleOpen(true), POPUP_DELAY_MS);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 animate-whatsapp-float-in">
-      {bubbleOpen && (
-        <div className="relative max-w-[240px] bg-white text-dark text-sm rounded-2xl rounded-br-sm shadow-xl border border-neutral-200/70 px-4 py-3.5 animate-chat-pop">
-          <button
-            onClick={() => setBubbleOpen(false)}
-            aria-label="Dismiss message"
-            className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-neutral-200 text-neutral-600 text-xs flex items-center justify-center hover:bg-neutral-300 transition-colors"
-          >
-            &times;
-          </button>
-          <div className="flex items-center gap-2.5 mb-2">
-            <div className="w-8 h-8 rounded-full bg-orange/10 text-orange border border-orange/20 text-[11px] font-semibold flex items-center justify-center shrink-0">
-              {brandInitials(settings.business_name)}
-            </div>
-            <div className="leading-tight">
-              <p className="font-semibold text-dark text-[13px]">{settings.business_name}</p>
-              <p className="text-[11px] text-neutral-500 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#25D366]" aria-hidden="true" />
-                Online now
-              </p>
-            </div>
-          </div>
-          <p className="text-neutral-600 text-xs leading-relaxed">
-            Need help with a project? Chat to us here on WhatsApp, we usually reply fast.
-          </p>
-        </div>
-      )}
-
+    <div className="fixed bottom-6 right-6 z-50 animate-whatsapp-float-in">
       <a
         href={`https://wa.me/${digits}?text=${message}`}
         target="_blank"
