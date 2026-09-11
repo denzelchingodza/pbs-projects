@@ -79,6 +79,55 @@ select:focus-visible {
   animation: chat-pop 0.25s ease-out;
 }
 
+/* A slower, softer pulse ring behind the WhatsApp button than Tailwind's
+   default `animate-ping` (which snaps through its cycle in ~1s and reads
+   a little twitchy/cheap at this size). Same "still alive" signal, just
+   at a calmer pace with a gentler fade, closer to how a considered,
+   premium widget breathes rather than blinks. */
+@keyframes whatsapp-pulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+.animate-whatsapp-pulse {
+  animation: whatsapp-pulse 2.6s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-whatsapp-pulse {
+    animation: none;
+  }
+}
+
+/* The WhatsApp float button itself settles in a beat after the page loads
+   rather than just being there from the first paint, small, but it's the
+   difference between a widget that was bolted on and one that was
+   designed to arrive. */
+@keyframes whatsapp-float-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-whatsapp-float-in {
+  animation: whatsapp-float-in 0.4s cubic-bezier(0.2, 0.7, 0.3, 1) 0.3s both;
+}
+
 /* Small slide-and-fade for admin toast notifications, so a new one reads
    as arriving rather than just appearing. */
 @keyframes toast-in {
