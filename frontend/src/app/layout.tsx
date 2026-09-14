@@ -83,13 +83,25 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${playball.variable}`}>
       <body className="font-sans text-dark antialiased">
+        {/* Skip link: invisible until keyboard-focused (Tab from the very
+            top of the page), then jumps straight past the Navbar/TopBar
+            to the real page content, standard accessibility affordance
+            most real sites have and most quick builds skip entirely. */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-orange focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+        >
+          Skip to main content
+        </a>
         <StructuredData settings={settings} />
         <LanguageProvider>
           <PublicChrome>
             <TopBar settings={settings} />
             <Navbar settings={settings} />
           </PublicChrome>
-          {children}
+          <div id="main-content" tabIndex={-1}>
+            {children}
+          </div>
           <PublicChrome>
             <Footer settings={settings} />
             <WhatsAppFloat settings={settings} />

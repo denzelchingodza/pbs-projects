@@ -37,6 +37,32 @@ const nextConfig = {
       { source: "/static/:path*", destination: "http://127.0.0.1:8000/static/:path*" },
     ];
   },
+  // A handful of standard security response headers, applied to every
+  // route. None of these change how the site looks or behaves for a real
+  // visitor, they just close off a few generic browser-level attack
+  // surfaces (clickjacking, MIME-sniffing, leaking the full referrer URL
+  // to third parties, a page embedding this site's camera/mic without
+  // asking) that any legitimate production site sets by default. Stops
+  // short of a full Content-Security-Policy for now, a strict CSP is easy
+  // to get wrong (it can silently break next/font, the reCAPTCHA script,
+  // or the PWA service worker) and deserves its own careful pass with real
+  // testing, not something to bolt on blind.
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = withPWA(nextConfig);
