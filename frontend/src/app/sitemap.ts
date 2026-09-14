@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/quote", priority: 0.9, changeFrequency: "monthly" },
     { path: "/testimonial", priority: 0.5, changeFrequency: "monthly" },
     { path: "/contact", priority: 0.6, changeFrequency: "monthly" },
+    { path: "/privacy", priority: 0.2, changeFrequency: "yearly" },
   ];
 
   return pages.map((p) => ({

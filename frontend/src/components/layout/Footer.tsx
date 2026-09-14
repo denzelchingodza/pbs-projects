@@ -67,11 +67,16 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto pt-7 flex flex-wrap justify-between gap-2 text-xs text-neutral-500">
+      <div className="max-w-6xl mx-auto pt-7 flex flex-wrap justify-between gap-3 text-xs text-neutral-500">
         <span>© {year} {settings.business_name}. All rights reserved.</span>
-        <span className="uppercase tracking-widest">
-          Windows · Doors · Shower Cubicles · Shop Fronts · Suspended Ceilings · Cabinets
-        </span>
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <span className="uppercase tracking-widest">
+            Windows · Doors · Shower Cubicles · Shop Fronts · Suspended Ceilings · Cabinets
+          </span>
+          <Link href="/privacy" className="hover:text-orange transition-colors">
+            Privacy Policy
+          </Link>
+        </div>
       </div>
     </footer>
   );
